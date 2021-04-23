@@ -1,0 +1,15 @@
+{
+  "name": "zarp.cash",
+  "version": "1.0.0",
+  "description": "zarp.cash web site",
+  "main": "index.js",
+  "repository": "https://github.com/venox-digital-assets/zarp.cash.git",
+  "author": "Kenny Inggs <kenny.inggs@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "http-server": "^0.12.3"
+  },
+  "scripts": {
+    "start": "http-server ./ -p 3000"
+  }
+}
