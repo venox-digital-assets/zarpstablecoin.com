@@ -1,0 +1,65 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+body {
+	margin: 0;
+	font-family: 'Open Sans', sans-serif;
+	overflow: auto;
+}
+
+header {
+    text-align: center;
+}
+
+#attest {  
+    width: 100%;
+    background-color: #017849;
+    text-align: center;
+    color: white;
+    padding: 10px;
+}
+
+#verify {
+    margin-right: 5px;
+}
+
+#attest p {
+    font-size: 0.8em;
+    margin: 0;
+}
+
+p#kemp {
+    font-size: 0.6em;
+}
+
+#coins {
+	position: absolute;
+	right: 0;
+	bottom: 0;
+	min-height: 100vh;
+	min-width: 100%;
+	opacity: 0.1;
+	overflow: hidden;
+	z-index: -100;
+}
+
+#content {
+    max-width: 1024px;
+    padding: 0 50px;
+    margin: auto;
+}
+
+#logo {
+    width: 100px;
+    margin-top: 80px;
+}
+
+header h1 {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 1.1em;
+}
+
+img.social {
+    width: 35px;
+    padding: 5px;
+}
