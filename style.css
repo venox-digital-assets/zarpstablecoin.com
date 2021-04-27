@@ -105,3 +105,44 @@ footer {
     padding: 20px 100px;
     font-size: .8em;
 }
+
+@media (max-width: 479px) {
+    
+#logo {
+        width: 80px;
+        margin-top: 60px;
+        margin-bottom: 10px;
+    }
+
+header h1 {
+        font-size: .9em;
+    }
+
+#content p {
+        font-size: .8em;
+}
+
+header {
+        height: 88vh;
+}
+
+p.whyzarp {
+    font-size: 1em;
+    padding: 30px 10px 20px;
+}
+
+#cases {
+    padding: 0;
+}
+
+div.blocks {
+    margin: 10px 5px;
+}
+
+footer {
+    background-color: darkgray;
+    padding: 20px 10px;
+    font-size: .7em;
+}
+
+}
