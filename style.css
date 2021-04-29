@@ -139,10 +139,19 @@ div.blocks {
     margin: 10px 5px;
 }
 
+}
+
+@media (max-width: 700px) {
+
+header {
+    min-height: 500px;
+}
+
 footer {
     background-color: darkgray;
     padding: 20px 10px;
     font-size: .7em;
-}
+    }
+
 
 }
