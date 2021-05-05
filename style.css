@@ -143,8 +143,14 @@ div.blocks {
 
 @media (max-width: 700px) {
 
+#logo {
+    width: 70px;
+    margin-top: 30px;
+    margin-bottom: 10px;
+}
+
 header {
-    min-height: 500px;
+    min-height: 800px;
 }
 
 footer {
