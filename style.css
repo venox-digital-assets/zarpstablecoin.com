@@ -23,6 +23,11 @@ header {
     padding: 10px;
 }
 
+#kempen {
+    float: right;
+    margin-top: -30px;
+}
+
 #verify {
     margin-right: 5px;
 }
