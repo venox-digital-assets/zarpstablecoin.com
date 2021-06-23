@@ -21,6 +21,12 @@ header {
     text-align: center;
     color: white;
     padding: 10px;
+    font-weight: lighter;
+}
+
+#attest a {
+    color: white;
+    font-size: 1.2em;
 }
 
 #kempen {
@@ -150,6 +156,11 @@ div.blocks {
 
 header {
     min-height: 500px;
+}
+
+#kempen {
+    float: none;
+    margin-top: 5px;
 }
 
 footer {
