@@ -117,6 +117,12 @@ footer {
     font-size: .8em;
 }
 
+footer a {
+    color: black;
+    font-weight: bolder;
+    text-decoration: none;
+}
+
 @media (max-width: 479px) {
     
 #logo {
