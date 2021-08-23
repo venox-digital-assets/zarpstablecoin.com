@@ -173,17 +173,22 @@ footer a {
     }
     
     #logo {
-        width: 40px;
-        margin-top: 20px;
-        margin-bottom: 10px;
+        width: 200px;
+        margin-top: 80px;
+        margin-bottom: 80px;
     }
     
     header h1 {
-        font-size: .7em;
+        font-size: 1.1em;
     }
     
     #content p {
-        font-size: .7em;
+        font-size: .9em;
+    }
+
+    img.social {
+        width: 40px;
+        padding: 10px;
     }
     
     #kempen {
@@ -203,13 +208,13 @@ footer a {
 @media (max-width: 479px) {
     
 #logo {
-        width: 80px;
-        margin-top: 60px;
-        margin-bottom: 10px;
+        width: 150px;
+        margin-top: 70px;
+        margin-bottom: 30px;
     }
 
 header h1 {
-        font-size: .9em;
+        font-size: 1em;
     }
 
 #content p {
@@ -217,7 +222,12 @@ header h1 {
 }
 
 header {
-        height: 88vh;
+        height: 100vh;
+}
+
+img.social {
+    width: 30px;
+    padding: 4px;
 }
 
 p.whyzarp {
@@ -231,6 +241,25 @@ p.whyzarp {
 
 div.blocks {
     margin: 10px 5px;
+}
+
+@media (max-width: 360px) {
+
+#logo {
+    width: 80px;
+        margin-top: 30px;
+        margin-bottom: 30px;
+}
+
+header h1 {
+    font-size: .8em;
+}
+
+img.social {
+    width: 25px;
+    padding: 3px;
+}
+
 }
 
 }
