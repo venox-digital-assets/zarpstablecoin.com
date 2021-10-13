@@ -166,29 +166,29 @@ footer a {
     text-decoration: none;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1400px) {
 
     header {
-        min-height: 400px;
+        min-height: 380px;
     }
     
     #logo {
         width: 200px;
-        margin-top: 80px;
+        margin-top: 150px;
         margin-bottom: 80px;
     }
     
     header h1 {
-        font-size: 1.1em;
+        font-size: 1.5em;
     }
     
     #content p {
-        font-size: .9em;
+        font-size: 1.2em;
     }
 
     img.social {
-        width: 40px;
-        padding: 10px;
+        width: 60px;
+        padding: 15px;
     }
     
     #kempen {
@@ -203,14 +203,37 @@ footer a {
         }
     
     
+}
+
+@media (max-width: 815px) {
+
+
+
+    #logo {
+        width: 80px;
+        margin-top: 20px;
+        margin-bottom: 10px;
+    }
+
+    header h1 {
+        font-size: .9em;
+    }
+
+    #content p {
+        display: none;
+    }
+
+    img.social {
+        width: 35px;
+        padding: 8px;
     }
     
 @media (max-width: 479px) {
     
 #logo {
-        width: 150px;
-        margin-top: 70px;
-        margin-bottom: 30px;
+        width: 130px;
+        margin-top: 60px;
+        margin-bottom: 20px;
     }
 
 header h1 {
@@ -218,11 +241,12 @@ header h1 {
     }
 
 #content p {
+        display: inherit;
         font-size: .8em;
 }
 
 header {
-        height: 100vh;
+        height: 95vh;
 }
 
 img.social {
