@@ -169,13 +169,12 @@ footer a {
 @media (max-width: 1400px) {
 
     header {
-        min-height: 380px;
-    }
-    
+        height: 95vh;
+}
     #logo {
-        width: 200px;
-        margin-top: 150px;
-        margin-bottom: 80px;
+        width: 180px;
+        margin-top: 80px;
+        margin-bottom: 60px;
     }
     
     header h1 {
@@ -188,7 +187,7 @@ footer a {
 
     img.social {
         width: 60px;
-        padding: 15px;
+        padding: 10px;
     }
     
     #kempen {
@@ -204,40 +203,17 @@ footer a {
     
     
 }
-
-@media (max-width: 815px) {
-
-
-
-    #logo {
-        width: 80px;
-        margin-top: 20px;
-        margin-bottom: 10px;
-    }
-
-    header h1 {
-        font-size: .9em;
-    }
-
-    #content p {
-        display: none;
-    }
-
-    img.social {
-        width: 35px;
-        padding: 8px;
-    }
     
 @media (max-width: 479px) {
     
 #logo {
-        width: 130px;
-        margin-top: 60px;
+        width: 100px;
+        margin-top: 40px;
         margin-bottom: 20px;
     }
 
 header h1 {
-        font-size: 1em;
+        font-size: .9em;
     }
 
 #content p {
@@ -246,7 +222,7 @@ header h1 {
 }
 
 header {
-        height: 95vh;
+        height: 85vh;
 }
 
 img.social {
