@@ -14,7 +14,7 @@ $(document).ready(function(){
         let smoother = ScrollSmoother.create({
             wrapper: '#smooth-wrapper',
             content: '#smooth-content',
-            normalizeScroll: true,
+            //normalizeScroll: true,
             smooth: 1.2,   // seconds it takes to "catch up" to native scroll position
             effects: true // look for data-speed and data-lag attributes on elements and animate accordingly
         });
