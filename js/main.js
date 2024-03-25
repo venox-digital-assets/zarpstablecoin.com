@@ -48,6 +48,15 @@ $(document).ready(function(){
         });
     }
 
+    function mobileNav (){
+        $('.menu-opener, .menu-item a, .main-nav.menu-opened .btn-2').bind('click', function() {
+            $('.main-nav').toggleClass('menu-opened');
+            $('body').toggleClass('body-menu-opened'); 
+        });
+    }
+   
+    
+
 
     function accordions(){
         //$('.accordion > li:first-child').addClass('active').find('.accordion-item').show();
@@ -98,8 +107,12 @@ $(document).ready(function(){
 
 
     barba.hooks.enter((data) => {
-        var el = document.querySelector('.ajax-load-more-wrap');
-        ajaxloadmore.start(el);
+        // Top of page with scrollsmoother
+
+
+
+        //window.scrollTo(0, 0);
+
     });
 
 
@@ -129,13 +142,15 @@ $(document).ready(function(){
 
 
     barba.hooks.beforeEnter((data) => {
-        $('body').removeClass('barba-leaving');
 
+        $('body').removeClass('barba-leaving');
+    
         const navs = $(data.next.html).find('[data-barba-update]') // New ones
         $('[data-barba-update]').each((i,el) => $(el).html($(navs[i]).html())) // Replace each old ones
-
+    
         smoothScroll();
         navigation();
+        mobileNav();
         setTimeout(() => {
             accordions();
         }, 500);
@@ -146,16 +161,24 @@ $(document).ready(function(){
         var bodyClasses = $(response).filter('notbody').attr('class')
         $("body").attr("class", bodyClasses);
 
+        if ( window.location.hash ) {
+            setTimeout(function() {
+                $('html,body').animate({
+                scrollTop: $(window.location.hash).offset().top - 80 
+                }, 1000);
+            }, 100);
+        }
+
+        
     });
-
-
-
-
-
-
+    
+    
+    
+    
+    
+    
     barba.hooks.afterEnter((data) => {
         $('body').addClass('page-transitioned');
-       
     });
 
     // Barba trigger only after ajax click
