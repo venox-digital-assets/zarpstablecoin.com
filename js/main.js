@@ -56,6 +56,15 @@ $(document).ready(function(){
     }
    
     
+    function footerMobile(){
+        $(".footer-col > ul > li > a").click(function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            $(this).toggleClass('open');
+            $(this).next().toggleClass("open");
+        })
+    }
+    
 
 
     function accordions(){
@@ -151,6 +160,7 @@ $(document).ready(function(){
         smoothScroll();
         navigation();
         mobileNav();
+        footerMobile();
         setTimeout(() => {
             accordions();
         }, 500);
