@@ -21,7 +21,8 @@ strong {font-weight: 600}
 .t-min {position: relative;top: -4px;}
 
 .bg-repeat {
-	height: 90px;
+	height: 57px;
+  background-size: 60px; 
   background-repeat: repeat no-repeat;
   background-position: center;
   background-color: #009A35;
@@ -40,6 +41,12 @@ strong {font-weight: 600}
   //   animation-timing-function: linear;
   background-position: 0 center;
 }
+
+@include media-breakpoint-up(md) {
+  .bg-repeat { height: 90px; background-size: 80px; }
+
+}
+
 
 
 @-webkit-keyframes bg-scrolling-reverse {
@@ -67,7 +74,6 @@ strong {font-weight: 600}
 
 
 .bg-repeat-2 {
-  height:90px;
   background-repeat: repeat no-repeat;
   background-position: center;
   background-color: #FFE400;
@@ -85,7 +91,13 @@ strong {font-weight: 600}
 //   -o-animation-timing-function: linear;
 //   animation-timing-function: linear;
    background-position: 0 center;
+   height: 57px; 
+   background-size: 50px; 
 
+}
+
+@include media-breakpoint-up(md) {
+  .bg-repeat-2 { height: 90px; background-size: 80px; }
 }
 
 @-webkit-keyframes bg-scrolling-reverse2 {
@@ -204,4 +216,38 @@ footer ul li a {
     position: absolute;
     right: 0;
   }
+}
+
+
+
+
+
+footer { padding: 20px 0px; }
+footer a { transition: color 0.4s ease 0s; }
+footer a:hover { color: rgb(255, 228, 0); }
+
+@include media-breakpoint-down(md) {
+  footer { padding-bottom: 90px !important; }
+  #features { background-image: none; }
+  footer ul li a { font-size: 15px; }
+}
+
+
+@include media-breakpoint-up(sm) {
+  .footer-col ul { padding: 0px; margin: 0px; list-style: none; }
+  .footer-col > ul > li > a { color: rgb(255, 255, 255); font-weight: 600; display: block; margin-bottom: 14px; cursor: default; pointer-events: none; }
+  .footer-col > ul > li li > a { font-size: 16px; display: inline-block; margin-bottom: 5px; }
+}
+@include media-breakpoint-down(sm) {
+  .footer-col { width: 100%; margin-left: 0px; margin-top: 0px; padding-right: 0px; }
+  .footer-col ul { padding: 0px; margin: 0px; list-style: none; }
+  .footer-col > ul { border-bottom: 1px solid rgba(255, 255, 255, 0.2); }
+  .footer-col > ul > li > a { color: rgb(255, 255, 255); max-width: 100%; margin-bottom: 0px; display: block; padding: 15px 0px; border-bottom: none; font-size: 16px; position: relative; }
+  .footer-col > ul > li > a::after { content: ""; position: absolute; right: 0px; top: 17px; transition: all 0.3s ease 0s; display: inline-block; width: 20px; height: 16px; transform-origin: center center; background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg width='12' height='6' viewBox='0 0 12 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E %3Cline y1='-0.25' x2='7.526' y2='-0.25' transform='matrix(-0.747409 0.664364 0.664364 0.747409 11.25 1)' stroke='white' stroke-width='1'/%3E %3Cline x1='0.166091' y1='0.813148' x2='5.79109' y2='5.81315' stroke='white' stroke-width='1'/%3E %3C/svg%3E "); background-repeat: no-repeat; background-position: center center; }
+  .footer-col > ul > li > a.open::after { transform: rotate(180deg); }
+  .footer-col > ul > li > ul { max-height: 0px; overflow: hidden; transition: all 0.4s ease 0s; }
+  .footer-col ul ul.open { max-height: 400px; overflow: hidden; }
+  .footer-col > ul > li li > a { padding: 6px 10px; display: block; }
+  .footer-col > ul > li li:last-child > a { padding-bottom: 30px; }
+  .footer-col > ul > li { padding-bottom: 0px; }
 }
