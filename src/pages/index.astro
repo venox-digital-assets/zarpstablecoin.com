@@ -1,0 +1,303 @@
+---
+import Layout from '../layouts/Layout.astro';
+import stats from '../data/stats.json';
+
+// Fetch live data from CoinGecko
+let priceData = {
+  zar: 1.00,
+  marketCap: stats.supply,
+  transactions: stats.transactions,
+  usd: 0.05,
+  reserves: stats.reserves
+};
+
+try {
+  // Parallel fetch: CoinGecko + Our Transparency Scraper
+  const [coingeckoRes, statsRes] = await Promise.all([
+    fetch('https://api.coingecko.com/api/v3/simple/price?ids=zarp-stablecoin&vs_currencies=usd,zar&include_market_cap=true&include_24hr_vol=true'),
+    fetch('http://localhost:4321/api/stats.json') // Fetch from our own endpoint
+  ]);
+
+  const geckoData = await coingeckoRes.json();
+  
+  // Update from Gecko
+  if (geckoData['zarp-stablecoin']) {
+    priceData.zar = geckoData['zarp-stablecoin'].zar;
+    priceData.volume = geckoData['zarp-stablecoin'].zar_24h_vol;
+    priceData.usd = geckoData['zarp-stablecoin'].usd;
+    // We prefer our transparency page supply if available, else fallback to gecko
+    // priceData.marketCap = geckoData['zarp-stablecoin'].zar_market_cap; 
+  }
+
+  // Update from Transparency Page via API (or fallback to build-time stats)
+  if (statsRes.ok) {
+    const statsData = await statsRes.json();
+    if (statsData.supply) priceData.marketCap = statsData.supply;
+    if (statsData.reserves) priceData.reserves = statsData.reserves;
+    // If our API scraper finds transactions, use them. Otherwise keep the build-time stat.
+    if (statsData.transactions) priceData.transactions = statsData.transactions; 
+  }
+} catch (e) {
+  console.error("Failed to fetch price data", e);
+}
+
+const zarFormatter = new Intl.NumberFormat('en-ZA', {
+  style: 'currency',
+  currency: 'ZAR',
+  minimumFractionDigits: 0,
+  maximumFractionDigits: 0,
+});
+
+const usdFormatter = new Intl.NumberFormat('en-US', {
+  style: 'currency',
+  currency: 'USD',
+  minimumFractionDigits: 4,
+  maximumFractionDigits: 4,
+});
+
+const numberFormatter = new Intl.NumberFormat('en-ZA', {
+  style: 'decimal',
+  minimumFractionDigits: 0,
+  maximumFractionDigits: 0,
+});
+
+const logos = [
+  { name: 'Base', src: '/img/base-wordmark.svg', url: 'https://basescan.org/token/0xb755506531786C8aC63B756BaB1ac387bACB0C04' },
+  { name: 'Ethereum', src: '/img/ethereum-wordmark.svg', url: 'https://etherscan.io/token/0xb755506531786C8aC63B756BaB1ac387bACB0C04' },
+  { name: 'Gnosis Chain', src: '/img/gnosis-wordmark.svg', url: 'https://gnosisscan.io/token/0xb755506531786C8aC63B756BaB1ac387bACB0C04' },
+  { name: 'Polygon', src: '/img/polygon-wordmark.svg', url: 'https://polygonscan.com/token/0xb755506531786C8aC63B756BaB1ac387bACB0C04' },
+  { name: 'Solana', src: '/img/solana-wordmark.svg', url: 'https://solscan.io/token/dngKhBQM3BGvsDHKhrLnjvRKfY5Q7gEnYGToj9Lk8rk' },
+];
+
+---
+
+<Layout title="ZARP Stablecoin | The Digital Rand">
+  <main class="min-h-screen bg-white">
+    <!-- Hero Section -->
+    <div class="relative overflow-hidden pt-16 pb-20 lg:pt-32">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+        
+        <!-- Floating Coin Graphic (Subtle) -->
+        <div class="absolute top-0 right-0 -z-10 opacity-10 pointer-events-none transform rotate-12 translate-x-1/4 -translate-y-1/4">
+            <img src="/img/zarp_coin.png" alt="" class="w-96 h-96 object-contain" />
+        </div>
+
+        <h1 class="text-5xl md:text-7xl font-extrabold text-slate-900 tracking-tight mb-6">
+          Open Stablecoin Rails <br class="hidden md:block" />
+          <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-yellow-500">for the Rand</span>
+        </h1>
+        <p class="mt-4 max-w-2xl mx-auto text-xl text-slate-500 mb-12">
+          The audited, fully collateralised and crypto-native stablecoin for the South African Rand.
+        </p>
+
+        <!-- Trust Widget -->
+        <div class="max-w-4xl mx-auto bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden mb-16">
+          <div class="bg-slate-50 px-6 py-3 border-b border-slate-100 flex items-center justify-between">
+            <h3 class="text-sm font-semibold text-slate-500 uppercase tracking-wider">Market Snapshot</h3>
+            <span class="text-xs text-slate-400 flex items-center gap-1">
+              <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span> Live
+            </span>
+          </div>
+          <div class="grid grid-cols-2 md:grid-cols-4 divide-y md:divide-y-0 md:divide-x divide-slate-100">
+          
+            <!-- Box 1: ZARP/USD -->
+            <div class="p-6 group hover:bg-slate-50 transition-colors">
+              <p class="text-sm font-medium text-slate-500 mb-1 group-hover:text-emerald-600">ZARP / USD</p>
+              <p class="text-2xl font-bold text-slate-900">{usdFormatter.format(priceData.usd)}</p>
+              <p class="text-xs text-slate-400 mt-1">1 ZARP ≈ 1 ZAR</p>
+            </div>
+
+            <!-- Box 2: Circulating Supply -->
+            <div class="p-6 group hover:bg-slate-50 transition-colors">
+              <p class="text-sm font-medium text-slate-500 mb-1 group-hover:text-emerald-600">Circulating Supply</p>
+              <p class="text-2xl font-bold text-slate-900">{zarFormatter.format(priceData.marketCap)}</p>
+              <p class="text-xs text-slate-400 mt-1">Audited Tokens</p>
+            </div>
+
+            <!-- Box 3: Total Transactions -->
+            <div class="p-6 group hover:bg-slate-50 transition-colors">
+              <p class="text-sm font-medium text-slate-500 mb-1 group-hover:text-emerald-600">Total Transactions</p>
+              <p class="text-2xl font-bold text-slate-900">{numberFormatter.format(priceData.transactions)}+</p>
+              <p class="text-xs text-slate-400 mt-1">Lifetime Transfers</p>
+            </div>
+
+            <!-- Box 4: Treasury Reserves -->
+            <div class="p-6 group hover:bg-slate-50 transition-colors">
+              <p class="text-sm font-medium text-slate-500 mb-1 group-hover:text-emerald-600">Treasury Reserves</p>
+              <p class="text-2xl font-bold text-slate-900 text-emerald-600">{zarFormatter.format(priceData.reserves)}</p>
+              <p class="text-xs text-slate-400 mt-1">Held by Old Mutual</p>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+      
+      <!-- Abstract Background -->
+      <div class="absolute top-0 left-1/2 w-full -translate-x-1/2 h-full overflow-hidden -z-10 opacity-30 pointer-events-none">
+          <div class="absolute top-[20%] left-[10%] w-72 h-72 bg-emerald-400 rounded-full mix-blend-multiply filter blur-3xl animate-blob"></div>
+          <div class="absolute top-[20%] right-[10%] w-72 h-72 bg-yellow-400 rounded-full mix-blend-multiply filter blur-3xl animate-blob animation-delay-2000"></div>
+          <div class="absolute bottom-[20%] left-[30%] w-72 h-72 bg-pink-400 rounded-full mix-blend-multiply filter blur-3xl animate-blob animation-delay-4000"></div>
+      </div>
+    </div>
+
+    <!-- Logo Carousel Section -->
+    <div class="py-12 bg-slate-50 border-y border-slate-100 relative overflow-hidden">
+      <div class="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-slate-50 to-transparent z-10"></div>
+      <div class="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-slate-50 to-transparent z-10"></div>
+      
+      <div class="flex items-center space-x-10 animate-scroll w-max">
+        <!-- First Set -->
+        {logos.map(logo => (
+          <a href={logo.url} target="_blank" rel="noopener noreferrer"><img src={logo.src} alt={logo.name} class="h-10 md:h-12 w-auto opacity-80 hover:opacity-100 transition-opacity" /></a>
+        ))}
+        <!-- Duplicate Set -->
+        {logos.map(logo => (
+          <a href={logo.url} target="_blank" rel="noopener noreferrer" aria-hidden="true" tabindex="-1"><img src={logo.src} alt={logo.name} class="h-10 md:h-12 w-auto opacity-80 hover:opacity-100 transition-opacity" /></a>
+        ))}
+        <!-- Triplicate Set (for wider screens) -->
+        {logos.map(logo => (
+          <a href={logo.url} target="_blank" rel="noopener noreferrer" aria-hidden="true" tabindex="-1"><img src={logo.src} alt={logo.name} class="h-10 md:h-12 w-auto opacity-80 hover:opacity-100 transition-opacity" /></a>
+        ))}
+      </div>
+    </div>
+
+    <!-- Use Cases Section -->
+    <div class="py-20 bg-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-14">
+          <h2 class="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight mb-4">
+            What Can You Do with <span class="text-emerald-600">ZARP</span>?
+          </h2>
+          <p class="text-lg text-slate-500 max-w-2xl mx-auto">
+            A fully collateralised digital rand opens up possibilities that traditional money can't match.
+          </p>
+        </div>
+
+        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+          
+          <!-- Send & Receive -->
+          <div class="group bg-slate-50 hover:bg-white rounded-2xl p-8 border border-slate-100 hover:border-emerald-100 hover:shadow-lg transition-all duration-300">
+            <div class="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center mb-5 group-hover:bg-emerald-200 transition-colors">
+              <svg class="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 11l5-5m0 0l5 5m-5-5v12"/></svg>
+            </div>
+            <h3 class="text-lg font-bold text-slate-900 mb-2">Send & Receive</h3>
+            <p class="text-sm text-slate-500 leading-relaxed">
+              Transfer rands instantly to anyone, anywhere — no banking hours, no borders, no delays. Just fast, peer-to-peer digital money.
+            </p>
+          </div>
+
+          <!-- Store Value -->
+          <div class="group bg-slate-50 hover:bg-white rounded-2xl p-8 border border-slate-100 hover:border-emerald-100 hover:shadow-lg transition-all duration-300">
+            <div class="w-12 h-12 bg-yellow-100 rounded-xl flex items-center justify-center mb-5 group-hover:bg-yellow-200 transition-colors">
+              <svg class="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+            </div>
+            <h3 class="text-lg font-bold text-slate-900 mb-2">Store Value</h3>
+            <p class="text-sm text-slate-500 leading-relaxed">
+              Park your rands on-chain in a stable, audited token. Always backed 1:1 — your money holds its value while you hold the keys.
+            </p>
+          </div>
+
+          <!-- Business Payments -->
+          <div class="group bg-slate-50 hover:bg-white rounded-2xl p-8 border border-slate-100 hover:border-emerald-100 hover:shadow-lg transition-all duration-300">
+            <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mb-5 group-hover:bg-blue-200 transition-colors">
+              <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+            </div>
+            <h3 class="text-lg font-bold text-slate-900 mb-2">Business Payments</h3>
+            <p class="text-sm text-slate-500 leading-relaxed">
+              Pay suppliers, freelancers, and partners in digital rand. Settle invoices on-chain with full transparency and instant finality.
+            </p>
+          </div>
+
+          <!-- DeFi & Yield -->
+          <div class="group bg-slate-50 hover:bg-white rounded-2xl p-8 border border-slate-100 hover:border-emerald-100 hover:shadow-lg transition-all duration-300">
+            <div class="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center mb-5 group-hover:bg-purple-200 transition-colors">
+              <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
+            </div>
+            <h3 class="text-lg font-bold text-slate-900 mb-2">DeFi & Yield</h3>
+            <p class="text-sm text-slate-500 leading-relaxed">
+              Put your rands to work. Provide liquidity, earn yield, and access decentralised finance — all denominated in ZAR.
+            </p>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Programmable Money Section -->
+    <div class="py-20 bg-[#f3f6f4]">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid md:grid-cols-2 gap-12 items-center">
+          
+          <!-- Text -->
+          <div>
+            <h2 class="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight mb-6">
+              Programmable Money
+            </h2>
+            <p class="text-lg text-slate-600 leading-relaxed">
+              Unleash the power of unstoppable payments, 24/7 liquidity, and money that moves at the speed of light.
+            </p>
+          </div>
+
+          <!-- Code Block -->
+          <div class="bg-slate-800 rounded-2xl shadow-2xl overflow-hidden ring-1 ring-slate-700">
+            <!-- Window chrome -->
+            <div class="flex items-center gap-2 px-4 py-3 bg-slate-700/50 border-b border-slate-600">
+              <div class="w-3 h-3 rounded-full bg-red-500/80"></div>
+              <div class="w-3 h-3 rounded-full bg-yellow-500/80"></div>
+              <div class="w-3 h-3 rounded-full bg-green-500/80"></div>
+              <span class="ml-3 text-xs text-slate-500 font-mono">transfer.sol</span>
+            </div>
+            <!-- Code -->
+            <pre class="p-4 md:p-6 text-xs md:text-sm leading-relaxed overflow-x-auto"><code><span class="text-slate-500">// Transfer ZARP on-chain</span>
+<span class="text-purple-400">import</span> <span class="text-yellow-300">&#123; transfer &#125;</span> <span class="text-purple-400">from</span> <span class="text-emerald-400">"@solana/spl-token"</span><span class="text-slate-400">;</span>
+
+<span class="text-purple-400">const</span> <span class="text-blue-300">ZARP_MINT</span> <span class="text-slate-400">=</span> <span class="text-emerald-400">"dngKhBQM3BGvs...Lk8rk"</span><span class="text-slate-400">;</span>
+
+<span class="text-purple-400">const</span> <span class="text-blue-300">tx</span> <span class="text-slate-400">=</span> <span class="text-purple-400">await</span> <span class="text-yellow-300">transfer</span><span class="text-slate-400">(</span>
+  <span class="text-blue-300">connection</span><span class="text-slate-400">,</span>
+  <span class="text-blue-300">payer</span><span class="text-slate-400">,</span>
+  <span class="text-blue-300">sourceAccount</span><span class="text-slate-400">,</span>     <span class="text-slate-500">// sender</span>
+  <span class="text-blue-300">destinationAccount</span><span class="text-slate-400">,</span> <span class="text-slate-500">// recipient</span>
+  <span class="text-blue-300">owner</span><span class="text-slate-400">,</span>
+  <span class="text-orange-400">1000</span> <span class="text-slate-400">*</span> <span class="text-orange-400">1e9</span>           <span class="text-slate-500">// R1,000 ZARP</span>
+<span class="text-slate-400">);</span>
+
+<span class="text-blue-300">console</span><span class="text-slate-400">.</span><span class="text-yellow-300">log</span><span class="text-slate-400">(</span><span class="text-emerald-400">`✅ Sent R1,000 ZARP`</span><span class="text-slate-400">);</span>
+<span class="text-blue-300">console</span><span class="text-slate-400">.</span><span class="text-yellow-300">log</span><span class="text-slate-400">(</span><span class="text-emerald-400">`🔗 TX: $&#123;tx&#125;`</span><span class="text-slate-400">);</span></code></pre>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </main>
+</Layout>
+
+<style>
+  .animate-blob {
+    animation: blob 7s infinite;
+  }
+  .animation-delay-2000 {
+    animation-delay: 2s;
+  }
+  .animation-delay-4000 {
+    animation-delay: 4s;
+  }
+  @keyframes blob {
+    0% { transform: translate(0px, 0px) scale(1); }
+    33% { transform: translate(30px, -50px) scale(1.1); }
+    66% { transform: translate(-20px, 20px) scale(0.9); }
+    100% { transform: translate(0px, 0px) scale(1); }
+  }
+  @keyframes scroll {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-33.33%); } /* Adjusted for triplicate */
+  }
+  .animate-scroll {
+    animation: scroll 40s linear infinite;
+  }
+  .animate-scroll:hover {
+    animation-play-state: paused;
+  }
+</style>

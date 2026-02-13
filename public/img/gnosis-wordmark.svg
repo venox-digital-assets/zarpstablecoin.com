@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 40" fill="none">
+  <circle cx="20" cy="20" r="15" fill="#3E6957"/>
+  <path d="M14 16a6 6 0 0 1 12 0c0 2.5-2 4-4 5.5S20 24 20 26m0 3v1" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+  <text x="42" y="26" font-family="system-ui, -apple-system, sans-serif" font-size="18" font-weight="700" fill="#3E6957">Gnosis Chain</text>
+</svg>

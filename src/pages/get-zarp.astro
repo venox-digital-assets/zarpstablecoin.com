@@ -1,0 +1,90 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const exchanges = [
+  {
+    category: "Centralized Exchanges",
+    description: "Custodial exchanges where you can buy ZARP with ZAR via bank transfer.",
+    items: [
+      { name: "AFRIDAX", url: "https://afridax.com/", logo: "/img/afridax.svg", color: "#000000", desc: "Crypto trading rooted in trust." },
+      { name: "ChainEX", url: "https://chainex.io/", logo: "/img/chainex.svg", color: "#2d70e7", desc: "Affordable South African exchange." },
+      { name: "OVEX", url: "https://www.ovex.io/", logo: "/img/ovex.svg", color: "#1e1e2f", desc: "High-volume OTC and RFQ trading." }
+    ]
+  },
+  {
+    category: "Decentralized Exchanges",
+    description: "Swap other crypto for ZARP directly on-chain.",
+    items: [
+      { name: "Aerodrome", url: "https://aerodrome.finance/", logo: "/img/aerodrome.svg", color: "#000000", desc: "The central liquidity hub on Base." },
+      { name: "Meteora", url: "https://meteora.ag/", logo: "/img/meteora.svg", color: "#ff3d00", desc: "Dynamic liquidity protocols on Solana." },
+      { name: "Orca", url: "https://www.orca.so/", logo: "/img/orca.svg", color: "#ffda59", desc: "User-friendly DEX on Solana." },
+      { name: "Stabull", url: "https://stabull.finance/", logo: "/img/stabull-color.svg", color: "#4f46e5", desc: "FX-optimized stablecoin AMM." },
+      { name: "Uniswap", url: "https://app.uniswap.org/#/swap?outputCurrency=0xb755506531786c8ac63b756bab1ac387bacb0c04", logo: "/img/uniswap.svg", color: "#ff007a", desc: "Swap on Ethereum, Polygon, and Base." }
+    ]
+  },
+  {
+    category: "On-Ramps",
+    description: "Easy ways to buy ZARP directly with fiat.",
+    items: [
+      { name: "EasyOnramp", url: "https://easyonramp.co.za/", logo: "/img/easyonramp.svg", color: "#000000", desc: "Transform your corporate treasury with ZARP." },
+      { name: "PumpPay", url: "https://www.pumppay.co.za/", logo: "/img/pumppay.svg", color: "#000000", desc: "Simple fiat-to-crypto payments." }
+    ]
+  },
+  {
+    category: "Ecosystem Partners",
+    description: "Infrastructure and security providers powering ZARP.",
+    items: [
+      { name: "BlockRadar", url: "https://blockradar.co/", logo: "/img/blockradar.svg", color: "#000000", desc: "Secure stablecoin wallet infrastructure." },
+      { name: "Fireblocks", url: "https://www.fireblocks.com/", logo: "/img/fireblocks.svg", color: "#000000", desc: "Enterprise-grade digital asset security." }
+    ]
+  }
+];
+---
+
+<Layout title="Get ZARP | Where to Buy">
+  <main class="min-h-screen bg-slate-50 pt-24 pb-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center mb-16">
+        <h1 class="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight mb-4">
+          Where to Get <span class="text-emerald-600">ZARP</span>
+        </h1>
+        <p class="text-xl text-slate-500 max-w-2xl mx-auto">
+          ZARP is available on leading exchanges, decentralized protocols, and on-ramps.
+        </p>
+      </div>
+
+      <div class="space-y-20">
+        {exchanges.map((section) => (
+          <section>
+            <div class="mb-8 border-b border-slate-200 pb-4">
+              <h2 class="text-2xl font-bold text-slate-900">{section.category}</h2>
+              <p class="text-slate-500 mt-1">{section.description}</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {section.items.map((item) => (
+                <a href={item.url} target="_blank" rel="noopener noreferrer" 
+                   class="group bg-white rounded-xl shadow-sm hover:shadow-lg hover:-translate-y-1 border border-slate-100 hover:border-emerald-100 p-6 flex items-start transition-all duration-300">
+                  
+                  <div class="h-14 w-14 flex-shrink-0 mr-5 flex items-center justify-center bg-slate-50 rounded-xl p-3 group-hover:bg-emerald-50 transition-colors">
+                    <img src={item.logo} alt={item.name} class="max-h-full max-w-full object-contain" />
+                  </div>
+                  
+                  <div class="flex-1">
+                    <div class="flex items-center justify-between">
+                      <h3 class="text-lg font-bold text-slate-900 group-hover:text-emerald-600 transition-colors">{item.name}</h3>
+                      <svg class="w-4 h-4 text-slate-300 group-hover:text-emerald-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                    </div>
+                    <p class="text-sm text-slate-500 mt-2 line-clamp-2">{item.desc}</p>
+                  </div>
+                </a>
+              ))}
+            </div>
+          </section>
+        ))}
+      </div>
+
+    </div>
+  </main>
+</Layout>
