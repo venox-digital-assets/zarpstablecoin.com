@@ -47,7 +47,7 @@ const exchanges = [
       
       <div class="text-center mb-16">
         <h1 class="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight mb-4">
-          Where to Get <span class="text-emerald-600">ZARP</span>
+          Where to Get <span class="text-[#009A35]">ZARP</span>
         </h1>
         <p class="text-xl text-slate-500 max-w-2xl mx-auto">
           ZARP is available on leading exchanges, decentralized protocols, and on-ramps.
@@ -65,16 +65,16 @@ const exchanges = [
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {section.items.map((item) => (
                 <a href={item.url} target="_blank" rel="noopener noreferrer" 
-                   class="group bg-white rounded-xl shadow-sm hover:shadow-lg hover:-translate-y-1 border border-slate-100 hover:border-emerald-100 p-6 flex items-start transition-all duration-300">
+                   class="group bg-white rounded-xl shadow-sm hover:shadow-lg hover:-translate-y-1 border border-slate-100 hover:border-[#009A35]/20 p-6 flex items-start transition-all duration-300">
                   
-                  <div class="h-14 w-14 flex-shrink-0 mr-5 flex items-center justify-center bg-slate-50 rounded-xl p-3 group-hover:bg-emerald-50 transition-colors">
+                  <div class="h-14 w-14 flex-shrink-0 mr-5 flex items-center justify-center bg-slate-50 rounded-xl p-3 group-hover:bg-[#009A35]/10 transition-colors">
                     <img src={item.logo} alt={item.name} class="max-h-full max-w-full object-contain" />
                   </div>
                   
                   <div class="flex-1">
                     <div class="flex items-center justify-between">
-                      <h3 class="text-lg font-bold text-slate-900 group-hover:text-emerald-600 transition-colors">{item.name}</h3>
-                      <svg class="w-4 h-4 text-slate-300 group-hover:text-emerald-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                      <h3 class="text-lg font-bold text-slate-900 group-hover:text-[#009A35] transition-colors">{item.name}</h3>
+                      <svg class="w-4 h-4 text-slate-300 group-hover:text-[#009A35] transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
                     </div>
                     <p class="text-sm text-slate-500 mt-2 line-clamp-2">{item.desc}</p>
                   </div>

@@ -62,16 +62,16 @@ const numberFormatter = new Intl.NumberFormat('en-ZA', {
 });
 
 const logos = [
-  { name: 'Base', src: '/img/base-wordmark.svg', url: 'https://basescan.org/token/0xb755506531786C8aC63B756BaB1ac387bACB0C04' },
-  { name: 'Ethereum', src: '/img/ethereum-wordmark.svg', url: 'https://etherscan.io/token/0xb755506531786C8aC63B756BaB1ac387bACB0C04' },
-  { name: 'Gnosis Chain', src: '/img/gnosis-wordmark.svg', url: 'https://gnosisscan.io/token/0xb755506531786C8aC63B756BaB1ac387bACB0C04' },
-  { name: 'Polygon', src: '/img/polygon-wordmark.svg', url: 'https://polygonscan.com/token/0xb755506531786C8aC63B756BaB1ac387bACB0C04' },
-  { name: 'Solana', src: '/img/solana-wordmark.svg', url: 'https://solscan.io/token/dngKhBQM3BGvsDHKhrLnjvRKfY5Q7gEnYGToj9Lk8rk' },
+  { name: 'Base', src: '/img/base.svg', url: 'https://basescan.org/token/0xb755506531786C8aC63B756BaB1ac387bACB0C04' },
+  { name: 'Ethereum', src: '/img/ethereum.svg', url: 'https://etherscan.io/token/0xb755506531786C8aC63B756BaB1ac387bACB0C04' },
+  { name: 'Gnosis Chain', src: '/img/gnosis.svg', url: 'https://gnosisscan.io/token/0xb755506531786C8aC63B756BaB1ac387bACB0C04' },
+  { name: 'Polygon', src: '/img/polygon.svg', url: 'https://polygonscan.com/token/0xb755506531786C8aC63B756BaB1ac387bACB0C04' },
+  { name: 'Solana', src: '/img/solana.svg', url: 'https://solscan.io/token/dngKhBQM3BGvsDHKhrLnjvRKfY5Q7gEnYGToj9Lk8rk' },
 ];
 
 ---
 
-<Layout title="ZARP Stablecoin | The Digital Rand">
+<Layout title="ZARP Stablecoin | The Rand Stablecoin">
   <main class="min-h-screen bg-white">
     <!-- Hero Section -->
     <div class="relative overflow-hidden pt-16 pb-20 lg:pt-32">
@@ -84,7 +84,7 @@ const logos = [
 
         <h1 class="text-5xl md:text-7xl font-extrabold text-slate-900 tracking-tight mb-6">
           Open Stablecoin Rails <br class="hidden md:block" />
-          <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-yellow-500">for the Rand</span>
+          <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#009A35] to-yellow-500">for the Rand</span>
         </h1>
         <p class="mt-4 max-w-2xl mx-auto text-xl text-slate-500 mb-12">
           The audited, fully collateralised and crypto-native stablecoin for the South African Rand.
@@ -102,29 +102,29 @@ const logos = [
           
             <!-- Box 1: ZARP/USD -->
             <div class="p-6 group hover:bg-slate-50 transition-colors">
-              <p class="text-sm font-medium text-slate-500 mb-1 group-hover:text-emerald-600">ZARP / USD</p>
+              <p class="text-sm font-medium text-slate-500 mb-1 group-hover:text-[#009A35]">ZARP / USD</p>
               <p class="text-2xl font-bold text-slate-900">{usdFormatter.format(priceData.usd)}</p>
               <p class="text-xs text-slate-400 mt-1">1 ZARP ≈ 1 ZAR</p>
             </div>
 
             <!-- Box 2: Circulating Supply -->
             <div class="p-6 group hover:bg-slate-50 transition-colors">
-              <p class="text-sm font-medium text-slate-500 mb-1 group-hover:text-emerald-600">Circulating Supply</p>
+              <p class="text-sm font-medium text-slate-500 mb-1 group-hover:text-[#009A35]">Circulating Supply</p>
               <p class="text-2xl font-bold text-slate-900">{zarFormatter.format(priceData.marketCap)}</p>
               <p class="text-xs text-slate-400 mt-1">Audited Tokens</p>
             </div>
 
             <!-- Box 3: Total Transactions -->
             <div class="p-6 group hover:bg-slate-50 transition-colors">
-              <p class="text-sm font-medium text-slate-500 mb-1 group-hover:text-emerald-600">Total Transactions</p>
+              <p class="text-sm font-medium text-slate-500 mb-1 group-hover:text-[#009A35]">Total Transactions</p>
               <p class="text-2xl font-bold text-slate-900">{numberFormatter.format(priceData.transactions)}+</p>
               <p class="text-xs text-slate-400 mt-1">Lifetime Transfers</p>
             </div>
 
             <!-- Box 4: Treasury Reserves -->
             <div class="p-6 group hover:bg-slate-50 transition-colors">
-              <p class="text-sm font-medium text-slate-500 mb-1 group-hover:text-emerald-600">Treasury Reserves</p>
-              <p class="text-2xl font-bold text-slate-900 text-emerald-600">{zarFormatter.format(priceData.reserves)}</p>
+              <p class="text-sm font-medium text-slate-500 mb-1 group-hover:text-[#009A35]">Treasury Reserves</p>
+              <p class="text-2xl font-bold text-slate-900 text-[#009A35]">{zarFormatter.format(priceData.reserves)}</p>
               <p class="text-xs text-slate-400 mt-1">Held by Old Mutual</p>
             </div>
 
@@ -135,7 +135,7 @@ const logos = [
       
       <!-- Abstract Background -->
       <div class="absolute top-0 left-1/2 w-full -translate-x-1/2 h-full overflow-hidden -z-10 opacity-30 pointer-events-none">
-          <div class="absolute top-[20%] left-[10%] w-72 h-72 bg-emerald-400 rounded-full mix-blend-multiply filter blur-3xl animate-blob"></div>
+          <div class="absolute top-[20%] left-[10%] w-72 h-72 bg-[#009A35]/60 rounded-full mix-blend-multiply filter blur-3xl animate-blob"></div>
           <div class="absolute top-[20%] right-[10%] w-72 h-72 bg-yellow-400 rounded-full mix-blend-multiply filter blur-3xl animate-blob animation-delay-2000"></div>
           <div class="absolute bottom-[20%] left-[30%] w-72 h-72 bg-pink-400 rounded-full mix-blend-multiply filter blur-3xl animate-blob animation-delay-4000"></div>
       </div>
@@ -146,18 +146,18 @@ const logos = [
       <div class="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-slate-50 to-transparent z-10"></div>
       <div class="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-slate-50 to-transparent z-10"></div>
       
-      <div class="flex items-center space-x-10 animate-scroll w-max">
+      <div class="flex items-center space-x-32 animate-scroll w-max">
         <!-- First Set -->
         {logos.map(logo => (
-          <a href={logo.url} target="_blank" rel="noopener noreferrer"><img src={logo.src} alt={logo.name} class="h-10 md:h-12 w-auto opacity-80 hover:opacity-100 transition-opacity" /></a>
+          <a href={logo.url} target="_blank" rel="noopener noreferrer"><img src={logo.src} alt={logo.name} class="h-5 md:h-6 w-auto opacity-80 hover:opacity-100 transition-opacity" /></a>
         ))}
         <!-- Duplicate Set -->
         {logos.map(logo => (
-          <a href={logo.url} target="_blank" rel="noopener noreferrer" aria-hidden="true" tabindex="-1"><img src={logo.src} alt={logo.name} class="h-10 md:h-12 w-auto opacity-80 hover:opacity-100 transition-opacity" /></a>
+          <a href={logo.url} target="_blank" rel="noopener noreferrer" aria-hidden="true" tabindex="-1"><img src={logo.src} alt={logo.name} class="h-5 md:h-6 w-auto opacity-80 hover:opacity-100 transition-opacity" /></a>
         ))}
         <!-- Triplicate Set (for wider screens) -->
         {logos.map(logo => (
-          <a href={logo.url} target="_blank" rel="noopener noreferrer" aria-hidden="true" tabindex="-1"><img src={logo.src} alt={logo.name} class="h-10 md:h-12 w-auto opacity-80 hover:opacity-100 transition-opacity" /></a>
+          <a href={logo.url} target="_blank" rel="noopener noreferrer" aria-hidden="true" tabindex="-1"><img src={logo.src} alt={logo.name} class="h-5 md:h-6 w-auto opacity-80 hover:opacity-100 transition-opacity" /></a>
         ))}
       </div>
     </div>
@@ -167,19 +167,19 @@ const logos = [
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-14">
           <h2 class="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight mb-4">
-            What Can You Do with <span class="text-emerald-600">ZARP</span>?
+            What Can You Do with <span class="text-[#009A35]">ZARP</span>?
           </h2>
           <p class="text-lg text-slate-500 max-w-2xl mx-auto">
-            A fully collateralised digital rand opens up possibilities that traditional money can't match.
+            A fully collateralised rand stablecoin opens up possibilities that traditional money can't match.
           </p>
         </div>
 
         <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
           
           <!-- Send & Receive -->
-          <div class="group bg-slate-50 hover:bg-white rounded-2xl p-8 border border-slate-100 hover:border-emerald-100 hover:shadow-lg transition-all duration-300">
-            <div class="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center mb-5 group-hover:bg-emerald-200 transition-colors">
-              <svg class="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 11l5-5m0 0l5 5m-5-5v12"/></svg>
+          <div class="group bg-slate-50 hover:bg-white rounded-2xl p-8 border border-slate-100 hover:border-[#009A35]/20 hover:shadow-lg transition-all duration-300">
+            <div class="w-12 h-12 bg-[#009A35]/15 rounded-xl flex items-center justify-center mb-5 group-hover:bg-[#009A35]/20 transition-colors">
+              <svg class="w-6 h-6 text-[#009A35]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 11l5-5m0 0l5 5m-5-5v12"/></svg>
             </div>
             <h3 class="text-lg font-bold text-slate-900 mb-2">Send & Receive</h3>
             <p class="text-sm text-slate-500 leading-relaxed">
@@ -188,7 +188,7 @@ const logos = [
           </div>
 
           <!-- Store Value -->
-          <div class="group bg-slate-50 hover:bg-white rounded-2xl p-8 border border-slate-100 hover:border-emerald-100 hover:shadow-lg transition-all duration-300">
+          <div class="group bg-slate-50 hover:bg-white rounded-2xl p-8 border border-slate-100 hover:border-[#009A35]/20 hover:shadow-lg transition-all duration-300">
             <div class="w-12 h-12 bg-yellow-100 rounded-xl flex items-center justify-center mb-5 group-hover:bg-yellow-200 transition-colors">
               <svg class="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
             </div>
@@ -199,18 +199,18 @@ const logos = [
           </div>
 
           <!-- Business Payments -->
-          <div class="group bg-slate-50 hover:bg-white rounded-2xl p-8 border border-slate-100 hover:border-emerald-100 hover:shadow-lg transition-all duration-300">
+          <div class="group bg-slate-50 hover:bg-white rounded-2xl p-8 border border-slate-100 hover:border-[#009A35]/20 hover:shadow-lg transition-all duration-300">
             <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mb-5 group-hover:bg-blue-200 transition-colors">
               <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
             </div>
             <h3 class="text-lg font-bold text-slate-900 mb-2">Business Payments</h3>
             <p class="text-sm text-slate-500 leading-relaxed">
-              Pay suppliers, freelancers, and partners in digital rand. Settle invoices on-chain with full transparency and instant finality.
+              Pay suppliers, freelancers, and partners in rand stablecoin. Settle invoices on-chain with full transparency and instant finality.
             </p>
           </div>
 
           <!-- DeFi & Yield -->
-          <div class="group bg-slate-50 hover:bg-white rounded-2xl p-8 border border-slate-100 hover:border-emerald-100 hover:shadow-lg transition-all duration-300">
+          <div class="group bg-slate-50 hover:bg-white rounded-2xl p-8 border border-slate-100 hover:border-[#009A35]/20 hover:shadow-lg transition-all duration-300">
             <div class="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center mb-5 group-hover:bg-purple-200 transition-colors">
               <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
             </div>
@@ -271,6 +271,82 @@ const logos = [
       </div>
     </div>
 
+    <!-- FAQ Section -->
+    <div class="py-20 bg-white">
+      <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+          <h2 class="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight mb-4">
+            Frequently Asked Questions
+          </h2>
+        </div>
+
+        <div class="space-y-4" id="faq-list">
+
+          <details class="group bg-slate-50 rounded-xl border border-slate-100 overflow-hidden">
+            <summary class="flex items-center justify-between cursor-pointer p-6 text-left font-semibold text-slate-900 hover:text-[#009A35] transition-colors">
+              What is a stablecoin?
+              <svg class="w-5 h-5 text-slate-400 group-open:rotate-180 transition-transform flex-shrink-0 ml-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </summary>
+            <div class="px-6 pb-6 text-sm text-slate-500 leading-relaxed">
+              Stablecoins are cryptocurrencies designed to maintain a stable value relative to a reference asset. ZARP is pegged to the South African Rand, so the price of 1 ZARP always equals 1 ZAR. This makes it useful for payments, savings, and trading without the volatility of other cryptocurrencies.
+            </div>
+          </details>
+
+          <details class="group bg-slate-50 rounded-xl border border-slate-100 overflow-hidden">
+            <summary class="flex items-center justify-between cursor-pointer p-6 text-left font-semibold text-slate-900 hover:text-[#009A35] transition-colors">
+              Where does the name 'ZARP' come from?
+              <svg class="w-5 h-5 text-slate-400 group-open:rotate-180 transition-transform flex-shrink-0 ml-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </summary>
+            <div class="px-6 pb-6 text-sm text-slate-500 leading-relaxed">
+              'ZAR' is the ticker symbol for the South African Rand. The 'ZA' refers to Zuid-Afrika (as in .co.za domain names), and the 'P' stands for peg — because ZARP is pegged to the price of the South African Rand.
+            </div>
+          </details>
+
+          <details class="group bg-slate-50 rounded-xl border border-slate-100 overflow-hidden">
+            <summary class="flex items-center justify-between cursor-pointer p-6 text-left font-semibold text-slate-900 hover:text-[#009A35] transition-colors">
+              How do you guarantee the price of ZARP?
+              <svg class="w-5 h-5 text-slate-400 group-open:rotate-180 transition-transform flex-shrink-0 ml-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </summary>
+            <div class="px-6 pb-6 text-sm text-slate-500 leading-relaxed">
+              Whenever our minting partners buy ZARP, we create new tokens to match the amount being acquired. Those rands are kept safely in our treasury, managed by Old Mutual Wealth. When rands are withdrawn, an equal amount of ZARP is burned. Independent auditors verify that we hold at least R1 for every ZARP in circulation. We never pay more or less than R1 per ZARP redeemed.
+            </div>
+          </details>
+
+          <details class="group bg-slate-50 rounded-xl border border-slate-100 overflow-hidden">
+            <summary class="flex items-center justify-between cursor-pointer p-6 text-left font-semibold text-slate-900 hover:text-[#009A35] transition-colors">
+              Where can I get ZARP?
+              <svg class="w-5 h-5 text-slate-400 group-open:rotate-180 transition-transform flex-shrink-0 ml-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </summary>
+            <div class="px-6 pb-6 text-sm text-slate-500 leading-relaxed">
+              ZARP can be acquired from issuing partners including <a href="https://afridax.com/" class="text-[#009A35] hover:underline">AFRIDAX</a>, <a href="https://chainex.io/" class="text-[#009A35] hover:underline">ChainEX</a>, and <a href="https://ovex.io/" class="text-[#009A35] hover:underline">OVEX</a>, and is listed on decentralised exchanges like <a href="https://aerodrome.finance/" class="text-[#009A35] hover:underline">Aerodrome</a>, <a href="https://www.orca.so/" class="text-[#009A35] hover:underline">Orca</a>, and <a href="https://app.uniswap.org/" class="text-[#009A35] hover:underline">Uniswap</a>. See our <a href="/get-zarp" class="text-[#009A35] hover:underline font-medium">full list of exchanges and on-ramps</a>.
+            </div>
+          </details>
+
+          <details class="group bg-slate-50 rounded-xl border border-slate-100 overflow-hidden">
+            <summary class="flex items-center justify-between cursor-pointer p-6 text-left font-semibold text-slate-900 hover:text-[#009A35] transition-colors">
+              What blockchains does ZARP run on?
+              <svg class="w-5 h-5 text-slate-400 group-open:rotate-180 transition-transform flex-shrink-0 ml-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </summary>
+            <div class="px-6 pb-6 text-sm text-slate-500 leading-relaxed">
+              ZARP is natively available on <strong>Base</strong>, <strong>Ethereum</strong>, <strong>Polygon</strong>, and <strong>Solana</strong>. The EVM contract address is <code class="text-xs bg-slate-100 px-1.5 py-0.5 rounded">0xb755506531786C8aC63B756BaB1ac387bACB0C04</code> and the Solana mint is <code class="text-xs bg-slate-100 px-1.5 py-0.5 rounded">dngKhBQM3BGvsDHKhrLnjvRKfY5Q7gEnYGToj9Lk8rk</code>.
+            </div>
+          </details>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Blog CTA -->
+    <div class="py-12 bg-slate-50 border-t border-slate-100">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <p class="text-slate-500 mb-4">Stay up to date with the latest ZARP news and developments.</p>
+        <a href="https://medium.com/@hello_56922" target="_blank" rel="noopener" class="inline-flex items-center gap-2 px-6 py-3 bg-slate-900 text-white text-sm font-medium rounded-lg hover:bg-[#009A35] transition-colors">
+          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M13.54 12a6.8 6.8 0 01-6.77 6.82A6.8 6.8 0 010 12a6.8 6.8 0 016.77-6.82A6.8 6.8 0 0113.54 12zm7.42 0c0 3.54-1.51 6.42-3.38 6.42-1.87 0-3.39-2.88-3.39-6.42s1.52-6.42 3.39-6.42 3.38 2.88 3.38 6.42M24 12c0 3.17-.53 5.75-1.19 5.75-.66 0-1.19-2.58-1.19-5.75s.53-5.75 1.19-5.75C23.47 6.25 24 8.83 24 12z"/></svg>
+          Read Our Blog on Medium
+        </a>
+      </div>
+    </div>
+
   </main>
 </Layout>
 
@@ -295,7 +371,7 @@ const logos = [
     100% { transform: translateX(-33.33%); } /* Adjusted for triplicate */
   }
   .animate-scroll {
-    animation: scroll 40s linear infinite;
+    animation: scroll 30s linear infinite;
   }
   .animate-scroll:hover {
     animation-play-state: paused;
