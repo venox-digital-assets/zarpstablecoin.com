@@ -27,6 +27,20 @@ const transactions = stats.transactions;
 const collateralRatio = ((reserves / supply) * 100).toFixed(1);
 const lastUpdated = new Date(stats.lastUpdated).toLocaleDateString('en-ZA', { day: 'numeric', month: 'long', year: 'numeric' });
 
+// Chart Data Calculation
+const chartData = stats.chart || [];
+const prices = chartData.map(d => d[1]);
+const minPrice = Math.min(...prices);
+const maxPrice = Math.max(...prices);
+const priceRange = maxPrice - minPrice;
+
+// SVG ViewBox 300x100
+const chartPoints = chartData.map((d, i) => {
+  const x = (i / (chartData.length - 1)) * 300;
+  const y = 100 - ((d[1] - minPrice) / priceRange) * 100; // Invert Y for SVG
+  return `${x},${y}`;
+}).join(' ');
+
 const explorers = [
   { name: 'Base', url: 'https://basescan.org/token/0xb755506531786C8aC63B756BaB1ac387bACB0C04', logo: '/img/base.svg' },
   { name: 'Ethereum', url: 'https://etherscan.io/token/0xb755506531786C8aC63B756BaB1ac387bACB0C04', logo: '/img/ethereum.svg' },
@@ -158,6 +172,53 @@ const explorers = [
               <svg class="w-4 h-4 text-slate-300 group-hover:text-[#009A35] transition-colors ml-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
             </a>
           ))}
+        </div>
+      </div>
+
+      <!-- Third Party Data -->
+      <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-8 md:p-12 mb-16">
+        <div class="grid md:grid-cols-2 gap-12 items-center">
+          <div>
+            <h2 class="text-2xl font-bold text-slate-900 mb-4">Data that not even we can mess with</h2>
+            <p class="text-slate-500 mb-6 leading-relaxed">
+              ZARP is a true, crypto-native stablecoin on public ledgers with immutable data, aggregated through independent third parties like CoinGecko. We don't control the data — the blockchain does.
+            </p>
+            <a href="https://www.coingecko.com/en/coins/zarp-stablecoin" target="_blank" rel="noopener" class="inline-flex items-center gap-2 text-[#009A35] font-medium hover:underline">
+              View on CoinGecko
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+            </a>
+          </div>
+          <div class="bg-slate-50 rounded-xl p-6 border border-slate-100 flex flex-col items-center justify-center text-center">
+            <img src="https://static.coingecko.com/s/coingecko-logo-8903d34ce19ca4be1c81f0db30e924154750d208683fad7ae6f2ce06c76d0a56.png" alt="CoinGecko" class="h-10 w-auto mb-4" />
+            <div class="text-sm text-slate-400">Live Market Data</div>
+            <div class="text-2xl font-bold text-slate-900 mt-1">ZARP / USD</div>
+            
+            <!-- Custom Sparkline Chart -->
+            <div class="mt-6 w-full h-32 bg-white rounded-lg border border-slate-100 overflow-hidden relative group">
+               {chartData.length > 0 ? (
+                 <svg viewBox="0 0 300 100" class="w-full h-full" preserveAspectRatio="none">
+                   <!-- Gradient Fill -->
+                   <defs>
+                     <linearGradient id="chartGradient" x1="0" x2="0" y1="0" y2="1">
+                       <stop offset="0%" stop-color="#009A35" stop-opacity="0.2"/>
+                       <stop offset="100%" stop-color="#009A35" stop-opacity="0"/>
+                     </linearGradient>
+                   </defs>
+                   <!-- Area -->
+                   <path d={`M0,100 L${chartPoints} L300,100 Z`} fill="url(#chartGradient)" />
+                   <!-- Line -->
+                   <polyline points={chartPoints} fill="none" stroke="#009A35" stroke-width="2" vector-effect="non-scaling-stroke" />
+                 </svg>
+               ) : (
+                 <div class="flex items-center justify-center h-full text-xs text-slate-300">Loading chart...</div>
+               )}
+               
+               <!-- Hover tooltip (simple CSS) -->
+               <div class="absolute top-2 right-2 text-[10px] bg-slate-900 text-white px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">
+                 7 Day Trend
+               </div>
+            </div>
+          </div>
         </div>
       </div>
 
