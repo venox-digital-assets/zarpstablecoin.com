@@ -1,43 +1,81 @@
-# Astro Starter Kit: Minimal
+# zarpstablecoin.com
+
+ZARP Stablecoin marketing site and transparency pages, built with Astro + Tailwind.
+
+## Stack
+
+- Astro 5
+- Tailwind CSS 4 (via `@tailwindcss/vite`)
+- Static output (`dist/`) for deployment
+
+## Local development
+
+From repo root:
 
 ```sh
-npm create astro@latest -- --template minimal
+npm ci
+npm run dev
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+Site runs at `http://localhost:4321`.
 
-## 🚀 Project Structure
+## Build and preview
 
-Inside of your Astro project, you'll see the following folders and files:
+```sh
+npm run build
+npm run preview
+```
+
+- Build output is generated in `dist/`.
+- This branch is configured to build as a static site.
+
+## Project layout
 
 ```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
+src/
+  pages/
+    index.astro
+    get-zarp.astro
+    transparency.astro
+    api/stats.json.ts
+  layouts/
+    Layout.astro
+  data/
+    stats.json
+  styles/
+    global.css
+public/
+  img/
+scripts/
+  update-stats.js
+old-site/
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+- `old-site/` contains the legacy pre-Astro implementation kept for reference.
+- Current production pages live under `src/pages/`.
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+## Data model and updates
 
-Any static assets, like images, can be placed in the `public/` directory.
+Primary metrics are sourced from `src/data/stats.json`.
 
-## 🧞 Commands
+The script `scripts/update-stats.js` refreshes:
 
-All commands are run from the root of the project, from a terminal:
+- transparency supply/reserves (scraped from the live transparency page)
+- CoinGecko price
+- 7-day chart points
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+Run manually:
 
-## 👀 Want to learn more?
+```sh
+node scripts/update-stats.js
+```
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+## Automation
+
+GitHub Actions workflow `.github/workflows/update-stats.yml` runs every 6 hours and commits updates to `src/data/stats.json` when values change.
+
+## Notes for contributors
+
+- Use `npm ci` for reproducible installs in CI/local.
+- Keep route logic static-friendly unless explicitly moving to SSR with an Astro adapter.
+- If you add new runtime/server routes, document deployment adapter requirements in this README.

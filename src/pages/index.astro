@@ -12,11 +12,7 @@ let priceData = {
 };
 
 try {
-  // Parallel fetch: CoinGecko + Our Transparency Scraper
-  const [coingeckoRes, statsRes] = await Promise.all([
-    fetch('https://api.coingecko.com/api/v3/simple/price?ids=zarp-stablecoin&vs_currencies=usd,zar&include_market_cap=true&include_24hr_vol=true'),
-    fetch('http://localhost:4321/api/stats.json') // Fetch from our own endpoint
-  ]);
+  const coingeckoRes = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=zarp-stablecoin&vs_currencies=usd,zar&include_market_cap=true&include_24hr_vol=true');
 
   const geckoData = await coingeckoRes.json();
   
@@ -29,14 +25,6 @@ try {
     // priceData.marketCap = geckoData['zarp-stablecoin'].zar_market_cap; 
   }
 
-  // Update from Transparency Page via API (or fallback to build-time stats)
-  if (statsRes.ok) {
-    const statsData = await statsRes.json();
-    if (statsData.supply) priceData.marketCap = statsData.supply;
-    if (statsData.reserves) priceData.reserves = statsData.reserves;
-    // If our API scraper finds transactions, use them. Otherwise keep the build-time stat.
-    if (statsData.transactions) priceData.transactions = statsData.transactions; 
-  }
 } catch (e) {
   console.error("Failed to fetch price data", e);
 }
