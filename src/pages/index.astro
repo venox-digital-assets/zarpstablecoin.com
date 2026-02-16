@@ -2,32 +2,21 @@
 import Layout from '../layouts/Layout.astro';
 import stats from '../data/stats.json';
 
-// Fetch live data from CoinGecko
-let priceData = {
+const priceData = {
   zar: 1.00,
   marketCap: stats.supply,
   transactions: stats.transactions,
-  usd: 0.05,
+  usd: stats.price_usd ?? 0.05,
   reserves: stats.reserves
 };
 
-try {
-  const coingeckoRes = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=zarp-stablecoin&vs_currencies=usd,zar&include_market_cap=true&include_24hr_vol=true');
-
-  const geckoData = await coingeckoRes.json();
-  
-  // Update from Gecko
-  if (geckoData['zarp-stablecoin']) {
-    priceData.zar = geckoData['zarp-stablecoin'].zar;
-    priceData.volume = geckoData['zarp-stablecoin'].zar_24h_vol;
-    priceData.usd = geckoData['zarp-stablecoin'].usd;
-    // We prefer our transparency page supply if available, else fallback to gecko
-    // priceData.marketCap = geckoData['zarp-stablecoin'].zar_market_cap; 
-  }
-
-} catch (e) {
-  console.error("Failed to fetch price data", e);
-}
+const coingeckoStatus = stats.sources?.coingecko?.status === 'error' ? 'error' : 'ok';
+const coingeckoMessage = stats.sources?.coingecko?.status === 'error'
+  ? `CoinGecko unavailable: ${stats.sources?.coingecko?.message ?? 'Temporary error'}`
+  : 'CoinGecko live feed healthy';
+const snapshotUpdatedAt = stats.lastUpdated
+  ? new Date(stats.lastUpdated).toLocaleString('en-ZA', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })
+  : null;
 
 const zarFormatter = new Intl.NumberFormat('en-ZA', {
   style: 'currency',
@@ -82,16 +71,24 @@ const logos = [
         <div class="max-w-4xl mx-auto bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden mb-16">
           <div class="bg-slate-50 px-6 py-3 border-b border-slate-100 flex items-center justify-between">
             <h3 class="text-sm font-semibold text-slate-500 uppercase tracking-wider">Market Snapshot</h3>
-            <span class="text-xs text-slate-400 flex items-center gap-1">
-              <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span> Live
-            </span>
+            {coingeckoStatus === 'ok' ? (
+              <span id="market-status-badge" class="text-xs text-slate-400 flex items-center gap-1">
+                <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+                CoinGecko Live
+              </span>
+            ) : (
+              <span id="market-status-badge" class="text-xs text-amber-700 flex items-center gap-1">
+                <span class="w-2 h-2 bg-amber-500 rounded-full"></span>
+                CoinGecko Temporarily Unavailable
+              </span>
+            )}
           </div>
           <div class="grid grid-cols-2 md:grid-cols-4 divide-y md:divide-y-0 md:divide-x divide-slate-100">
           
             <!-- Box 1: ZARP/USD -->
             <div class="p-6 group hover:bg-slate-50 transition-colors">
               <p class="text-sm font-medium text-slate-500 mb-1 group-hover:text-[#009A35]">ZARP / USD</p>
-              <p class="text-2xl font-bold text-slate-900">{usdFormatter.format(priceData.usd)}</p>
+              <p id="market-usd" class="text-2xl font-bold text-slate-900">{usdFormatter.format(priceData.usd)}</p>
               <p class="text-xs text-slate-400 mt-1">1 ZARP ≈ 1 ZAR</p>
             </div>
 
@@ -116,6 +113,12 @@ const logos = [
               <p class="text-xs text-slate-400 mt-1">Held by Old Mutual</p>
             </div>
 
+          </div>
+          <div class="px-6 py-3 border-t border-slate-100 bg-slate-50/70">
+            <p id="market-status-message" class="text-xs text-slate-500">{coingeckoMessage}</p>
+            {snapshotUpdatedAt && (
+              <p id="market-updated-at" class="text-xs text-slate-400 mt-1">Last successful market data update: {snapshotUpdatedAt}</p>
+            )}
           </div>
         </div>
 
@@ -341,6 +344,114 @@ const logos = [
 
   </main>
 </Layout>
+
+<script is:inline>
+  (() => {
+    if (window.__zarpMarketRefreshInitialized) return;
+    window.__zarpMarketRefreshInitialized = true;
+
+    const IS_DEV = ['localhost', '127.0.0.1'].includes(window.location.hostname);
+    const ENDPOINT = "https://api.coingecko.com/api/v3/simple/price?ids=zarp-stablecoin&vs_currencies=usd,zar";
+    const statusBadgeEl = document.getElementById('market-status-badge');
+    const statusMessageEl = document.getElementById('market-status-message');
+    const updatedAtEl = document.getElementById('market-updated-at');
+    const usdEl = document.getElementById('market-usd');
+
+    const usdFormatter = new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+      minimumFractionDigits: 4,
+      maximumFractionDigits: 4,
+    });
+
+    const log = (level, message, details) => {
+      if (!IS_DEV && level === 'debug') return;
+      const prefix = '[market-refresh]';
+      if (details !== undefined) {
+        console[level](`${prefix} ${message}`, details);
+      } else {
+        console[level](`${prefix} ${message}`);
+      }
+    };
+
+    const setBadge = (status, label) => {
+      if (!statusBadgeEl) return;
+      const isOk = status === 'ok';
+      statusBadgeEl.className = isOk
+        ? 'text-xs text-slate-400 flex items-center gap-1'
+        : 'text-xs text-amber-700 flex items-center gap-1';
+      const dotClass = isOk ? 'w-2 h-2 bg-green-500 rounded-full animate-pulse' : 'w-2 h-2 bg-amber-500 rounded-full';
+      statusBadgeEl.replaceChildren();
+      const dot = document.createElement('span');
+      dot.className = dotClass;
+      statusBadgeEl.appendChild(dot);
+      statusBadgeEl.append(label);
+    };
+
+    const setStatusMessage = (message) => {
+      if (statusMessageEl) statusMessageEl.textContent = message;
+    };
+
+    const setUpdatedAt = (dateObj) => {
+      if (!updatedAtEl) return;
+      const formatted = dateObj.toLocaleString('en-ZA', {
+        day: 'numeric',
+        month: 'short',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+      updatedAtEl.textContent = `Last successful market data update: ${formatted}`;
+    };
+
+    const refreshFromCoinGecko = async () => {
+      setBadge('warn', 'Refreshing CoinGecko...');
+      setStatusMessage('Attempting live market refresh from CoinGecko...');
+      log('info', 'Starting CoinGecko refresh');
+
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 8000);
+
+      try {
+        const response = await fetch(ENDPOINT, {
+          signal: controller.signal,
+          cache: 'no-store',
+          headers: {
+            'Accept': 'application/json'
+          }
+        });
+
+        if (!response.ok) {
+          throw new Error(`CoinGecko HTTP ${response.status}`);
+        }
+
+        const data = await response.json();
+        const usd = data?.['zarp-stablecoin']?.usd;
+        if (!Number.isFinite(usd) || usd <= 0) {
+          throw new Error('CoinGecko returned invalid USD price');
+        }
+
+        if (usdEl) {
+          usdEl.textContent = usdFormatter.format(usd);
+        }
+        setBadge('ok', 'CoinGecko Live');
+        setStatusMessage('CoinGecko live feed healthy');
+        setUpdatedAt(new Date());
+        log('info', 'CoinGecko refresh succeeded', { usd });
+      } catch (error) {
+        const message = error instanceof Error ? error.message : 'Unknown CoinGecko error';
+        setBadge('warn', 'CoinGecko Temporarily Unavailable');
+        setStatusMessage(`CoinGecko unavailable: ${message}. Showing cached values.`);
+        log('warn', 'CoinGecko refresh failed; keeping cached snapshot', message);
+      } finally {
+        clearTimeout(timeout);
+      }
+    };
+
+    log('info', 'Client market refresh script initialized');
+    refreshFromCoinGecko();
+  })();
+</script>
 
 <style>
   .animate-blob {

@@ -3,10 +3,17 @@
   "type": "module",
   "version": "0.0.1",
   "scripts": {
-    "dev": "astro dev",
+    "dev": "astro dev --host 127.0.0.1 --port 4321 --strict-port",
+    "dev:verbose": "DEBUG=astro:* NODE_OPTIONS=--trace-warnings astro dev --host 127.0.0.1 --port 4321 --strict-port",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "check": "astro check && npm run build",
+    "update:stats": "node scripts/update-stats.js"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.4",
+    "typescript": "^5.9.2"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.18",
