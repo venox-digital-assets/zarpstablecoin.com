@@ -10,14 +10,6 @@ const priceData = {
   reserves: stats.reserves
 };
 
-const coingeckoStatus = stats.sources?.coingecko?.status === 'error' ? 'error' : 'ok';
-const coingeckoMessage = stats.sources?.coingecko?.status === 'error'
-  ? `CoinGecko unavailable: ${stats.sources?.coingecko?.message ?? 'Temporary error'}`
-  : 'CoinGecko live feed healthy';
-const snapshotUpdatedAt = stats.lastUpdated
-  ? new Date(stats.lastUpdated).toLocaleString('en-ZA', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })
-  : null;
-
 const zarFormatter = new Intl.NumberFormat('en-ZA', {
   style: 'currency',
   currency: 'ZAR',
@@ -71,17 +63,9 @@ const logos = [
         <div class="max-w-4xl mx-auto bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden mb-16">
           <div class="bg-slate-50 px-6 py-3 border-b border-slate-100 flex items-center justify-between">
             <h3 class="text-sm font-semibold text-slate-500 uppercase tracking-wider">Market Snapshot</h3>
-            {coingeckoStatus === 'ok' ? (
-              <span id="market-status-badge" class="text-xs text-slate-400 flex items-center gap-1">
-                <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
-                CoinGecko Live
-              </span>
-            ) : (
-              <span id="market-status-badge" class="text-xs text-amber-700 flex items-center gap-1">
-                <span class="w-2 h-2 bg-amber-500 rounded-full"></span>
-                CoinGecko Temporarily Unavailable
-              </span>
-            )}
+            <span class="text-xs text-slate-400 flex items-center gap-1">
+              <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span> Live
+            </span>
           </div>
           <div class="grid grid-cols-2 md:grid-cols-4 divide-y md:divide-y-0 md:divide-x divide-slate-100">
           
@@ -114,12 +98,7 @@ const logos = [
             </div>
 
           </div>
-          <div class="px-6 py-3 border-t border-slate-100 bg-slate-50/70">
-            <p id="market-status-message" class="text-xs text-slate-500">{coingeckoMessage}</p>
-            {snapshotUpdatedAt && (
-              <p id="market-updated-at" class="text-xs text-slate-400 mt-1">Last successful market data update: {snapshotUpdatedAt}</p>
-            )}
-          </div>
+
         </div>
 
       </div>
@@ -168,47 +147,63 @@ const logos = [
         <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
           
           <!-- Send & Receive -->
-          <div class="group bg-slate-50 hover:bg-white rounded-2xl p-8 border border-slate-100 hover:border-[#009A35]/20 hover:shadow-lg transition-all duration-300">
-            <div class="w-12 h-12 bg-[#009A35]/15 rounded-xl flex items-center justify-center mb-5 group-hover:bg-[#009A35]/20 transition-colors">
-              <svg class="w-6 h-6 text-[#009A35]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 11l5-5m0 0l5 5m-5-5v12"/></svg>
+          <div class="group relative rounded-2xl overflow-hidden hover:shadow-lg transition-all duration-300 min-h-[280px]">
+            <img src="/img/usecase-send.jpg" alt="" class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-black/20 group-hover:from-black/85 group-hover:via-black/55 transition-all duration-300"></div>
+            <div class="relative z-10 p-8 flex flex-col justify-end h-full">
+              <div class="w-12 h-12 bg-white/15 backdrop-blur-sm rounded-xl flex items-center justify-center mb-5">
+                <svg class="w-6 h-6 text-[#009A35]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 11l5-5m0 0l5 5m-5-5v12"/></svg>
+              </div>
+              <h3 class="text-lg font-bold text-white mb-2">Send & Receive</h3>
+              <p class="text-sm text-white/80 leading-relaxed">
+                Transfer rand value instantly to anyone, anywhere — no banking hours, no borders, no delays.
+              </p>
             </div>
-            <h3 class="text-lg font-bold text-slate-900 mb-2">Send & Receive</h3>
-            <p class="text-sm text-slate-500 leading-relaxed">
-              Transfer rand value instantly to anyone, anywhere — no banking hours, no borders, no delays. Just fast, peer-to-peer digital money.
-            </p>
           </div>
 
           <!-- Store Value -->
-          <div class="group bg-slate-50 hover:bg-white rounded-2xl p-8 border border-slate-100 hover:border-[#009A35]/20 hover:shadow-lg transition-all duration-300">
-            <div class="w-12 h-12 bg-yellow-100 rounded-xl flex items-center justify-center mb-5 group-hover:bg-yellow-200 transition-colors">
-              <svg class="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+          <div class="group relative rounded-2xl overflow-hidden hover:shadow-lg transition-all duration-300 min-h-[280px]">
+            <img src="/img/usecase-store.jpg" alt="" class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-black/20 group-hover:from-black/85 group-hover:via-black/55 transition-all duration-300"></div>
+            <div class="relative z-10 p-8 flex flex-col justify-end h-full">
+              <div class="w-12 h-12 bg-white/15 backdrop-blur-sm rounded-xl flex items-center justify-center mb-5">
+                <svg class="w-6 h-6 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+              </div>
+              <h3 class="text-lg font-bold text-white mb-2">Store Value</h3>
+              <p class="text-sm text-white/80 leading-relaxed">
+                Park your rand value on-chain in a stable, audited token. Always backed 1:1 — your money holds its value.
+              </p>
             </div>
-            <h3 class="text-lg font-bold text-slate-900 mb-2">Store Value</h3>
-            <p class="text-sm text-slate-500 leading-relaxed">
-              Park your rand value on-chain in a stable, audited token. Always backed 1:1 — your money holds its value while you hold the keys.
-            </p>
           </div>
 
           <!-- Business Payments -->
-          <div class="group bg-slate-50 hover:bg-white rounded-2xl p-8 border border-slate-100 hover:border-[#009A35]/20 hover:shadow-lg transition-all duration-300">
-            <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mb-5 group-hover:bg-blue-200 transition-colors">
-              <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+          <div class="group relative rounded-2xl overflow-hidden hover:shadow-lg transition-all duration-300 min-h-[280px]">
+            <img src="/img/usecase-business.jpg" alt="" class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-black/20 group-hover:from-black/85 group-hover:via-black/55 transition-all duration-300"></div>
+            <div class="relative z-10 p-8 flex flex-col justify-end h-full">
+              <div class="w-12 h-12 bg-white/15 backdrop-blur-sm rounded-xl flex items-center justify-center mb-5">
+                <svg class="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+              </div>
+              <h3 class="text-lg font-bold text-white mb-2">Business Payments</h3>
+              <p class="text-sm text-white/80 leading-relaxed">
+                Pay suppliers, freelancers, and partners — or receive payments in your store with no fees to the merchant.
+              </p>
             </div>
-            <h3 class="text-lg font-bold text-slate-900 mb-2">Business Payments</h3>
-            <p class="text-sm text-slate-500 leading-relaxed">
-              Pay suppliers, freelancers, and partners in rand stablecoin. Settle invoices on-chain with full transparency and instant finality.
-            </p>
           </div>
 
           <!-- DeFi & Yield -->
-          <div class="group bg-slate-50 hover:bg-white rounded-2xl p-8 border border-slate-100 hover:border-[#009A35]/20 hover:shadow-lg transition-all duration-300">
-            <div class="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center mb-5 group-hover:bg-purple-200 transition-colors">
-              <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
+          <div class="group relative rounded-2xl overflow-hidden hover:shadow-lg transition-all duration-300 min-h-[280px]">
+            <img src="/img/usecase-defi.jpg" alt="" class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-black/20 group-hover:from-black/85 group-hover:via-black/55 transition-all duration-300"></div>
+            <div class="relative z-10 p-8 flex flex-col justify-end h-full">
+              <div class="w-12 h-12 bg-white/15 backdrop-blur-sm rounded-xl flex items-center justify-center mb-5">
+                <svg class="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
+              </div>
+              <h3 class="text-lg font-bold text-white mb-2">DeFi & Yield</h3>
+              <p class="text-sm text-white/80 leading-relaxed">
+                Put your rand value to work. Provide liquidity, earn yield, and access decentralised finance — all in ZAR.
+              </p>
             </div>
-            <h3 class="text-lg font-bold text-slate-900 mb-2">DeFi & Yield</h3>
-            <p class="text-sm text-slate-500 leading-relaxed">
-              Put your rand value to work. Provide liquidity, earn yield, and access decentralised finance — all denominated in ZAR.
-            </p>
           </div>
 
         </div>
@@ -350,13 +345,7 @@ const logos = [
     if (window.__zarpMarketRefreshInitialized) return;
     window.__zarpMarketRefreshInitialized = true;
 
-    const IS_DEV = ['localhost', '127.0.0.1'].includes(window.location.hostname);
-    const ENDPOINT = "https://api.coingecko.com/api/v3/simple/price?ids=zarp-stablecoin&vs_currencies=usd,zar";
-    const statusBadgeEl = document.getElementById('market-status-badge');
-    const statusMessageEl = document.getElementById('market-status-message');
-    const updatedAtEl = document.getElementById('market-updated-at');
     const usdEl = document.getElementById('market-usd');
-
     const usdFormatter = new Intl.NumberFormat('en-US', {
       style: 'currency',
       currency: 'USD',
@@ -364,92 +353,27 @@ const logos = [
       maximumFractionDigits: 4,
     });
 
-    const log = (level, message, details) => {
-      if (!IS_DEV && level === 'debug') return;
-      const prefix = '[market-refresh]';
-      if (details !== undefined) {
-        console[level](`${prefix} ${message}`, details);
-      } else {
-        console[level](`${prefix} ${message}`);
-      }
-    };
-
-    const setBadge = (status, label) => {
-      if (!statusBadgeEl) return;
-      const isOk = status === 'ok';
-      statusBadgeEl.className = isOk
-        ? 'text-xs text-slate-400 flex items-center gap-1'
-        : 'text-xs text-amber-700 flex items-center gap-1';
-      const dotClass = isOk ? 'w-2 h-2 bg-green-500 rounded-full animate-pulse' : 'w-2 h-2 bg-amber-500 rounded-full';
-      statusBadgeEl.replaceChildren();
-      const dot = document.createElement('span');
-      dot.className = dotClass;
-      statusBadgeEl.appendChild(dot);
-      statusBadgeEl.append(label);
-    };
-
-    const setStatusMessage = (message) => {
-      if (statusMessageEl) statusMessageEl.textContent = message;
-    };
-
-    const setUpdatedAt = (dateObj) => {
-      if (!updatedAtEl) return;
-      const formatted = dateObj.toLocaleString('en-ZA', {
-        day: 'numeric',
-        month: 'short',
-        year: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit'
-      });
-      updatedAtEl.textContent = `Last successful market data update: ${formatted}`;
-    };
-
-    const refreshFromCoinGecko = async () => {
-      setBadge('warn', 'Refreshing CoinGecko...');
-      setStatusMessage('Attempting live market refresh from CoinGecko...');
-      log('info', 'Starting CoinGecko refresh');
-
-      const controller = new AbortController();
-      const timeout = setTimeout(() => controller.abort(), 8000);
-
+    const refreshPrice = async () => {
       try {
-        const response = await fetch(ENDPOINT, {
-          signal: controller.signal,
-          cache: 'no-store',
-          headers: {
-            'Accept': 'application/json'
-          }
-        });
-
-        if (!response.ok) {
-          throw new Error(`CoinGecko HTTP ${response.status}`);
-        }
-
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 8000);
+        const response = await fetch(
+          'https://api.coingecko.com/api/v3/simple/price?ids=zarp-stablecoin&vs_currencies=usd,zar',
+          { signal: controller.signal, cache: 'no-store' }
+        );
+        clearTimeout(timeout);
+        if (!response.ok) return;
         const data = await response.json();
         const usd = data?.['zarp-stablecoin']?.usd;
-        if (!Number.isFinite(usd) || usd <= 0) {
-          throw new Error('CoinGecko returned invalid USD price');
-        }
-
-        if (usdEl) {
+        if (usdEl && Number.isFinite(usd) && usd > 0) {
           usdEl.textContent = usdFormatter.format(usd);
         }
-        setBadge('ok', 'CoinGecko Live');
-        setStatusMessage('CoinGecko live feed healthy');
-        setUpdatedAt(new Date());
-        log('info', 'CoinGecko refresh succeeded', { usd });
-      } catch (error) {
-        const message = error instanceof Error ? error.message : 'Unknown CoinGecko error';
-        setBadge('warn', 'CoinGecko Temporarily Unavailable');
-        setStatusMessage(`CoinGecko unavailable: ${message}. Showing cached values.`);
-        log('warn', 'CoinGecko refresh failed; keeping cached snapshot', message);
-      } finally {
-        clearTimeout(timeout);
+      } catch (e) {
+        // Silently keep cached value
       }
     };
 
-    log('info', 'Client market refresh script initialized');
-    refreshFromCoinGecko();
+    refreshPrice();
   })();
 </script>
 

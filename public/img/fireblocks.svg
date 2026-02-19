@@ -1,4 +1,15 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
-  <rect width="200" height="200" fill="none"/>
-  <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="Arial, sans-serif" font-weight="bold" font-size="32" fill="#000000">Fireblocks</text>
+<svg width="297" height="298" viewBox="0 0 297 298" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_2323_164)">
+<mask id="mask0_2323_164" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="0" y="0" width="1763" height="298">
+<path d="M1763 0H0V298H1763V0Z" fill="white"/>
+</mask>
+<g mask="url(#mask0_2323_164)">
+<path d="M253.901 0H43.3489C19.4141 0 0 19.4631 0 43.4583V254.542C0 278.537 19.4141 298 43.3489 298H253.901C277.835 298 297.249 278.537 297.249 254.542V43.4583C297.249 19.4631 277.835 0 253.901 0ZM202.904 211.083H94.3458C82.3629 211.083 74.9317 198.046 81.0005 187.709L135.528 94.615C141.534 84.3713 156.304 84.4023 162.248 94.6771L216.28 187.771C222.287 198.108 214.825 211.083 202.904 211.083Z" fill="#212647"/>
+</g>
+</g>
+<defs>
+<clipPath id="clip0_2323_164">
+<rect width="297" height="298" fill="white"/>
+</clipPath>
+</defs>
 </svg>
