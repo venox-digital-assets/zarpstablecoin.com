@@ -1,0 +1,42 @@
+name: Update Stats & Prices
+
+on:
+  schedule:
+    # Run every 6 hours
+    - cron: '0 */6 * * *'
+  workflow_dispatch: # Allow manual trigger
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-stats-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  update-data:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v5
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run update script
+        run: node scripts/update-stats.js
+
+      - name: Commit and push if changed
+        run: |
+          git config user.name "ZARP Bot"
+          git config user.email "bot@zarpstablecoin.com"
+          git add src/data/stats.json
+          git commit -m "data: update price and stats" || exit 0
+          git pull --rebase origin "${GITHUB_REF_NAME}" || true
+          git push

@@ -1,15 +1,24 @@
 {
-  "name": "zarp.cash",
-  "version": "1.0.0",
-  "description": "zarp.cash web site",
-  "main": "index.js",
-  "repository": "https://github.com/venox-digital-assets/zarp.cash.git",
-  "author": "Kenny Inggs <kenny.inggs@gmail.com>",
-  "license": "MIT",
-  "devDependencies": {
-    "http-server": "^0.12.3"
-  },
+  "name": "zarpstablecoin.com",
+  "type": "module",
+  "version": "3.0",
   "scripts": {
-    "start": "http-server ./ -p 3000"
+    "dev": "astro dev --host 127.0.0.1 --port 4321 --strict-port",
+    "dev:verbose": "DEBUG=astro:* NODE_OPTIONS=--trace-warnings astro dev --host 127.0.0.1 --port 4321 --strict-port",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "check": "astro check",
+    "verify": "astro check && astro build",
+    "update:stats": "node scripts/update-stats.js"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.4",
+    "typescript": "^5.9.2"
+  },
+  "dependencies": {
+    "@tailwindcss/vite": "^4.1.18",
+    "astro": "^5.17.1",
+    "tailwindcss": "^4.1.18"
   }
 }
