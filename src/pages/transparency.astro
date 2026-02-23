@@ -29,21 +29,20 @@ const collateralRatio = ((reserves / supply) * 100).toFixed(1);
 const lastUpdated = new Date(stats.last_updated).toLocaleDateString('en-ZA', { day: 'numeric', month: 'long', year: 'numeric' });
 
 // Chart Data Calculation
-const chartData = stats.chart || [];
-const prices = chartData.map(d => d[1]);
+const prices = stats.chart_points || [];
 const minPrice = Math.min(...prices);
 const maxPrice = Math.max(...prices);
 const priceRange = maxPrice - minPrice;
-const hasRenderableChart = chartData.length > 1;
+const hasRenderableChart = prices.length > 1;
 const chartStatusMessage = stats.sources?.chart?.status === 'error'
   ? `CoinGecko chart unavailable: ${stats.sources?.chart?.message ?? 'temporary error'}`
   : 'Chart data is temporarily unavailable.';
 
 // SVG ViewBox 300x100
 const chartPoints = hasRenderableChart
-  ? chartData.map((d, i) => {
-      const x = (i / Math.max(chartData.length - 1, 1)) * 300;
-      const y = priceRange === 0 ? 50 : 100 - ((d[1] - minPrice) / priceRange) * 100;
+  ? prices.map((price, i) => {
+      const x = (i / Math.max(prices.length - 1, 1)) * 300;
+      const y = priceRange === 0 ? 50 : 100 - ((price - minPrice) / priceRange) * 100;
       return `${x},${y}`;
     }).join(' ')
   : '';
@@ -205,30 +204,10 @@ const explorers = [
             <div class="text-sm text-slate-400">Live Market Data</div>
             <div class="text-2xl font-bold text-slate-900 mt-1">ZARP / USD</div>
             
-            <!-- Custom Sparkline Chart -->
-            <div class="mt-6 w-full h-32 bg-white rounded-lg border border-slate-100 overflow-hidden relative group">
-               {hasRenderableChart ? (
-                 <svg viewBox="0 0 300 100" class="w-full h-full" preserveAspectRatio="none">
-                   <!-- Gradient Fill -->
-                   <defs>
-                     <linearGradient id="chartGradient" x1="0" x2="0" y1="0" y2="1">
-                       <stop offset="0%" stop-color="#009A35" stop-opacity="0.2"/>
-                       <stop offset="100%" stop-color="#009A35" stop-opacity="0"/>
-                     </linearGradient>
-                   </defs>
-                   <!-- Area -->
-                   <path d={`M0,100 L${chartPoints} L300,100 Z`} fill="url(#chartGradient)" />
-                   <!-- Line -->
-                   <polyline points={chartPoints} fill="none" stroke="#009A35" stroke-width="2" vector-effect="non-scaling-stroke" />
-                 </svg>
-               ) : (
-                 <div class="flex items-center justify-center h-full text-xs text-slate-400 px-4 text-center">{chartStatusMessage}</div>
-               )}
-               
-               <!-- Hover tooltip (simple CSS) -->
-               <div class="absolute top-2 right-2 text-[10px] bg-slate-900 text-white px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">
-                 7 Day Trend
-               </div>
+            <!-- CoinGecko Widget -->
+            <div class="mt-6 w-full h-64 bg-white rounded-lg border border-slate-100 overflow-hidden relative">
+               <script src="https://widgets.coingecko.com/gecko-coin-price-chart-widget.js"></script>
+               <gecko-coin-price-chart-widget locale="en" transparent-background="true" coin-id="zarp-stablecoin" initial-currency="usd"></gecko-coin-price-chart-widget>
             </div>
           </div>
         </div>
