@@ -28,25 +28,6 @@ const transactions = stats.transactions;
 const collateralRatio = ((reserves / supply) * 100).toFixed(1);
 const lastUpdated = new Date(stats.last_updated).toLocaleDateString('en-ZA', { day: 'numeric', month: 'long', year: 'numeric' });
 
-// Chart Data Calculation
-const prices = stats.chart_points || [];
-const minPrice = Math.min(...prices);
-const maxPrice = Math.max(...prices);
-const priceRange = maxPrice - minPrice;
-const hasRenderableChart = prices.length > 1;
-const chartStatusMessage = stats.sources?.chart?.status === 'error'
-  ? `CoinGecko chart unavailable: ${stats.sources?.chart?.message ?? 'temporary error'}`
-  : 'Chart data is temporarily unavailable.';
-
-// SVG ViewBox 300x100
-const chartPoints = hasRenderableChart
-  ? prices.map((price, i) => {
-      const x = (i / Math.max(prices.length - 1, 1)) * 300;
-      const y = priceRange === 0 ? 50 : 100 - ((price - minPrice) / priceRange) * 100;
-      return `${x},${y}`;
-    }).join(' ')
-  : '';
-
 const explorers = [
   { name: 'Base', url: 'https://basescan.org/token/0xb755506531786C8aC63B756BaB1ac387bACB0C04', logo: '/img/base.svg' },
   { name: 'Ethereum', url: 'https://etherscan.io/token/0xb755506531786C8aC63B756BaB1ac387bACB0C04', logo: '/img/ethereum.svg' },
@@ -208,6 +189,7 @@ const explorers = [
             <div class="mt-6 w-full h-64 bg-white rounded-lg border border-slate-100 overflow-hidden relative">
                <script is:inline src="https://widgets.coingecko.com/gecko-coin-price-chart-widget.js"></script>
                <gecko-coin-price-chart-widget locale="en" transparent-background="true" coin-id="zarp-stablecoin" initial-currency="usd"></gecko-coin-price-chart-widget>
+               <noscript><p class="text-xs text-slate-400 p-4 text-center">Chart requires JavaScript. Visit <a href="https://www.coingecko.com/en/coins/zarp-stablecoin" class="underline">CoinGecko</a> for live data.</p></noscript>
             </div>
           </div>
         </div>

@@ -8,7 +8,8 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "check": "astro check && npm run build",
+    "check": "astro check",
+    "verify": "astro check && astro build",
     "update:stats": "node scripts/update-stats.js"
   },
   "devDependencies": {

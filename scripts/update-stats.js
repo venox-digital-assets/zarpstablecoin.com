@@ -20,7 +20,6 @@ const REQUEST_TIMEOUT_MS = 15000;
 const BASELINE_TRANSACTIONS = 150000;
 const FALLBACK_SUPPLY = 67365368.31;
 const FALLBACK_RESERVES = 85819720.70;
-const IS_DEV = process.env.NODE_ENV !== 'production';
 
 function logInfo(message, details) {
   if (details !== undefined) {
@@ -96,34 +95,18 @@ async function fetchStats() {
   const now = new Date().toISOString();
   let hasSuccessfulSource = false;
 
-  const newStats = {
-    transactions: existingStats?.transactions ?? BASELINE_TRANSACTIONS,
+  // Start from existing values or fallbacks
+  const result = {
     supply: existingStats?.supply ?? FALLBACK_SUPPLY,
     reserves: existingStats?.reserves ?? FALLBACK_RESERVES,
+    transactions: existingStats?.transactions ?? BASELINE_TRANSACTIONS,
     price_usd: existingStats?.price_usd ?? 0,
-    chart: Array.isArray(existingStats?.chart) ? existingStats.chart : [],
-    lastUpdated: existingStats?.lastUpdated ?? now,
-    lastAttemptedAt: now,
-    sources: {
-      transparency: {
-        status: 'error',
-        checkedAt: now,
-        message: 'Not attempted yet'
-      },
-      coingecko: {
-        status: 'error',
-        checkedAt: now,
-        message: 'Not attempted yet'
-      },
-      chart: {
-        status: 'error',
-        checkedAt: now,
-        message: 'Not attempted yet'
-      }
-    }
+    chart_points: Array.isArray(existingStats?.chart_points) ? existingStats.chart_points : [],
+    last_updated: existingStats?.last_updated ?? now,
   };
 
   try {
+    // --- Transparency page (supply + reserves) ---
     logInfo(`Fetching ${TRANSPARENCY_URL}...`);
     try {
       const transparencyRes = await fetchWithTimeout(TRANSPARENCY_URL);
@@ -139,32 +122,19 @@ async function fetchStats() {
       const parsedReserves = parseAmount(reservesMatch?.[1]);
 
       if (parsedSupply && parsedReserves) {
-        newStats.supply = parsedSupply;
-        newStats.reserves = parsedReserves;
-        newStats.sources.transparency = {
-          status: 'ok',
-          checkedAt: now,
-          message: 'Transparency page parsed successfully'
-        };
+        result.supply = parsedSupply;
+        result.reserves = parsedReserves;
         hasSuccessfulSource = true;
-        logInfo(`Supply: ${newStats.supply}`);
-        logInfo(`Reserves: ${newStats.reserves}`);
+        logInfo(`Supply: ${result.supply}`);
+        logInfo(`Reserves: ${result.reserves}`);
       } else {
-        newStats.sources.transparency = {
-          status: 'error',
-          checkedAt: now,
-          message: 'Unable to parse supply/reserves from transparency page'
-        };
+        logWarn('Unable to parse supply/reserves from transparency page');
       }
     } catch (error) {
-      newStats.sources.transparency = {
-        status: 'error',
-        checkedAt: now,
-        message: error instanceof Error ? error.message : 'Unknown transparency error'
-      };
-      logWarn('Transparency source failed', newStats.sources.transparency.message);
+      logWarn('Transparency source failed', error instanceof Error ? error.message : String(error));
     }
 
+    // --- CoinGecko price ---
     logInfo('Fetching CoinGecko price...');
     try {
       const geckoRes = await fetchWithTimeout(COINGECKO_URL);
@@ -176,30 +146,17 @@ async function fetchStats() {
       const usdPrice = geckoData?.['zarp-stablecoin']?.usd;
 
       if (isFinitePositiveNumber(usdPrice)) {
-        newStats.price_usd = usdPrice;
-        newStats.sources.coingecko = {
-          status: 'ok',
-          checkedAt: now,
-          message: 'CoinGecko price fetched successfully'
-        };
+        result.price_usd = usdPrice;
         hasSuccessfulSource = true;
-        logInfo(`Price (USD): ${newStats.price_usd}`);
+        logInfo(`Price (USD): ${result.price_usd}`);
       } else {
-        newStats.sources.coingecko = {
-          status: 'error',
-          checkedAt: now,
-          message: 'CoinGecko response missing valid USD price'
-        };
+        logWarn('CoinGecko response missing valid USD price');
       }
     } catch (error) {
-      newStats.sources.coingecko = {
-        status: 'error',
-        checkedAt: now,
-        message: error instanceof Error ? error.message : 'Unknown CoinGecko error'
-      };
-      logWarn('CoinGecko price source failed', newStats.sources.coingecko.message);
+      logWarn('CoinGecko price source failed', error instanceof Error ? error.message : String(error));
     }
 
+    // --- CoinGecko chart (downsample to flat array of prices) ---
     logInfo('Fetching CoinGecko chart...');
     try {
       const chartRes = await fetchWithTimeout(COINGECKO_CHART_URL);
@@ -211,47 +168,25 @@ async function fetchStats() {
       const normalizedChart = normalizeChartPoints(chartData?.prices);
 
       if (normalizedChart.length > 0) {
-        newStats.chart = normalizedChart;
-        newStats.sources.chart = {
-          status: 'ok',
-          checkedAt: now,
-          message: `Chart updated with ${normalizedChart.length} points`
-        };
+        // Store only the price values (no timestamps) for the simplified schema
+        result.chart_points = normalizedChart.map(([, price]) => price);
         hasSuccessfulSource = true;
-        logInfo(`Chart points: ${newStats.chart.length}`);
+        logInfo(`Chart points: ${result.chart_points.length}`);
       } else {
-        newStats.sources.chart = {
-          status: 'error',
-          checkedAt: now,
-          message: 'CoinGecko chart response missing valid price points'
-        };
+        logWarn('CoinGecko chart response missing valid price points');
       }
     } catch (error) {
-      newStats.sources.chart = {
-        status: 'error',
-        checkedAt: now,
-        message: error instanceof Error ? error.message : 'Unknown chart error'
-      };
-      logWarn('CoinGecko chart source failed', newStats.sources.chart.message);
+      logWarn('CoinGecko chart source failed', error instanceof Error ? error.message : String(error));
     }
 
     if (hasSuccessfulSource) {
-      newStats.lastUpdated = now;
+      result.last_updated = now;
     } else {
       logWarn('All upstream sources failed; keeping last successful snapshot values.');
     }
 
-    if (IS_DEV) {
-      const failedSources = Object.entries(newStats.sources)
-        .filter(([, source]) => source.status === 'error')
-        .map(([name, source]) => `${name}: ${source.message}`);
-      if (failedSources.length > 0) {
-        logWarn('Source health warnings', failedSources);
-      }
-    }
-
     logInfo(`Writing to ${STATS_PATH}...`);
-    await fs.writeFile(STATS_PATH, JSON.stringify(newStats, null, 2));
+    await fs.writeFile(STATS_PATH, JSON.stringify(result, null, 2));
     logInfo('Done!');
 
   } catch (error) {

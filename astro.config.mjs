@@ -5,7 +5,7 @@ import tailwindcss from '@tailwindcss/vite';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://zarpstablecoin.com',
+  site: 'https://www.zarpstablecoin.com',
   vite: {
     plugins: [tailwindcss()]
   }
