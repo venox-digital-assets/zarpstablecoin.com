@@ -3,6 +3,18 @@ import Layout from '../layouts/Layout.astro';
 
 const exchanges = [
   {
+    category: "Apps & Wallets",
+    description: "Use ZARP in everyday life — send, receive, and spend.",
+    items: [
+      { name: "Coinbase", url: "https://www.coinbase.com/", logo: "/img/coinbase.svg", color: "#0052FF", desc: "Swap ZARP directly in Coinbase for users in North America." },
+      { name: "Mandla Money", url: "https://mandla.money/", logo: "/img/mandlamoney.svg", color: "#000000", desc: "Send and receive ZARP on WhatsApp or to any mobile number." },
+      { name: "MetaMask", url: "https://metamask.io/", logo: "/img/metamask.svg", color: "#F6851B", desc: "The most popular wallet for Ethereum and EVM chains." },
+      { name: "Moovha", url: "https://moovha.com/", logo: "/img/moovha.svg", color: "#1E3A8A", desc: "Save, send, and spend in USD or Rands, powered by ZARP." },
+      { name: "Phantom", url: "https://phantom.app/", logo: "/img/phantom.svg", color: "#AB9FF2", desc: "Multi-chain wallet for Solana, Ethereum, and more." },
+      { name: "Rabby", url: "https://rabby.io/", logo: "/img/rabby.svg", color: "#7084FF", desc: "Smart wallet with built-in security for EVM chains." }
+    ]
+  },
+  {
     category: "Centralized Exchanges",
     description: "Custodial exchanges where you can buy ZARP with ZAR via bank transfer.",
     items: [
@@ -29,7 +41,9 @@ const exchanges = [
     description: "Infrastructure and security providers powering ZARP.",
     items: [
       { name: "BlockRadar", url: "https://blockradar.co/", logo: "/img/blockradar.svg", color: "#000000", desc: "Secure stablecoin wallet infrastructure." },
-      { name: "Fireblocks", url: "https://www.fireblocks.com/", logo: "/img/fireblocks.svg", color: "#000000", desc: "Enterprise-grade digital asset security." }
+      { name: "Capa", url: "https://capa.fi/", logo: "/img/capa.svg", color: "#000000", desc: "Connecting LATAM to global finance." },
+      { name: "Fireblocks", url: "https://www.fireblocks.com/", logo: "/img/fireblocks.svg", color: "#000000", desc: "Enterprise-grade digital asset security." },
+      { name: "LinkIO", url: "https://www.linkio.world/", logo: "/img/linkio.png", color: "#000000", desc: "Real-time FX infrastructure for modern payments." }
     ]
   },
   {
@@ -38,18 +52,6 @@ const exchanges = [
     items: [
       { name: "EasyOnramp", url: "https://easyonramp.co.za/", logo: "/img/easyonramp.svg", color: "#000000", desc: "Transform your corporate treasury with ZARP." },
       { name: "PumpPay", url: "https://www.pumppay.co.za/", logo: "/img/pumppay.svg", color: "#000000", desc: "Smart fuel payments powered by ZARP." }
-    ]
-  },
-  {
-    category: "Wallets & Apps",
-    description: "Use ZARP in everyday life — send, receive, and spend.",
-    items: [
-      { name: "Coinbase", url: "https://www.coinbase.com/", logo: "/img/coinbase.svg", color: "#0052FF", desc: "Swap ZARP directly in Coinbase for users in North America." },
-      { name: "Mandla Money", url: "https://mandla.money/", logo: "/img/mandlamoney.svg", color: "#000000", desc: "Send and receive ZARP on WhatsApp or to any mobile number." },
-      { name: "MetaMask", url: "https://metamask.io/", logo: "/img/metamask.svg", color: "#F6851B", desc: "The most popular wallet for Ethereum and EVM chains." },
-      { name: "Moovha", url: "https://moovha.com/", logo: "/img/moovha.svg", color: "#1E3A8A", desc: "Save, send, and spend in USD or Rands, powered by ZARP." },
-      { name: "Phantom", url: "https://phantom.app/", logo: "/img/phantom.svg", color: "#AB9FF2", desc: "Multi-chain wallet for Solana, Ethereum, and more." },
-      { name: "Rabby", url: "https://rabby.io/", logo: "/img/rabby.svg", color: "#7084FF", desc: "Smart wallet with built-in security for EVM chains." }
     ]
   }
 ];
