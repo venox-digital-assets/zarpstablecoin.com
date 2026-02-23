@@ -1,101 +1,101 @@
-# zarpstablecoin.com
+# ZARP Stablecoin Website
 
-ZARP Stablecoin marketing site and transparency pages, built with Astro + Tailwind.
+The official website for [ZARP Stablecoin](https://zarpstablecoin.com), the fully collateralized and audited Rand stablecoin.
 
-## Stack
+Built with modern web standards to ensure performance, reliability, and transparency.
 
-- Astro 5
-- Tailwind CSS 4 (via `@tailwindcss/vite`)
-- Static output (`dist/`) for deployment
+## ⚡ Tech Stack
 
-## Local development
+- **Framework**: [Astro v5](https://astro.build) (Static Site Generation)
+- **Styling**: [Tailwind CSS v4](https://tailwindcss.com)
+- **Deployment**: GitHub Pages
+- **Automation**: GitHub Actions (Data fetching)
 
-From repo root:
+## 🚀 Getting Started
 
-```sh
+### Prerequisites
+- Node.js v20+
+- npm
+
+### Installation
+
+```bash
+git clone https://github.com/venox-digital-assets/zarpstablecoin.com.git
+cd zarpstablecoin.com
 npm ci
-npm run dev
 ```
 
-Site runs at `http://localhost:4321`.
+### Local Development
 
-- `npm run dev` uses `--strictPort`, so it fails fast if `4321` is busy.
-- For extra diagnostics locally, run `npm run dev:verbose`.
+Start the development server:
 
-## Build and preview
+```bash
+npm run dev
+```
+Visit `http://localhost:4321`.
 
-```sh
+### Building for Production
+
+Generate the static output (`dist/`):
+
+```bash
 npm run build
+```
+
+Preview the build locally:
+
+```bash
 npm run preview
 ```
 
-- Build output is generated in `dist/`.
-- This branch is configured to build as a static site.
+## 📊 Data & Automation
 
-## Deployment (GitHub Pages)
+The site relies on a hybrid data approach to ensure speed and freshness:
 
-- Hosting target is GitHub Pages.
-- Root `CNAME` must remain present for custom domain mapping.
-- Avoid introducing SSR-only routes or adapters unless deployment strategy changes.
+1.  **Static Data (`src/data/stats.json`)**:
+    - Contains circulating supply, treasury reserves, transaction counts, and cached price data.
+    - Updated automatically every 6 hours via GitHub Actions (`.github/workflows/update-stats.yml`).
+    - Script: `scripts/update-stats.js`.
 
-## Project layout
+2.  **Live Price Data**:
+    - The client-side browser fetches real-time ZARP/USD price data from CoinGecko to overlay on the static content.
+    - If the API is unreachable, it gracefully falls back to the static build data.
 
-```text
-src/
-  pages/
-    index.astro
-    get-zarp.astro
-    transparency.astro
-    api/stats.json.ts
-  layouts/
-    Layout.astro
-  data/
-    stats.json
-  styles/
-    global.css
-public/
-  img/
-scripts/
-  update-stats.js
-old-site/
+To manually update stats locally:
+```bash
+npm run update:stats
 ```
 
-- `old-site/` contains the legacy pre-Astro implementation kept for reference.
-- Current production pages live under `src/pages/`.
+## 🎨 Design & Content Guidelines
 
-## Data model and updates
+### Brand Colors
+- **ZARP Green**: `#009A35`
+- **Dark Green**: `#00493D`
+- **Slate**: `slate-900` (Text/Headings), `slate-50` (Backgrounds)
 
-Primary metrics are sourced from `src/data/stats.json`.
+### Copywriting Rules (Compliance)
+- **DO**: Use "Rand stablecoin", "Rand value", "ZARP tokens".
+- **DO NOT**: Use "Digital Rand" or imply it is legal tender issued by the SARB.
+- **Tone**: Trusted, transparent, technical but accessible.
 
-`stats.json` stores both values and source health metadata (`sources.*`) so the UI can show clear degraded states (for example, CoinGecko temporarily unavailable) without breaking static rendering.
+## 📂 Project Structure
 
-Homepage market data follows a progressive pattern:
+- `src/pages/`:
+  - `index.astro`: Homepage (Market snapshot, use cases).
+  - `get-zarp.astro`: Ecosystem directory (Exchanges, Wallets, Partners).
+  - `transparency.astro`: Live transparency dashboard (Audits, Proof of Reserves).
+  - `terms.astro`: Terms of Service (Native HTML version).
+- `src/data/`: Static JSON data files.
+- `public/`: Static assets (Logos, PDFs, Favicons).
+- `scripts/`: Node.js maintenance scripts.
 
-- Render cached values from `stats.json` immediately (fast and resilient).
-- Attempt an async browser refresh from CoinGecko.
-- If CoinGecko fails, keep cached values and show an explicit degraded status message.
+## 🤝 Contributing
 
-The script `scripts/update-stats.js` refreshes:
+1.  Create a feature branch (`git checkout -b feature/amazing-feature`).
+2.  Commit your changes (`git commit -m 'feat: Add amazing feature'`).
+3.  Push to the branch (`git push origin feature/amazing-feature`).
+4.  Open a Pull Request.
 
-- transparency supply/reserves (scraped from the live transparency page)
-- CoinGecko price
-- 7-day chart points
+---
 
-Run manually:
-
-```sh
-node scripts/update-stats.js
-```
-
-## Automation
-
-GitHub Actions workflow `.github/workflows/update-stats.yml` runs every 6 hours and commits updates to `src/data/stats.json` when values change.
-
-## Notes for contributors
-
-- Use `npm ci` for reproducible installs in CI/local.
-- Keep route logic static-friendly unless explicitly moving to SSR with an Astro adapter.
-- If you add new runtime/server routes, document deployment adapter requirements in this README.
-- Run `npm run update:stats` to refresh market/transparency data and source statuses.
-- Run `npm run check` before opening PRs.
-- Use `npm run dev:verbose` during manual QA to surface Astro debug logs and Node warnings.
+&copy; 2026 ZARP Stablecoin (Pty) Ltd. All rights reserved.
