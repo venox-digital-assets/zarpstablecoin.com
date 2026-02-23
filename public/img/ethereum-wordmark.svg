@@ -1,7 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 40" fill="none">
-  <path d="M16 4L6 20.5L16 27L26 20.5L16 4Z" fill="#627EEA"/>
-  <path d="M6 20.5L16 27V4L6 20.5Z" fill="#627EEA" opacity="0.6"/>
-  <path d="M16 29L6 22.5L16 36L26 22.5L16 29Z" fill="#627EEA"/>
-  <path d="M6 22.5L16 29V36L6 22.5Z" fill="#627EEA" opacity="0.6"/>
-  <text x="34" y="26" font-family="system-ui, -apple-system, sans-serif" font-size="18" font-weight="700" fill="#627EEA">Ethereum</text>
-</svg>
