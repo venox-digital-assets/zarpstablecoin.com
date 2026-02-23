@@ -10,11 +10,12 @@ const priceData = {
   reserves: stats.reserves
 };
 
-const zarFormatter = new Intl.NumberFormat('en-ZA', {
+const zarFormatter = new Intl.NumberFormat('en-US', {
   style: 'currency',
   currency: 'ZAR',
-  minimumFractionDigits: 0,
-  maximumFractionDigits: 0,
+  currencyDisplay: 'narrowSymbol',
+  minimumFractionDigits: 2,
+  maximumFractionDigits: 2,
 });
 
 const usdFormatter = new Intl.NumberFormat('en-US', {
@@ -24,7 +25,7 @@ const usdFormatter = new Intl.NumberFormat('en-US', {
   maximumFractionDigits: 4,
 });
 
-const numberFormatter = new Intl.NumberFormat('en-ZA', {
+const numberFormatter = new Intl.NumberFormat('en-US', {
   style: 'decimal',
   minimumFractionDigits: 0,
   maximumFractionDigits: 0,
@@ -94,7 +95,7 @@ const logos = [
             <div class="p-6 group hover:bg-slate-50 transition-colors">
               <p class="text-sm font-medium text-slate-500 mb-1 group-hover:text-[#009A35]">Treasury Reserves</p>
               <p class="text-2xl font-bold text-slate-900 text-[#009A35]">{zarFormatter.format(priceData.reserves)}</p>
-              <p class="text-xs text-slate-400 mt-1">Held by Old Mutual</p>
+              <p class="text-xs text-slate-400 mt-1">Held by Old Mutual Wealth</p>
             </div>
 
           </div>
@@ -298,7 +299,7 @@ const logos = [
               <svg class="w-5 h-5 text-slate-400 group-open:rotate-180 transition-transform flex-shrink-0 ml-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
             </summary>
             <div class="px-6 pb-6 text-sm text-slate-500 leading-relaxed">
-              Whenever our minting partners buy ZARP, we create new tokens to match the amount being acquired. Those rands are kept safely in our treasury, managed by Old Mutual Wealth. When rands are withdrawn, an equal amount of ZARP is burned. Independent auditors verify that we hold at least R1 for every ZARP in circulation. We never pay more or less than R1 per ZARP redeemed.
+              Whenever our issuing partners buy ZARP, we create new tokens to match the amount being acquired. Those rands are kept safely in our treasury, managed by Old Mutual Wealth. When rands are withdrawn, ZARP tokens are removed from circulation or destroyed. Independent auditors verify that we hold at least R1 for every ZARP in circulation. We never pay more or less than R1 per ZARP redeemed.
             </div>
           </details>
 

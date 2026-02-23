@@ -2,20 +2,21 @@
 import Layout from '../layouts/Layout.astro';
 import stats from '../data/stats.json';
 
-const zarFormatter = new Intl.NumberFormat('en-ZA', {
+const zarFormatter = new Intl.NumberFormat('en-US', {
   style: 'currency',
   currency: 'ZAR',
+  currencyDisplay: 'narrowSymbol',
   minimumFractionDigits: 2,
   maximumFractionDigits: 2,
 });
 
-const numberFormatter = new Intl.NumberFormat('en-ZA', {
+const numberFormatter = new Intl.NumberFormat('en-US', {
   style: 'decimal',
   minimumFractionDigits: 2,
   maximumFractionDigits: 2,
 });
 
-const intFormatter = new Intl.NumberFormat('en-ZA', {
+const intFormatter = new Intl.NumberFormat('en-US', {
   style: 'decimal',
   minimumFractionDigits: 0,
   maximumFractionDigits: 0,
@@ -25,7 +26,7 @@ const supply = stats.supply;
 const reserves = stats.reserves;
 const transactions = stats.transactions;
 const collateralRatio = ((reserves / supply) * 100).toFixed(1);
-const lastUpdated = new Date(stats.lastUpdated).toLocaleDateString('en-ZA', { day: 'numeric', month: 'long', year: 'numeric' });
+const lastUpdated = new Date(stats.last_updated).toLocaleDateString('en-ZA', { day: 'numeric', month: 'long', year: 'numeric' });
 
 // Chart Data Calculation
 const chartData = stats.chart || [];
@@ -111,7 +112,7 @@ const explorers = [
             <div class="w-10 h-10 bg-[#009A35]/15 rounded-lg flex items-center justify-center mb-4">
               <span class="text-[#009A35] font-bold text-lg">1</span>
             </div>
-            <h3 class="font-bold text-slate-900 mb-2">Minting</h3>
+            <h3 class="font-bold text-slate-900 mb-2">Issuance</h3>
             <p class="text-sm text-slate-500">When issuing partners buy ZARP, new tokens are minted and an equal amount of rands is deposited into the treasury. Supply never exceeds reserves.</p>
           </div>
           <div>
@@ -159,10 +160,14 @@ const explorers = [
             Visit Stablecoin Standard
             <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
           </a>
-          <div class="mt-6 pt-6 border-t border-slate-100 flex items-center justify-center gap-6 flex-wrap">
-            <img src="/img/stablecoin-standard.svg" alt="Stablecoin Standard" class="h-8 w-auto opacity-80" />
-            <img src="/img/old-mutual.svg" alt="Old Mutual Wealth" class="h-8 w-auto opacity-70" />
-            <img src="/img/solidity-finance.svg" alt="Solidity Finance" class="h-8 w-auto opacity-70" />
+          <div class="mt-6 pt-6 border-t border-slate-100 flex flex-col items-center justify-center">
+            <div class="w-full flex justify-center pb-4">
+               <img src="/img/stablecoin-standard.svg" alt="Stablecoin Standard" class="h-16 md:h-20 w-auto opacity-90 hover:opacity-100 transition-opacity" />
+            </div>
+            <div class="flex items-center justify-center gap-6 md:gap-10 flex-wrap opacity-70">
+              <img src="/img/old-mutual.svg" alt="Old Mutual Wealth" class="h-8 md:h-9 w-auto grayscale hover:grayscale-0 transition-all" />
+              <img src="/img/solidity-finance.svg" alt="Solidity Finance" class="h-8 md:h-9 w-auto grayscale hover:grayscale-0 transition-all" />
+            </div>
           </div>
         </div>
 
