@@ -3,9 +3,19 @@ import '../styles/global.css';
 
 interface Props {
 	title: string;
+	ogTitle?: string;
+	ogDescription?: string;
+	ogImage?: string;
+	ogUrl?: string;
 }
 
-const { title } = Astro.props;
+const { 
+	title,
+	ogTitle = 'ZARP Stablecoin',
+	ogDescription = 'ZARP is a cryptocurrency stablecoin pegged to the price of the South African Rand (ZAR).',
+	ogImage = 'https://zarpstablecoin.com/img/og-home.jpg',
+	ogUrl = 'https://zarpstablecoin.com/'
+} = Astro.props;
 ---
 
 <!doctype html>
@@ -18,22 +28,22 @@ const { title } = Astro.props;
 		<title>{title}</title>
 		
 		<!-- Meta Tags -->
-		<meta name="description" content="ZARP is a cryptocurrency stablecoin pegged to the price of the South African Rand (ZAR)." />
+		<meta name="description" content={ogDescription} />
 		
 		<!-- Open Graph / Facebook -->
-		<meta property="og:title" content="ZARP Stablecoin" />
+		<meta property="og:title" content={ogTitle} />
 		<meta property="og:type" content="website" />
-		<meta property="og:url" content="https://zarpstablecoin.com/" />
-		<meta property="og:image" content="https://zarpstablecoin.com/img/zarpog3.jpg" />
-		<meta property="og:description" content="ZARP is a cryptocurrency stablecoin pegged to the price of the South African Rand (ZAR)." />
+		<meta property="og:url" content={ogUrl} />
+		<meta property="og:image" content={ogImage} />
+		<meta property="og:description" content={ogDescription} />
 		
 		<!-- Twitter -->
 		<meta name="twitter:card" content="summary_large_image" />
 		<meta name="twitter:site" content="@ZARP_Stablecoin" />
 		<meta name="twitter:creator" content="@ZARP_Stablecoin" />
-		<meta name="twitter:title" content="ZARP Stablecoin" />
-		<meta name="twitter:description" content="ZARP is a cryptocurrency stablecoin pegged to the price of the South African Rand (ZAR)." />
-		<meta name="twitter:image" content="https://zarpstablecoin.com/img/zarpog3.jpg" />
+		<meta name="twitter:title" content={ogTitle} />
+		<meta name="twitter:description" content={ogDescription} />
+		<meta name="twitter:image" content={ogImage} />
 
 		<!-- Fonts -->
 		<link rel="preconnect" href="https://fonts.googleapis.com">
