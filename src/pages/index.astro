@@ -14,8 +14,8 @@ const zarFormatter = new Intl.NumberFormat('en-US', {
   style: 'currency',
   currency: 'ZAR',
   currencyDisplay: 'narrowSymbol',
-  minimumFractionDigits: 2,
-  maximumFractionDigits: 2,
+  minimumFractionDigits: 0,
+  maximumFractionDigits: 0,
 });
 
 const usdFormatter = new Intl.NumberFormat('en-US', {
@@ -41,7 +41,13 @@ const logos = [
 
 ---
 
-<Layout title="ZARP Stablecoin | The Rand Stablecoin">
+<Layout
+	title="ZARP Stablecoin | Open Stablecoin Rails for the South African Rand"
+	ogTitle="ZARP Stablecoin — Open Stablecoin Rails for the South African Rand"
+	ogDescription="The audited, fully collateralised and crypto-native stablecoin for the South African Rand."
+	ogImage="https://zarpstablecoin.com/img/og-home.jpg"
+	ogUrl="https://zarpstablecoin.com/"
+>
   <main class="min-h-screen bg-white">
     <!-- Hero Section -->
     <div class="relative overflow-hidden pt-16 pb-20 lg:pt-32">
@@ -71,30 +77,30 @@ const logos = [
           <div class="grid grid-cols-2 md:grid-cols-4 divide-y md:divide-y-0 md:divide-x divide-slate-100">
           
             <!-- Box 1: ZARP/USD -->
-            <div class="p-6 group hover:bg-slate-50 transition-colors">
+            <div class="p-4 md:p-6 group hover:bg-slate-50 transition-colors">
               <p class="text-sm font-medium text-slate-500 mb-1 group-hover:text-[#009A35]">ZARP / USD</p>
-              <p id="market-usd" class="text-2xl font-bold text-slate-900">{usdFormatter.format(priceData.usd)}</p>
+              <p id="market-usd" class="text-xl md:text-2xl font-bold text-slate-900">{usdFormatter.format(priceData.usd)}</p>
               <p class="text-xs text-slate-400 mt-1">1 ZARP ≈ 1 ZAR</p>
             </div>
 
             <!-- Box 2: Circulating Supply -->
-            <div class="p-6 group hover:bg-slate-50 transition-colors">
+            <div class="p-4 md:p-6 group hover:bg-slate-50 transition-colors">
               <p class="text-sm font-medium text-slate-500 mb-1 group-hover:text-[#009A35]">Circulating Supply</p>
-              <p class="text-2xl font-bold text-slate-900">{zarFormatter.format(priceData.marketCap)}</p>
-              <p class="text-xs text-slate-400 mt-1">Audited Tokens</p>
+              <p class="text-xl md:text-2xl font-bold text-slate-900 truncate">{zarFormatter.format(priceData.marketCap)}</p>
+              <p class="text-xs text-slate-400 mt-1">Tokens</p>
             </div>
 
             <!-- Box 3: Total Transactions -->
-            <div class="p-6 group hover:bg-slate-50 transition-colors">
+            <div class="p-4 md:p-6 group hover:bg-slate-50 transition-colors">
               <p class="text-sm font-medium text-slate-500 mb-1 group-hover:text-[#009A35]">Total Transactions</p>
-              <p class="text-2xl font-bold text-slate-900">{numberFormatter.format(priceData.transactions)}+</p>
+              <p class="text-xl md:text-2xl font-bold text-slate-900">{numberFormatter.format(priceData.transactions)}+</p>
               <p class="text-xs text-slate-400 mt-1">Lifetime Transfers</p>
             </div>
 
             <!-- Box 4: Treasury Reserves -->
-            <div class="p-6 group hover:bg-slate-50 transition-colors">
+            <div class="p-4 md:p-6 group hover:bg-slate-50 transition-colors">
               <p class="text-sm font-medium text-slate-500 mb-1 group-hover:text-[#009A35]">Treasury Reserves</p>
-              <p class="text-2xl font-bold text-[#009A35]">{zarFormatter.format(priceData.reserves)}</p>
+              <p class="text-xl md:text-2xl font-bold text-[#009A35] truncate">{zarFormatter.format(priceData.reserves)}</p>
               <p class="text-xs text-slate-400 mt-1">Held by Old Mutual Wealth</p>
             </div>
 
