@@ -61,30 +61,30 @@ const explorers = [
       <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
         
         <!-- Circulating Supply -->
-        <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-6">
+        <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-6 overflow-hidden">
           <p class="text-sm font-medium text-slate-500 mb-2">Circulating Supply</p>
-          <p class="text-3xl font-extrabold text-slate-900">{numberFormatter.format(supply)}</p>
+          <p class="text-2xl lg:text-xl xl:text-3xl font-extrabold text-slate-900 truncate">{numberFormatter.format(supply)}</p>
           <p class="text-xs text-slate-400 mt-2">ZARP tokens across all chains</p>
         </div>
 
         <!-- Treasury Reserves -->
-        <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-6">
+        <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-6 overflow-hidden">
           <p class="text-sm font-medium text-slate-500 mb-2">Treasury Reserves</p>
-          <p class="text-3xl font-extrabold text-[#009A35]">{zarFormatter.format(reserves)}</p>
+          <p class="text-2xl lg:text-xl xl:text-3xl font-extrabold text-[#009A35] truncate">{zarFormatter.format(reserves)}</p>
           <p class="text-xs text-slate-400 mt-2">Held by Old Mutual Wealth</p>
         </div>
 
         <!-- Collateral Ratio -->
-        <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-6">
+        <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-6 overflow-hidden">
           <p class="text-sm font-medium text-slate-500 mb-2">Collateral Ratio</p>
-          <p class="text-3xl font-extrabold text-slate-900">{collateralRatio}%</p>
+          <p class="text-2xl lg:text-xl xl:text-3xl font-extrabold text-slate-900 truncate">{collateralRatio}%</p>
           <p class="text-xs text-slate-400 mt-2">Reserves ÷ Supply</p>
         </div>
 
         <!-- Total Transactions -->
-        <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-6">
+        <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-6 overflow-hidden">
           <p class="text-sm font-medium text-slate-500 mb-2">Total Transactions</p>
-          <p class="text-3xl font-extrabold text-slate-900">{intFormatter.format(transactions)}+</p>
+          <p class="text-2xl lg:text-xl xl:text-3xl font-extrabold text-slate-900 truncate">{intFormatter.format(transactions)}+</p>
           <p class="text-xs text-slate-400 mt-2">Lifetime on-chain transfers</p>
         </div>
 
