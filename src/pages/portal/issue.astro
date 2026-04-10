@@ -1,0 +1,12 @@
+---
+import PortalLayout from '../../layouts/PortalLayout.astro';
+import IssueForm from '../../components/portal/issue/IssueForm';
+import IssueHistory from '../../components/portal/issue/IssueHistory';
+---
+
+<PortalLayout title="Issue ZARP" activePage="issue">
+  <div class="space-y-8">
+    <IssueForm client:load />
+    <IssueHistory client:load />
+  </div>
+</PortalLayout>

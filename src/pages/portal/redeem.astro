@@ -1,0 +1,12 @@
+---
+import PortalLayout from '../../layouts/PortalLayout.astro';
+import RedeemForm from '../../components/portal/redeem/RedeemForm';
+import RedeemHistory from '../../components/portal/redeem/RedeemHistory';
+---
+
+<PortalLayout title="Redeem ZARP" activePage="redeem">
+  <div class="space-y-8">
+    <RedeemForm client:load />
+    <RedeemHistory client:load />
+  </div>
+</PortalLayout>

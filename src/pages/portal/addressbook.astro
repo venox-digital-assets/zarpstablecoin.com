@@ -1,0 +1,8 @@
+---
+import PortalLayout from '../../layouts/PortalLayout.astro';
+import AddressBook from '../../components/portal/addressbook/AddressBook';
+---
+
+<PortalLayout title="Addressbook" activePage="addressbook">
+  <AddressBook client:load />
+</PortalLayout>
