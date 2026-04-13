@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import type { BankDetails, Network } from '../../../types/portal';
-import { mockAccount, networkLabels, networkColors, formatZAR } from '../../../data/portal-mock';
+import type { BankDetails } from '../../../types/portal';
+import { mockAccount, networkLabels, networkColors } from '../../../data/portal-mock';
 import Button from '../ui/Button';
 import Badge from '../ui/Badge';
 
@@ -14,9 +14,17 @@ const redeemAddresses: Record<string, string> = {
 
 const initialBankAccounts: BankDetails[] = [
   {
+    id: 'b1',
     bankName: 'First National Bank',
     accountNumber: '62890457321',
     branchCode: '250655',
+    accountHolder: 'Protea Digital Trading (Pty) Ltd',
+  },
+  {
+    id: 'b2',
+    bankName: 'Standard Bank',
+    accountNumber: '041234567',
+    branchCode: '051001',
     accountHolder: 'Protea Digital Trading (Pty) Ltd',
   },
 ];
@@ -26,7 +34,7 @@ export default function RedeemForm() {
   const [selectedBankIdx, setSelectedBankIdx] = useState<number>(0);
   const [bankAccounts, setBankAccounts] = useState<BankDetails[]>(initialBankAccounts);
   const [showAddBank, setShowAddBank] = useState(false);
-  const [newBank, setNewBank] = useState<BankDetails>({ bankName: '', accountNumber: '', branchCode: '', accountHolder: mockAccount.companyName });
+  const [newBank, setNewBank] = useState<BankDetails>({ id: '', bankName: '', accountNumber: '', branchCode: '', accountHolder: mockAccount.companyName });
   const [bankErrors, setBankErrors] = useState<Record<string, string>>({});
   const [copied, setCopied] = useState(false);
 
@@ -48,10 +56,10 @@ export default function RedeemForm() {
       setBankErrors(errors);
       return;
     }
-    setBankAccounts((prev) => [...prev, { ...newBank }]);
+    setBankAccounts((prev) => [...prev, { ...newBank, id: `b${Date.now()}` }]);
     setSelectedBankIdx(bankAccounts.length);
     setShowAddBank(false);
-    setNewBank({ bankName: '', accountNumber: '', branchCode: '', accountHolder: mockAccount.companyName });
+    setNewBank({ id: '', bankName: '', accountNumber: '', branchCode: '', accountHolder: mockAccount.companyName });
     setBankErrors({});
   };
 

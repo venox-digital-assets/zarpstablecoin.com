@@ -166,12 +166,23 @@ export const mockSettings: PartnerSettings = {
     email: 'thabo@proteadigital.co.za',
     mobile: '+27 82 555 1234',
   },
-  bankDetails: {
-    bankName: 'First National Bank',
-    accountNumber: '****7890',
-    branchCode: '250655',
-    accountHolder: 'Protea Digital Trading (Pty) Ltd',
-  },
+  bankDetails: [
+    {
+      id: 'b1',
+      bankName: 'First National Bank',
+      accountNumber: '****7890',
+      branchCode: '250655',
+      accountHolder: 'Protea Digital Trading (Pty) Ltd',
+    },
+    {
+      id: 'b2',
+      bankName: 'Standard Bank',
+      accountNumber: '****4321',
+      branchCode: '051001',
+      accountHolder: 'Protea Digital Trading (Pty) Ltd',
+    },
+  ],
+  twoFactorEnabled: false,
 };
 
 export const countries = [

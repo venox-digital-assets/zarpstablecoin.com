@@ -58,30 +58,58 @@ export default function SettingsPanel() {
         </dl>
       </div>
 
-      {/* Bank Details */}
+      {/* Bank Accounts */}
       <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-6">
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wider">Bank Details</h3>
-          <Button variant="ghost" size="sm" onClick={() => showToast('Update functionality coming soon')}>Update</Button>
+        <div className="flex items-center justify-between mb-2">
+          <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wider">Bank Accounts</h3>
+          <Button variant="outline" size="sm" onClick={() => showToast('Add bank account coming soon')}>Add Bank Account</Button>
         </div>
-        <dl className="divide-y divide-slate-100">
-          <div className="py-3 grid grid-cols-3 gap-4">
-            <dt className="text-sm text-slate-500">Bank</dt>
-            <dd className="text-sm font-medium text-slate-900 col-span-2">{settings.bankDetails.bankName}</dd>
-          </div>
-          <div className="py-3 grid grid-cols-3 gap-4">
-            <dt className="text-sm text-slate-500">Account Number</dt>
-            <dd className="text-sm font-medium text-slate-900 col-span-2 font-mono">{settings.bankDetails.accountNumber}</dd>
-          </div>
-          <div className="py-3 grid grid-cols-3 gap-4">
-            <dt className="text-sm text-slate-500">Branch Code</dt>
-            <dd className="text-sm font-medium text-slate-900 col-span-2">{settings.bankDetails.branchCode}</dd>
-          </div>
-          <div className="py-3 grid grid-cols-3 gap-4">
-            <dt className="text-sm text-slate-500">Account Holder</dt>
-            <dd className="text-sm font-medium text-slate-900 col-span-2">{settings.bankDetails.accountHolder}</dd>
-          </div>
-        </dl>
+        <p className="text-xs text-slate-500 mb-4">
+          You may link multiple bank accounts. All accounts must be held in the name of <span className="font-medium text-slate-700">{settings.companyName}</span>. Accounts in any other name will be rejected.
+        </p>
+        <div className="space-y-3">
+          {settings.bankDetails.map((bank) => (
+            <div key={bank.id} className="border border-slate-100 rounded-xl p-4">
+              <div className="flex items-start justify-between gap-4">
+                <div className="flex-1">
+                  <div className="flex items-center gap-2 mb-2">
+                    <p className="text-sm font-semibold text-slate-900">{bank.bankName}</p>
+                  </div>
+                  <dl className="grid grid-cols-1 sm:grid-cols-3 gap-y-1.5 gap-x-4 text-xs">
+                    <div>
+                      <dt className="text-slate-500">Account Number</dt>
+                      <dd className="font-mono text-slate-900">{bank.accountNumber}</dd>
+                    </div>
+                    <div>
+                      <dt className="text-slate-500">Branch Code</dt>
+                      <dd className="text-slate-900">{bank.branchCode}</dd>
+                    </div>
+                    <div>
+                      <dt className="text-slate-500">Account Holder</dt>
+                      <dd className="text-slate-900">{bank.accountHolder}</dd>
+                    </div>
+                  </dl>
+                </div>
+                <div className="flex gap-1.5 shrink-0">
+                  <Button variant="ghost" size="sm" onClick={() => showToast('Edit coming soon')}>Edit</Button>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() =>
+                      showToast(
+                        settings.bankDetails.length > 1
+                          ? 'Remove coming soon'
+                          : 'At least one bank account is required',
+                      )
+                    }
+                  >
+                    Remove
+                  </Button>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* Security */}
@@ -95,12 +123,27 @@ export default function SettingsPanel() {
             </div>
             <Button variant="outline" size="sm" onClick={() => showToast('Coming soon')}>Change Password</Button>
           </div>
-          <div className="flex items-center justify-between py-3">
-            <div>
-              <p className="text-sm font-medium text-slate-900">Two-Factor Authentication</p>
-              <p className="text-xs text-slate-400 mt-0.5">Add an extra layer of security</p>
+          <div className="flex items-center justify-between py-3 gap-4">
+            <div className="flex-1">
+              <div className="flex items-center gap-2">
+                <p className="text-sm font-medium text-slate-900">Two-Factor Authentication</p>
+                <span className="text-[10px] font-semibold uppercase tracking-wider px-1.5 py-0.5 rounded bg-red-50 text-red-700 border border-red-100">
+                  Required
+                </span>
+              </div>
+              <p className="text-xs text-slate-400 mt-0.5">
+                {settings.twoFactorEnabled
+                  ? '2FA is active on your account.'
+                  : '2FA is mandatory for all partners. Set it up to authorise issuance and redemptions.'}
+              </p>
             </div>
-            <Button variant="outline" size="sm" onClick={() => showToast('Coming soon')}>Enable 2FA</Button>
+            <Button
+              variant={settings.twoFactorEnabled ? 'outline' : 'primary'}
+              size="sm"
+              onClick={() => showToast(settings.twoFactorEnabled ? 'Manage 2FA coming soon' : 'Set up 2FA coming soon')}
+            >
+              {settings.twoFactorEnabled ? 'Manage 2FA' : 'Set up 2FA'}
+            </Button>
           </div>
         </div>
       </div>

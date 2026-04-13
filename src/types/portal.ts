@@ -86,6 +86,7 @@ export interface YieldEntry {
 }
 
 export interface BankDetails {
+  id: string;
   bankName: string;
   accountNumber: string;
   branchCode: string;
@@ -102,5 +103,6 @@ export interface PartnerSettings {
     email: string;
     mobile: string;
   };
-  bankDetails: BankDetails;
+  bankDetails: BankDetails[];
+  twoFactorEnabled: boolean;
 }
