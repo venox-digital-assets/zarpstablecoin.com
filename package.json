@@ -17,8 +17,13 @@
     "typescript": "^5.9.2"
   },
   "dependencies": {
+    "@astrojs/react": "^5.0.0",
     "@tailwindcss/vite": "^4.1.18",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
     "astro": "^5.17.1",
+    "react": "^19.2.5",
+    "react-dom": "^19.2.5",
     "tailwindcss": "^4.1.18"
   }
 }

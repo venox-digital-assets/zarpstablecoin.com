@@ -1,254 +1,333 @@
 ---
 import Layout from '../layouts/Layout.astro';
+
+const snapshotDate = new Date().toLocaleDateString('en-GB', {
+	day: 'numeric',
+	month: 'long',
+	year: 'numeric',
+});
+
+const yieldSnapshot = [
+	{ value: '~7.3%', label: 'Current Annualised Yield', sub: snapshotDate },
+	{ value: 'Old Mutual Money Market Fund', label: 'Yield Source', sub: 'STeFI Composite Index' },
+	{ value: 'Base', label: 'Networks', sub: 'Live', live: true },
+	{ value: '1:1', label: 'ZARPy : ZARP' },
+];
+
+const steps = [
+	{
+		title: 'Deposit',
+		body: 'Deposit ZARP into the ZARPy smart contract. You receive ZARPy 1:1. Your ZARP is held by the contract and backed by Inves Capital’s reserves.',
+	},
+	{
+		title: 'Earn',
+		body: 'A daily oracle publishes the current money market fund yield rate to the smart contract. A cumulative yield index compounds with each update, tracking your accrued yield in real time. Interest is calculated daily on your running balance, aligned with the fund’s own methodology.',
+	},
+	{
+		title: 'Claim',
+		body: 'Call claimYield to receive your accrued yield as additional ZARPy. You choose when and how often to claim — daily, weekly, monthly. You pay gas (negligible on Base). Claimed ZARPy immediately earns further yield.',
+		code: 'claimYield',
+	},
+	{
+		title: 'Withdraw',
+		body: 'Redeem ZARPy for ZARP at any time, 1:1. Call withdraw and your ZARP is returned from the contract.',
+		code: 'withdraw',
+	},
+];
+
+const fundDetails = [
+	{ label: 'Fund manager', value: 'Old Mutual Investment Group' },
+	{ label: 'Regulation', value: 'FSCA / CISCA' },
+	{ label: 'Asset class', value: 'ZAR Money Market' },
+	{ label: 'Yield standard', value: 'ASISA seven-day rolling effective yield' },
+];
+
+const features = [
+	{
+		title: 'Real-time yield',
+		body: 'Yield accrues continuously via an on-chain cumulative index. No waiting for monthly distributions — claim whenever you want.',
+	},
+	{
+		title: '1:1 redemption',
+		body: 'ZARPy is always redeemable for ZARP at par. Deposit and withdraw freely with no lock-ups or penalties.',
+	},
+	{
+		title: 'On-chain transparency',
+		body: 'The yield rate, cumulative index, and reserve buffer are publicly verifiable on Base. All claims and oracle updates emit on-chain events.',
+	},
+	{
+		title: 'Institutional backing',
+		body: 'Reserves are managed by Old Mutual Investment Group, with over 180 years of history. Regular independent reserve attestations.',
+	},
+];
+
+const contractFunctions = [
+	{ sig: 'deposit(amount)', desc: 'Deposit ZARP, receive ZARPy 1:1. Settles any existing accrued yield first.' },
+	{ sig: 'withdraw(amount)', desc: 'Redeem ZARPy for ZARP 1:1. Settles accrued yield first.' },
+	{ sig: 'claimYield()', desc: 'Claim accrued yield as additional ZARPy.' },
+	{ sig: 'getClaimableYield(address)', desc: 'View your current accrued yield.' },
+	{ sig: 'getCurrentYieldIndex()', desc: 'View the current cumulative yield index.' },
+	{ sig: 'getCurrentDailyRate()', desc: 'View the current daily yield rate.' },
+];
+
+const disclosures = [
+	{
+		title: 'Yield is not guaranteed',
+		body: 'The yield will fluctuate depending on market conditions and the income earned by the underlying fund. Past performance is not necessarily a guide to future performance. The yield rate may fall to zero.',
+	},
+	{
+		title: 'Not a bank deposit',
+		body: 'ZARPy is not a bank deposit account and is not protected by any deposit insurance scheme.',
+	},
+	{
+		title: 'Issuer credit risk',
+		body: 'ZARPy holders bear Inves Capital’s credit risk as issuer. Inves Capital’s reserves are invested in money market instruments which, while conservative, carry a small risk of capital loss. Any such loss would affect reserve backing. Inves Capital manages this risk through a conservative investment policy and regular reserve attestations.',
+	},
+	{
+		title: 'Crypto asset risks',
+		body: 'This product involves crypto assets, which carry additional risks including smart contract risk, blockchain network risk, and regulatory risk. The regulatory environment for crypto assets in South Africa continues to evolve.',
+	},
+	{
+		title: 'Liquidity and redemption',
+		body: 'Excessive withdrawals from the underlying fund may place it under liquidity pressure. If this happens, the yield reserve buffer may be temporarily depleted and yield claims may be delayed. ZARPy redemption for ZARP is subject to available contract liquidity.',
+	},
+	{
+		title: 'Oracle risk',
+		body: 'The yield rate is published on-chain by an oracle operated by ZARP. While safeguards are in place (rate bounds, change limits, emergency pause), oracle failure could temporarily affect yield accrual.',
+	},
+];
 ---
 
 <Layout
-	title="ZARP Yield | ZARP Stablecoin"
-	ogTitle="ZARP Yield — Institutional-Grade Rand Yield"
-	ogDescription="ZARP Yield gives approved partners access to money market yields backed by the Old Mutual Money Market Fund and other ASISA-regulated instruments. On-chain, transparent, partner-gated."
+	title="ZARPy | Rand Yield, On-Chain"
+	ogTitle="ZARPy — Rand Yield, On-Chain"
+	ogDescription="Deposit ZARP, earn yield from the Old Mutual Money Market Fund, withdraw anytime."
 	ogImage="https://zarpstablecoin.com/img/og-home.jpg"
 	ogUrl="https://zarpstablecoin.com/yield"
 >
 	<main class="min-h-screen bg-white">
 
 		<!-- Hero -->
-		<section class="pt-20 pb-16 md:pt-28 md:pb-20">
+		<section class="pt-20 pb-12 md:pt-28 md:pb-16">
 			<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-				<div class="inline-flex items-center gap-2 bg-[#009A35]/10 text-[#009A35] text-sm font-medium px-4 py-1.5 rounded-full mb-6">
-					<svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
-					Yield for Partners
-				</div>
+				<img
+					src="/img/zarpy_logo.svg"
+					alt="ZARPy"
+					class="h-14 md:h-20 w-auto mx-auto mb-8"
+				/>
 				<h1 class="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight mb-6">
-					ZARP <span class="text-[#009A35]">Yield</span>
+					Rand Yield, <span class="text-[#009A35]">On-Chain</span>
 				</h1>
-				<p class="text-lg md:text-xl text-slate-500 max-w-2xl mx-auto leading-relaxed">
-					Money market yields, on-chain. Backed by the Old Mutual Money Market Fund and other ASISA-regulated instruments, distributed through approved ZARP partners.
+				<p class="text-lg md:text-xl text-slate-500 max-w-2xl mx-auto leading-relaxed mb-10">
+					Deposit ZARP. Earn yield from the Old Mutual Money Market Fund. Withdraw anytime.
 				</p>
-			</div>
-		</section>
-
-		<!-- What is ZARP Yield -->
-		<section class="pb-16 md:pb-20">
-			<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-				<div class="bg-slate-50 rounded-3xl p-8 md:p-12">
-					<h2 class="text-2xl font-bold text-slate-900 mb-6">What is ZARP Yield?</h2>
-					<div class="space-y-4 text-slate-600 leading-relaxed">
-						<p>
-							ZARP Yield allows approved partners to earn yield on their existing ZARP token balances. There is no separate yield token — partners hold ordinary ZARP, and yield accrues against their verified wallet balances via a smart contract on the <strong class="text-slate-900">Base</strong> blockchain.
-						</p>
-						<p>
-							Yield is generated by ZARP's reserves, which are invested in the <strong class="text-slate-900">Old Mutual Money Market Fund</strong> and other ASISA-regulated money market instruments. Rather than reserves sitting idle, ZARP deploys them into South Africa's most trusted money market vehicles, passing yield through to partners.
-						</p>
-						<p>
-							ZARP Yield is not a retail product. It is available exclusively to <strong class="text-slate-900">approved ZARP partners</strong>, who distribute yield to their customers under their own regulatory licences and compliance frameworks. Partners are contractual creditors of ZARP — they hold a right to claim yield and redeem ZARP at par, not a proportional interest in a pooled portfolio.
-						</p>
-					</div>
-				</div>
-			</div>
-		</section>
-
-		<!-- Key Design Principles -->
-		<section class="pb-16 md:pb-20">
-			<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-				<div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-					<div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-6">
-						<div class="w-10 h-10 bg-[#009A35]/10 rounded-xl flex items-center justify-center mb-4">
-							<svg class="w-5 h-5 text-[#009A35]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4" /></svg>
-						</div>
-						<h3 class="text-sm font-bold text-slate-900 mb-2">No New Token</h3>
-						<p class="text-xs text-slate-500 leading-relaxed">Partners earn yield on their existing ZARP. Yield is paid out in ZARP when claimed.</p>
-					</div>
-					<div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-6">
-						<div class="w-10 h-10 bg-[#009A35]/10 rounded-xl flex items-center justify-center mb-4">
-							<svg class="w-5 h-5 text-[#009A35]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
-						</div>
-						<h3 class="text-sm font-bold text-slate-900 mb-2">Partner-Gated</h3>
-						<p class="text-xs text-slate-500 leading-relaxed">Only wallets verified by ZARP earn yield. This is not a permissionless product.</p>
-					</div>
-					<div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-6">
-						<div class="w-10 h-10 bg-[#009A35]/10 rounded-xl flex items-center justify-center mb-4">
-							<svg class="w-5 h-5 text-[#009A35]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
-						</div>
-						<h3 class="text-sm font-bold text-slate-900 mb-2">Principal Protected</h3>
-						<p class="text-xs text-slate-500 leading-relaxed">ZARP absorbs all investment risk and guarantees that partner balances remain fully redeemable at par.</p>
-					</div>
-					<div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-6">
-						<div class="w-10 h-10 bg-[#009A35]/10 rounded-xl flex items-center justify-center mb-4">
-							<svg class="w-5 h-5 text-[#009A35]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-						</div>
-						<h3 class="text-sm font-bold text-slate-900 mb-2">On-Chain Transparency</h3>
-						<p class="text-xs text-slate-500 leading-relaxed">Yield rates, the cumulative index, and all claim events are publicly verifiable on Base.</p>
-					</div>
-				</div>
-			</div>
-		</section>
-
-		<!-- Blockchain Availability -->
-		<section class="pb-16 md:pb-20">
-			<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-				<div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-6 md:p-8 flex items-center gap-5">
-					<img src="/img/base.svg" alt="Base" class="h-10 w-auto shrink-0" />
-					<div>
-						<h3 class="text-lg font-bold text-slate-900 mb-1">Available on Base</h3>
-						<p class="text-sm text-slate-500">ZARP Yield is currently available on <strong class="text-slate-700">Base</strong> only.</p>
-					</div>
-				</div>
-			</div>
-		</section>
-
-		<!-- How It Works -->
-		<section class="pb-16 md:pb-20">
-			<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-				<div class="bg-[#f3f6f4] rounded-3xl p-8 md:p-12">
-					<h2 class="text-2xl font-bold text-slate-900 mb-8">How It Works</h2>
-					<div class="space-y-8">
-						<div class="flex gap-5">
-							<div class="w-10 h-10 bg-[#009A35]/15 rounded-lg flex items-center justify-center shrink-0">
-								<span class="text-[#009A35] font-bold text-lg">1</span>
-							</div>
-							<div>
-								<h3 class="font-bold text-slate-900 mb-2">Reserve Deployment</h3>
-								<p class="text-sm text-slate-500">ZARP's Rand reserves are invested into the Old Mutual Money Market Fund and other ASISA-regulated money market instruments, generating yield from high-quality, short-term South African instruments including government securities, bank deposits, and corporate paper.</p>
-							</div>
-						</div>
-						<div class="flex gap-5">
-							<div class="w-10 h-10 bg-[#009A35]/15 rounded-lg flex items-center justify-center shrink-0">
-								<span class="text-[#009A35] font-bold text-lg">2</span>
-							</div>
-							<div>
-								<h3 class="font-bold text-slate-900 mb-2">Yield-Eligible Wallets</h3>
-								<p class="text-sm text-slate-500">Partners nominate wallet addresses on Base. ZARP verifies and registers these wallets as <strong class="text-slate-700">yield-eligible</strong> in the yield smart contract. Only ZARP balances held in verified wallets accrue yield.</p>
-							</div>
-						</div>
-						<div class="flex gap-5">
-							<div class="w-10 h-10 bg-[#009A35]/15 rounded-lg flex items-center justify-center shrink-0">
-								<span class="text-[#009A35] font-bold text-lg">3</span>
-							</div>
-							<div>
-								<h3 class="font-bold text-slate-900 mb-2">Daily Oracle Updates</h3>
-								<p class="text-sm text-slate-500">A daily oracle pushes the current money market fund rate on-chain, net of the ZARP spread. The yield smart contract maintains a <strong class="text-slate-700">cumulative yield index</strong> that compounds with each update, tracking the total yield accumulated per unit of ZARP.</p>
-							</div>
-						</div>
-						<div class="flex gap-5">
-							<div class="w-10 h-10 bg-[#009A35]/15 rounded-lg flex items-center justify-center shrink-0">
-								<span class="text-[#009A35] font-bold text-lg">4</span>
-							</div>
-							<div>
-								<h3 class="font-bold text-slate-900 mb-2">Yield Accrual</h3>
-								<p class="text-sm text-slate-500">Yield accrues continuously in smart contract accounting against each yield-eligible wallet's ZARP balance. No tokens are minted or transferred automatically — yield is tracked, not distributed, until a partner claims.</p>
-							</div>
-						</div>
-						<div class="flex gap-5">
-							<div class="w-10 h-10 bg-[#009A35]/15 rounded-lg flex items-center justify-center shrink-0">
-								<span class="text-[#009A35] font-bold text-lg">5</span>
-							</div>
-							<div>
-								<h3 class="font-bold text-slate-900 mb-2">Manual Claim</h3>
-								<p class="text-sm text-slate-500">Partners claim accrued yield via an on-chain transaction at their discretion — daily, weekly, or monthly. Claimed yield is paid in ZARP and immediately participates in future accrual, so compounding occurs naturally. Partners control their own timing and gas costs.</p>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</section>
-
-		<!-- Underlying Fund -->
-		<section class="pb-16 md:pb-20">
-			<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-				<div class="bg-[#00493D] rounded-3xl p-8 md:p-12 text-white">
-					<div class="flex flex-col md:flex-row md:items-start gap-6 md:gap-10">
-						<img src="/img/old-mutual.svg" alt="Old Mutual" class="h-12 md:h-14 w-auto shrink-0 brightness-0 invert opacity-90" />
-						<div>
-							<h2 class="text-2xl font-bold mb-4">The Underlying Investments</h2>
-							<div class="space-y-4 text-white/80 leading-relaxed">
-								<p>
-									ZARP's reserves are primarily invested in the <strong class="text-white">Old Mutual Money Market Fund</strong>, one of South Africa's most established money market vehicles managed by Old Mutual Investment Group, alongside other ASISA-regulated money market instruments. These invest in high-quality, short-term Rand-denominated instruments including government securities, bank deposits, and corporate paper.
-								</p>
-								<p>
-									As regulated collective investment schemes under the Collective Investment Schemes Control Act (CISCA), these funds are supervised by the FSCA and subject to strict investment guidelines designed to preserve capital and maintain liquidity. ZARP maintains at least 95% of backing in South African Big Four bank deposits, ASISA-registered top-tier money market funds, and short-term government treasury bills.
-								</p>
-							</div>
-							<div class="grid grid-cols-2 md:grid-cols-3 gap-4 mt-8">
-								<div class="bg-white/10 rounded-xl p-4">
-									<p class="text-xs text-white/60 mb-1">Primary Fund Manager</p>
-									<p class="text-sm font-semibold text-white">Old Mutual Investment Group</p>
-								</div>
-								<div class="bg-white/10 rounded-xl p-4">
-									<p class="text-xs text-white/60 mb-1">Regulation</p>
-									<p class="text-sm font-semibold text-white">FSCA / CISCA</p>
-								</div>
-								<div class="bg-white/10 rounded-xl p-4">
-									<p class="text-xs text-white/60 mb-1">Asset Class</p>
-									<p class="text-sm font-semibold text-white">ZAR Money Market</p>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</section>
-
-		<!-- For Partners -->
-		<section class="pb-16 md:pb-20">
-			<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-				<div class="bg-slate-50 rounded-3xl p-8 md:p-12">
-					<h2 class="text-2xl font-bold text-slate-900 mb-4">For Partners</h2>
-					<p class="text-slate-600 leading-relaxed mb-8">
-						ZARP handles the complexity of fund management, yield calculation, and on-chain infrastructure — partners deliver a seamless, white-labelled experience to their customers. The only fee is the spread between the fund yield and the partner yield rate. No subscription fees, per-claim fees, or platform fees.
-					</p>
-					<a href="https://forms.gle/5PqHnLxTJfZC7NuB9" target="_blank" rel="noopener" class="inline-flex items-center justify-center px-6 py-3 border border-transparent text-sm font-medium rounded-md text-white bg-slate-900 hover:bg-[#009A35] transition-colors">
-						Apply to Become a Partner
-						<svg class="w-4 h-4 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+				<div class="flex flex-col sm:flex-row items-center justify-center gap-3">
+					<a
+						href="/get-zarp"
+						class="inline-flex items-center justify-center px-6 py-3 text-sm font-medium rounded-md text-white bg-slate-900 hover:bg-[#009A35] transition-colors"
+					>
+						Get ZARP
+					</a>
+					<a
+						href="/portal/login"
+						class="inline-flex items-center justify-center px-6 py-3 text-sm font-medium rounded-md border border-slate-300 text-slate-700 hover:border-[#009A35] hover:text-[#009A35] transition-colors"
+					>
+						Launch App
 					</a>
 				</div>
 			</div>
 		</section>
 
-		<!-- Risk & Disclosures -->
-		<section class="pb-20 md:pb-28">
+		<!-- Yield Snapshot -->
+		<section class="pb-16 md:pb-20">
 			<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-				<h2 class="text-2xl font-bold text-slate-900 mb-8 text-center">Important Disclosures</h2>
-				<div class="grid md:grid-cols-2 gap-6">
-					<div class="bg-amber-50 border border-amber-200 rounded-2xl p-6">
-						<h3 class="text-sm font-bold text-amber-900 uppercase tracking-wider mb-3">Yield Is Not Guaranteed</h3>
-						<p class="text-sm text-amber-800 leading-relaxed">
-							The yield is not guaranteed and will fluctuate depending on market conditions and the income earned by the underlying funds. Past performance is not necessarily a guide to future performance.
-						</p>
+				<div class="bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden">
+					<div class="bg-slate-50 px-6 py-3 border-b border-slate-100 flex items-center justify-between">
+						<h3 class="text-sm font-semibold text-slate-500 uppercase tracking-wider">Yield Snapshot</h3>
+						<span class="text-xs text-slate-400">Updated daily</span>
 					</div>
-					<div class="bg-amber-50 border border-amber-200 rounded-2xl p-6">
-						<h3 class="text-sm font-bold text-amber-900 uppercase tracking-wider mb-3">Not a Bank Deposit</h3>
-						<p class="text-sm text-amber-800 leading-relaxed">
-							ZARP Yield is not a bank deposit account and is not protected by any deposit insurance scheme. While ZARP guarantees principal and absorbs investment losses in the underlying reserves, partners bear ZARP's credit risk as issuer.
-						</p>
+					<div class="grid grid-cols-2 md:grid-cols-4 divide-y md:divide-y-0 md:divide-x divide-slate-100">
+						{yieldSnapshot.map((item) => (
+							<div class="p-4 md:p-6 flex flex-col group hover:bg-slate-50 transition-colors">
+								<p class="text-xs font-medium text-slate-500 mb-1 group-hover:text-[#009A35]">{item.label}</p>
+								<div class="flex-1 flex items-center py-2">
+									<p class="text-base md:text-lg font-bold text-slate-900 leading-tight">{item.value}</p>
+								</div>
+								{item.sub && (
+									<p class="text-xs text-slate-400 flex items-center gap-1.5">
+										{item.live && <span class="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span>}
+										{item.sub}
+									</p>
+								)}
+							</div>
+						))}
 					</div>
-					<div class="bg-amber-50 border border-amber-200 rounded-2xl p-6">
-						<h3 class="text-sm font-bold text-amber-900 uppercase tracking-wider mb-3">Crypto Asset Risks</h3>
-						<p class="text-sm text-amber-800 leading-relaxed">
-							This product involves crypto assets, which carry additional risks including smart contract risk, blockchain network risk, and regulatory risk. The regulatory environment for crypto assets in South Africa continues to evolve.
-						</p>
+				</div>
+			</div>
+		</section>
+
+		<!-- What is ZARPy -->
+		<section class="bg-slate-50 py-16 md:py-20">
+			<div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+				<h2 class="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight mb-8 text-center">
+					What is ZARPy?
+				</h2>
+				<div class="space-y-5 text-slate-600 leading-relaxed">
+					<p>
+						ZARPy is a yield-bearing token backed by ZARP. When you deposit ZARP into the ZARPy smart contract, you receive ZARPy at a 1:1 ratio. Your ZARPy balance earns yield generated by Inves Capital&rsquo;s reserves, which are invested in the Old Mutual Money Market Fund &mdash; one of South Africa&rsquo;s most established and trusted money market vehicles.
+					</p>
+					<p>
+						Yield accrues continuously and can be claimed at any time. When you&rsquo;re ready to exit, withdraw your ZARP at a 1:1 rate. No lock-ups, no penalties.
+					</p>
+					<p>
+						ZARPy is available on <span class="font-semibold text-slate-900">Base</span>.
+					</p>
+				</div>
+			</div>
+		</section>
+
+		<!-- How it works -->
+		<section class="py-16 md:py-20">
+			<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+				<div class="text-center mb-12">
+					<h2 class="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight mb-4">
+						How it works
+					</h2>
+					<p class="text-slate-500 max-w-2xl mx-auto">
+						Deposit, earn, claim, withdraw &mdash; all on-chain, all in your control.
+					</p>
+				</div>
+				<div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+					{steps.map((step, i) => (
+						<div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-6 flex flex-col">
+							<span class="text-5xl font-extrabold text-[#009A35]/20 leading-none mb-4">
+								{String(i + 1).padStart(2, '0')}
+							</span>
+							<h3 class="text-lg font-bold text-slate-900 mb-2">{step.title}</h3>
+							<p class="text-sm text-slate-500 leading-relaxed">
+								{step.code ? (
+									<>
+										{step.body.split(step.code)[0]}
+										<code class="font-mono text-xs bg-slate-100 text-slate-900 px-1.5 py-0.5 rounded">{step.code}</code>
+										{step.body.split(step.code)[1]}
+									</>
+								) : step.body}
+							</p>
+						</div>
+					))}
+				</div>
+			</div>
+		</section>
+
+		<!-- Underlying fund -->
+		<section class="py-16 md:py-20">
+			<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+				<div class="bg-[#00493D] rounded-3xl overflow-hidden">
+					<div class="grid md:grid-cols-5 gap-0">
+						<div class="md:col-span-3 p-8 md:p-12 text-white">
+							<div class="flex items-center gap-3 mb-6">
+								<img src="/img/old-mutual.svg" alt="Old Mutual" class="h-8 w-auto opacity-90" />
+							</div>
+							<h2 class="text-3xl md:text-4xl font-extrabold tracking-tight mb-6">
+								The underlying fund
+							</h2>
+							<div class="space-y-5 text-white/80 leading-relaxed">
+								<p>
+									The Old Mutual Money Market Fund is one of South Africa&rsquo;s most established money market vehicles, managed by Old Mutual Investment Group. It invests in high-quality, short-term Rand-denominated instruments including government securities, bank deposits, and corporate paper.
+								</p>
+								<p>
+									The fund is a regulated collective investment scheme under the Collective Investment Schemes Control Act (CISCA), supervised by the FSCA and subject to strict investment guidelines designed to preserve capital and maintain liquidity.
+								</p>
+							</div>
+						</div>
+						<div class="md:col-span-2 bg-white/5 border-t md:border-t-0 md:border-l border-white/10 p-8 md:p-12">
+							<dl class="space-y-6">
+								{fundDetails.map((item) => (
+									<div>
+										<dt class="text-xs font-semibold text-white/50 uppercase tracking-wider mb-1">{item.label}</dt>
+										<dd class="text-base font-semibold text-white">{item.value}</dd>
+									</div>
+								))}
+							</dl>
+						</div>
 					</div>
-					<div class="bg-amber-50 border border-amber-200 rounded-2xl p-6">
-						<h3 class="text-sm font-bold text-amber-900 uppercase tracking-wider mb-3">Liquidity & Redemption</h3>
-						<p class="text-sm text-amber-800 leading-relaxed">
-							Yield claims are subject to the availability of the on-chain yield reserve buffer. Excessive withdrawals from the underlying funds may place them under liquidity pressure, in which case redemptions may be managed over a period of time.
-						</p>
+				</div>
+			</div>
+		</section>
+
+		<!-- Key features -->
+		<section class="bg-slate-50 py-16 md:py-20">
+			<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+				<div class="text-center mb-12">
+					<h2 class="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight mb-4">
+						Key features
+					</h2>
+				</div>
+				<div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+					{features.map((feature) => (
+						<div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-6">
+							<h3 class="text-base font-bold text-slate-900 mb-2">{feature.title}</h3>
+							<p class="text-sm text-slate-500 leading-relaxed">{feature.body}</p>
+						</div>
+					))}
+				</div>
+			</div>
+		</section>
+
+		<!-- Smart contract -->
+		<section class="py-16 md:py-20">
+			<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+				<div class="text-center mb-12">
+					<h2 class="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight mb-4">
+						Smart contract
+					</h2>
+					<p class="text-slate-500 max-w-2xl mx-auto">
+						The ZARPy smart contract manages deposits, withdrawals, yield accrual, and claims. Deployed on Base.
+					</p>
+				</div>
+				<div class="bg-slate-900 rounded-2xl overflow-hidden shadow-xl">
+					<div class="bg-slate-800/50 px-6 py-3 border-b border-slate-800 flex items-center gap-2">
+						<span class="w-2.5 h-2.5 rounded-full bg-slate-700"></span>
+						<span class="w-2.5 h-2.5 rounded-full bg-slate-700"></span>
+						<span class="w-2.5 h-2.5 rounded-full bg-slate-700"></span>
+						<span class="ml-3 text-xs font-mono text-slate-500">ZARPy.sol</span>
 					</div>
+					<div class="divide-y divide-slate-800">
+						{contractFunctions.map((fn) => (
+							<div class="px-6 py-4 md:py-5 grid md:grid-cols-5 gap-2 md:gap-6 items-start hover:bg-slate-800/30 transition-colors">
+								<code class="md:col-span-2 font-mono text-sm text-emerald-300 break-all">{fn.sig}</code>
+								<p class="md:col-span-3 text-sm text-slate-400 leading-relaxed">{fn.desc}</p>
+							</div>
+						))}
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- Disclosures -->
+		<section class="bg-slate-50 py-16 md:py-20">
+			<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+				<div class="text-center mb-10">
+					<h2 class="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight mb-4">
+						Important disclosures
+					</h2>
+					<p class="text-slate-500 max-w-2xl mx-auto">
+						Please read these risks carefully before depositing.
+					</p>
+				</div>
+				<div class="space-y-4">
+					{disclosures.map((item) => (
+						<div class="bg-amber-50 border border-amber-200 rounded-2xl p-6">
+							<h3 class="text-base font-bold text-amber-900 mb-2">{item.title}</h3>
+							<p class="text-sm text-amber-800 leading-relaxed">{item.body}</p>
+						</div>
+					))}
 				</div>
 
-				<!-- Regulatory footer -->
-				<div class="mt-10 bg-slate-50 rounded-2xl p-6 md:p-8">
-					<div class="space-y-3 text-xs text-slate-500 leading-relaxed">
-						<p>
-							ZARP Stablecoin (Pty) Ltd is an authorised representative of Inves Capital (Pty) Ltd (FSP 53739 - license pending). The underlying funds are managed by regulated fund managers including Old Mutual Investment Group (Pty) Ltd, regulated by the Financial Sector Conduct Authority (FSCA).
-						</p>
-						<p>
-							Yield is calculated according to ASISA (Association for Savings and Investment South Africa) standards as a seven-day rolling effective yield. Nothing on this page constitutes investment, legal, tax, or financial advice. Prospective partners should consult their own legal and compliance advisors. Partners are responsible for their own tax obligations on yield received.
-						</p>
-						<p>
-							The fund manager does not provide any guarantee regarding the capital or the return of the portfolio. ZARP guarantees that partner balances are fully redeemable at par and absorbs investment losses in the underlying reserves. Returns may not keep up with inflation, which means that the value of an investment may decline in real terms over time.
-						</p>
-					</div>
-				</div>
+				<!-- Regulatory footer paragraph -->
+				<p class="text-xs text-slate-500 leading-relaxed mt-10">
+					ZARP Stablecoin (Pty) Ltd is an authorised representative of Inves Capital (Pty) Ltd (FSP 53739, CASP licence pending). The underlying fund is managed by Old Mutual Investment Group (Pty) Ltd, a registered fund manager regulated by the Financial Sector Conduct Authority (FSCA). Yield is calculated according to ASISA standards as a seven-day rolling effective yield. Nothing on this page constitutes investment, legal, tax, or financial advice. The fund manager does not provide any guarantee regarding the capital or the return of the portfolio.
+				</p>
 			</div>
 		</section>
 

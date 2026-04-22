@@ -1,0 +1,29 @@
+---
+import '../../styles/global.css';
+import LoginForm from '../../components/portal/auth/LoginForm';
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <title>Sign In — ZARP Partner Portal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  </head>
+  <body class="bg-slate-50 text-slate-900 font-sans antialiased min-h-screen flex flex-col">
+    <main class="flex-1 flex items-center justify-center px-4 py-12">
+      <LoginForm client:load />
+    </main>
+    <footer class="py-4 text-center">
+      <p class="text-xs text-slate-400">
+        &copy; {new Date().getFullYear()} ZARP Stablecoin. All rights reserved.
+        <span class="mx-1.5 text-slate-300">&middot;</span>
+        <a href="/privacy" class="hover:text-slate-600 transition-colors">Privacy Policy</a>
+      </p>
+    </footer>
+  </body>
+</html>
