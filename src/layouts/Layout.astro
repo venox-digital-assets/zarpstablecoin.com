@@ -7,14 +7,16 @@ interface Props {
 	ogDescription?: string;
 	ogImage?: string;
 	ogUrl?: string;
+	ogType?: 'website' | 'article';
 }
 
-const { 
+const {
 	title,
 	ogTitle = 'ZARP Stablecoin',
 	ogDescription = 'ZARP is a cryptocurrency stablecoin pegged to the price of the South African Rand (ZAR).',
 	ogImage = 'https://zarpstablecoin.com/img/og-home.jpg',
-	ogUrl = 'https://zarpstablecoin.com/'
+	ogUrl = 'https://zarpstablecoin.com/',
+	ogType = 'website'
 } = Astro.props;
 ---
 
@@ -30,9 +32,12 @@ const {
 		<!-- Meta Tags -->
 		<meta name="description" content={ogDescription} />
 		
+		<!-- RSS feed auto-discovery -->
+		<link rel="alternate" type="application/rss+xml" title="ZARP Stablecoin News" href="/rss.xml" />
+
 		<!-- Open Graph / Facebook -->
 		<meta property="og:title" content={ogTitle} />
-		<meta property="og:type" content="website" />
+		<meta property="og:type" content={ogType} />
 		<meta property="og:url" content={ogUrl} />
 		<meta property="og:image" content={ogImage} />
 		<meta property="og:description" content={ogDescription} />
@@ -63,10 +68,11 @@ const {
 					</div>
 
 					<!-- Desktop Nav Links -->
-					<div class="hidden md:flex space-x-8">
-						<a href="/about" class="text-slate-500 hover:text-slate-900 text-sm font-medium transition-colors">About</a>
-						<a href="/get-zarp" class="text-slate-500 hover:text-slate-900 text-sm font-medium transition-colors">Ecosystem</a>
-						<a href="/transparency" class="text-slate-500 hover:text-slate-900 text-sm font-medium transition-colors">Transparency</a>
+					<div class="hidden md:flex items-center space-x-8 text-sm">
+						<a href="/about" class="text-slate-600 hover:text-slate-900 font-medium tracking-wide transition-colors border-b border-transparent hover:border-[#009A35]/60 pb-0.5">About</a>
+						<a href="/get-zarp" class="text-slate-600 hover:text-slate-900 font-medium tracking-wide transition-colors border-b border-transparent hover:border-[#009A35]/60 pb-0.5">Ecosystem</a>
+						<a href="/transparency" class="text-slate-600 hover:text-slate-900 font-medium tracking-wide transition-colors border-b border-transparent hover:border-[#009A35]/60 pb-0.5">Transparency</a>
+						<a href="/news" class="text-slate-600 hover:text-slate-900 font-medium tracking-wide transition-colors border-b border-transparent hover:border-[#009A35]/60 pb-0.5">News</a>
 					</div>
 
 					<!-- Right side: Get ZARP + Hamburger -->
@@ -93,6 +99,7 @@ const {
 					<a href="/about" class="block text-slate-600 hover:text-slate-900 text-sm font-medium transition-colors">About</a>
 					<a href="/get-zarp" class="block text-slate-600 hover:text-slate-900 text-sm font-medium transition-colors">Ecosystem</a>
 					<a href="/transparency" class="block text-slate-600 hover:text-slate-900 text-sm font-medium transition-colors">Transparency</a>
+					<a href="/news" class="block text-slate-600 hover:text-slate-900 text-sm font-medium transition-colors">News</a>
 				</div>
 			</div>
 		</nav>
@@ -132,6 +139,7 @@ const {
 						<h4 class="text-xs font-semibold uppercase tracking-wider text-slate-500 mb-4">ZARP</h4>
 						<ul class="space-y-3">
 							<li><a href="/about" class="text-sm text-slate-600 hover:text-slate-900 transition-colors">About</a></li>
+							<li><a href="/news" class="text-sm text-slate-600 hover:text-slate-900 transition-colors">News</a></li>
 							<li><a href="https://docs.zarpstablecoin.com/zarp-stablecoin" target="_blank" rel="noopener" class="text-sm text-slate-600 hover:text-slate-900 transition-colors">Documentation</a></li>
 							<li><a href="https://forms.gle/YoVq67QMsX44uKus7" target="_blank" rel="noopener" class="text-sm text-slate-600 hover:text-slate-900 transition-colors">Partner Application</a></li>
 							<li><a href="/transparency" class="text-sm text-slate-600 hover:text-slate-900 transition-colors">Transparency</a></li>
