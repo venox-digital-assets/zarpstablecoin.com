@@ -1,0 +1,126 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getPublishedNews, formatDate, readingTime } from '../../utils/posts';
+
+const posts = await getPublishedNews();
+const [featured, ...rest] = posts;
+---
+
+<Layout
+	title="News | ZARP Stablecoin"
+	ogTitle="ZARP Stablecoin News"
+	ogDescription="The latest news, announcements, and insights from the ZARP Stablecoin team — South Africa's most established Rand stablecoin."
+	ogImage="https://zarpstablecoin.com/img/og-home.jpg"
+	ogUrl="https://zarpstablecoin.com/news"
+>
+	<main class="min-h-screen bg-white">
+		<!-- Hero -->
+		<section class="pt-20 pb-10 md:pt-28 md:pb-14">
+			<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+				<h1 class="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight mb-6">
+					News
+				</h1>
+				<p class="text-lg md:text-xl text-slate-500 max-w-2xl mx-auto leading-relaxed">
+					Announcements, product updates, and insights from the team building South Africa's most established Rand stablecoin.
+				</p>
+				<a
+					href="/rss.xml"
+					class="inline-flex items-center gap-2 mt-6 text-sm font-medium text-slate-500 hover:text-[#009A35] transition-colors"
+				>
+					<svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.18 15.64a2.18 2.18 0 1 1 0 4.36 2.18 2.18 0 0 1 0-4.36zM4 4.44A15.56 15.56 0 0 1 19.56 20h-2.83A12.73 12.73 0 0 0 4 7.27V4.44zm0 5.66a9.9 9.9 0 0 1 9.9 9.9h-2.83A7.07 7.07 0 0 0 4 12.93V10.1z"/></svg>
+					Subscribe via RSS
+				</a>
+			</div>
+		</section>
+
+		{posts.length === 0 && (
+			<section class="pb-24">
+				<div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-slate-500">
+					No posts yet. Check back soon.
+				</div>
+			</section>
+		)}
+
+		<!-- Featured (latest) post -->
+		{featured && (
+			<section class="pb-12">
+				<div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+					<a
+						href={`/news/${featured.id}/`}
+						class="group grid md:grid-cols-2 gap-8 items-center bg-slate-50 rounded-3xl overflow-hidden border border-slate-100 hover:shadow-md transition-shadow"
+					>
+						<div class="aspect-[16/10] md:aspect-auto md:h-full overflow-hidden bg-gradient-to-br from-[#009A35]/10 to-slate-100 flex items-center justify-center">
+							{featured.data.heroImage ? (
+								<img
+									src={featured.data.heroImage}
+									alt={featured.data.heroImageAlt ?? featured.data.title}
+									class="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-300"
+								/>
+							) : (
+								<img src="/img/zarp-coin.svg" alt="ZARP" class="h-24 opacity-80" />
+							)}
+						</div>
+						<div class="p-8 md:pr-12">
+							<div class="flex items-center gap-3 text-xs font-medium text-slate-500 mb-3">
+								<time datetime={featured.data.pubDate.toISOString()}>{formatDate(featured.data.pubDate)}</time>
+								<span aria-hidden="true">·</span>
+								<span>{readingTime(featured.body)} min read</span>
+							</div>
+							<h2 class="text-2xl md:text-3xl font-bold text-slate-900 tracking-tight mb-3 group-hover:text-[#009A35] transition-colors">
+								{featured.data.title}
+							</h2>
+							<p class="text-slate-600 leading-relaxed line-clamp-3">
+								{featured.data.description}
+							</p>
+							<span class="inline-flex items-center gap-1 mt-5 text-sm font-medium text-[#009A35]">
+								Read more
+								<svg class="w-4 h-4 group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+							</span>
+						</div>
+					</a>
+				</div>
+			</section>
+		)}
+
+		<!-- Remaining posts grid -->
+		{rest.length > 0 && (
+			<section class="pb-24">
+				<div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+					<div class="grid sm:grid-cols-2 gap-8">
+						{rest.map((post) => (
+							<a
+								href={`/news/${post.id}/`}
+								class="group flex flex-col bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden hover:shadow-md transition-shadow"
+							>
+								<div class="aspect-[16/9] overflow-hidden bg-gradient-to-br from-[#009A35]/10 to-slate-100 flex items-center justify-center">
+									{post.data.heroImage ? (
+										<img
+											src={post.data.heroImage}
+											alt={post.data.heroImageAlt ?? post.data.title}
+											class="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-300"
+										/>
+									) : (
+										<img src="/img/zarp-coin.svg" alt="ZARP" class="h-16 opacity-80" />
+									)}
+								</div>
+								<div class="flex flex-col flex-1 p-6">
+									<div class="flex items-center gap-3 text-xs font-medium text-slate-500 mb-2">
+										<time datetime={post.data.pubDate.toISOString()}>{formatDate(post.data.pubDate)}</time>
+										<span aria-hidden="true">·</span>
+										<span>{readingTime(post.body)} min read</span>
+									</div>
+									<h3 class="text-lg font-bold text-slate-900 mb-2 group-hover:text-[#009A35] transition-colors">
+										{post.data.title}
+									</h3>
+									<p class="text-sm text-slate-600 leading-relaxed line-clamp-3">
+										{post.data.description}
+									</p>
+								</div>
+							</a>
+						))}
+					</div>
+				</div>
+			</section>
+		)}
+	</main>
+</Layout>

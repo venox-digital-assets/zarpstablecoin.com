@@ -1,0 +1,89 @@
+---
+import { render } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import { getPublishedNews, formatDate, readingTime } from '../../utils/posts';
+
+export async function getStaticPaths() {
+	const posts = await getPublishedNews();
+	return posts.map((post) => ({
+		params: { slug: post.id },
+		props: { post },
+	}));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+
+const ogImage = post.data.heroImage
+	? new URL(post.data.heroImage, Astro.site).href
+	: 'https://zarpstablecoin.com/img/og-home.jpg';
+const canonical = new URL(`/news/${post.id}/`, Astro.site).href;
+---
+
+<Layout
+	title={`${post.data.title} | ZARP Stablecoin`}
+	ogTitle={post.data.title}
+	ogDescription={post.data.description}
+	ogImage={ogImage}
+	ogUrl={canonical}
+	ogType="article"
+>
+	<main class="min-h-screen bg-white">
+		<article class="pt-16 pb-20 md:pt-24 md:pb-28">
+			<!-- Header -->
+			<header class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+				<a href="/news" class="inline-flex items-center gap-1 text-sm font-medium text-slate-500 hover:text-[#009A35] transition-colors mb-8">
+					<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
+					All news
+				</a>
+				<div class="flex flex-wrap items-center justify-center gap-2 mb-5">
+					{post.data.tags.map((tag) => (
+						<span class="text-xs font-semibold uppercase tracking-wider text-[#009A35] bg-[#009A35]/10 rounded-full px-3 py-1">{tag}</span>
+					))}
+				</div>
+				<h1 class="text-3xl md:text-5xl font-extrabold text-slate-900 tracking-tight mb-6 leading-tight">
+					{post.data.title}
+				</h1>
+				<div class="flex items-center justify-center gap-3 text-sm text-slate-500">
+					<span class="font-medium text-slate-700">{post.data.author}</span>
+					<span aria-hidden="true">·</span>
+					<time datetime={post.data.pubDate.toISOString()}>{formatDate(post.data.pubDate)}</time>
+					<span aria-hidden="true">·</span>
+					<span>{readingTime(post.body)} min read</span>
+				</div>
+			</header>
+
+			<!-- Hero image -->
+			{post.data.heroImage && (
+				<figure class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mt-10 md:mt-12">
+					<img
+						src={post.data.heroImage}
+						alt={post.data.heroImageAlt ?? post.data.title}
+						class="w-full rounded-2xl shadow-sm"
+					/>
+					{post.data.heroImageCredit && (
+						<figcaption class="text-center text-xs text-slate-400 mt-3">{post.data.heroImageCredit}</figcaption>
+					)}
+				</figure>
+			)}
+
+			<!-- Body -->
+			<div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 mt-10 md:mt-12">
+				<div class="prose prose-slate lg:prose-lg max-w-none prose-headings:font-bold prose-headings:tracking-tight prose-a:text-[#009A35] prose-a:font-medium prose-a:no-underline hover:prose-a:underline prose-strong:text-slate-900 prose-img:rounded-xl">
+					<Content />
+				</div>
+
+				<!-- Footer / CTA -->
+				<div class="mt-14 pt-8 border-t border-slate-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+					<a href="/news" class="inline-flex items-center gap-1 text-sm font-medium text-slate-500 hover:text-[#009A35] transition-colors">
+						<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
+						Back to all news
+					</a>
+					<a href="/get-zarp" class="inline-flex items-center justify-center px-5 py-2.5 border border-transparent text-sm font-medium rounded-md text-white bg-slate-900 hover:bg-[#009A35] transition-colors">
+						Get ZARP
+					</a>
+				</div>
+			</div>
+		</article>
+	</main>
+</Layout>
