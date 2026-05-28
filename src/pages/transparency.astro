@@ -34,6 +34,20 @@ const explorers = [
   { name: 'Polygon', url: 'https://polygonscan.com/token/0xb755506531786C8aC63B756BaB1ac387bACB0C04', logo: '/img/polygon.svg' },
   { name: 'Solana', url: 'https://solscan.io/token/dngKhBQM3BGvsDHKhrLnjvRKfY5Q7gEnYGToj9Lk8rk', logo: '/img/solana.svg' },
 ];
+
+// Independent Agreed-Upon Procedures reports by Kempen Audit, hosted on kempengroup.co.za.
+// Newest first — index 0 is treated as the latest report.
+const attestationReports = [
+  { period: 'February 2026', url: 'https://kempengroup.co.za/wp-content/uploads/2026/03/ZARP-Stablecoin-Pty-Ltd-Agreed-upon-procedures-report-2026-02-27-1773397665324.pdf' },
+  { period: 'September 2025', url: 'https://kempengroup.co.za/wp-content/uploads/2025/09/ZARP-Stablecoin-Pty-Ltd-Agreed-upon-procedures-report-2025-09-04-1757061801998.pdf' },
+  { period: 'April 2025', url: 'https://kempengroup.co.za/wp-content/uploads/2025/04/ZARP-Stablecoin-Pty-Ltd-Agreed-upon-procedures-report-2025-04-09-1744890691983-1.pdf' },
+  { period: 'January 2025', url: 'https://kempengroup.co.za/wp-content/uploads/2025/01/ZARP-Stablecoin-Pty-Ltd-Agreed-upon-procedures-report-2025-01-16.pdf' },
+  { period: 'November 2024', url: 'https://kempengroup.co.za/wp-content/uploads/2024/11/ZARP-Stablecoin-Pty-Ltd-Agreed-upon-procedures-report-Nov-2024.pdf' },
+  { period: 'September 2024', url: 'https://kempengroup.co.za/wp-content/uploads/2024/09/ZARP-Stablecoin-Pty-Ltd-Agreed-upon-procedures-report-17.09.2024-1727246460393.pdf' },
+  { period: 'August 2024', url: 'https://kempengroup.co.za/wp-content/uploads/2024/08/Combined-Agreed-Upon-Proc-Report-ZARP-Aug-2024.pdf' },
+  { period: 'May 2024', url: 'https://kempengroup.co.za/wp-content/uploads/2024/05/ZARP-Stablecoin-Pty-Ltd-Agreed-upon-procedures-report-08.05.2024-signed.pdf' },
+];
+const latestReport = attestationReports[0];
 ---
 
 <Layout
@@ -122,16 +136,33 @@ const explorers = [
       <div class="grid md:grid-cols-2 gap-6 mb-16">
         
         <!-- Attestation Reports -->
-        <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-8">
+        <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-8 flex flex-col">
           <h3 class="text-lg font-bold text-slate-900 mb-3">Attestation Reports</h3>
           <p class="text-sm text-slate-500 mb-5">
             Independent auditors at Kempen Audit review our treasury reserves and circulating token supplies directly to ensure that ZARP Stablecoin's management assertions are verified.
           </p>
-          <a href="https://kempengroup.co.za/wp-content/uploads/2026/03/ZARP-Stablecoin-Pty-Ltd-Agreed-upon-procedures-report-2026-02-27-1773397665324.pdf" target="_blank" rel="noopener" class="inline-flex items-center text-sm font-medium text-[#009A35] hover:underline">
-            Read latest attestation report
+          <a href={latestReport.url} target="_blank" rel="noopener" class="inline-flex items-center text-sm font-medium text-[#009A35] hover:underline">
+            Read latest attestation report ({latestReport.period})
             <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
           </a>
-          <div class="mt-6 pt-6 border-t border-slate-100 flex justify-center">
+
+          <!-- Past report date selector -->
+          <div class="mt-6">
+            <label for="report-period" class="block text-xs font-medium text-slate-500 mb-2">Browse past reports</label>
+            <div class="flex gap-2">
+              <select id="report-period" aria-label="Select an attestation report period" class="flex-1 min-w-0 text-sm text-slate-700 bg-white border border-slate-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#009A35]/30 focus:border-[#009A35]">
+                {attestationReports.map((report, i) => (
+                  <option value={report.url} selected={i === 0}>{report.period}</option>
+                ))}
+              </select>
+              <a id="report-view" href={latestReport.url} target="_blank" rel="noopener" class="shrink-0 inline-flex items-center gap-1 text-sm font-medium text-white bg-[#009A35] hover:bg-[#008a2f] rounded-lg px-4 py-2 transition-colors">
+                View
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+              </a>
+            </div>
+          </div>
+
+          <div class="mt-auto pt-6 border-t border-slate-100 flex justify-center">
             <img src="/img/kempen.png" alt="Kempen Audit" class="h-10 w-auto opacity-80" />
           </div>
         </div>
@@ -261,6 +292,14 @@ const explorers = [
         }
 
         document.addEventListener('DOMContentLoaded', function() {
+          var reportSelect = document.getElementById('report-period');
+          var reportView = document.getElementById('report-view');
+          if (reportSelect && reportView) {
+            reportSelect.addEventListener('change', function() {
+              reportView.setAttribute('href', this.value);
+            });
+          }
+
           document.querySelectorAll('.copy-address').forEach(function(el) {
             el.addEventListener('click', function() {
               var address = this.getAttribute('data-address');
