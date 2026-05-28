@@ -4,6 +4,7 @@
   "version": "3.0",
   "scripts": {
     "dev": "astro dev --host 127.0.0.1 --port 4321 --strict-port",
+    "dev:tailscale": "astro dev --host $(tailscale ip -4 | head -n1) --port 4321 --strict-port",
     "dev:verbose": "DEBUG=astro:* NODE_OPTIONS=--trace-warnings astro dev --host 127.0.0.1 --port 4321 --strict-port",
     "build": "astro build",
     "preview": "astro preview",
