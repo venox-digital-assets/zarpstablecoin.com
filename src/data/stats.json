@@ -1,8 +1,8 @@
 {
   "supply": 81918962.83,
   "reserves": 91260682.44,
-  "transactions": 289217,
+  "transactions": 291758,
   "price_usd": 0.0605,
   "chart_points": [0.054, 0.0542, 0.0539, 0.0545, 0.0541, 0.0543],
-  "last_updated": "2026-06-22T09:03:00Z"
+  "last_updated": "2026-06-24T08:42:32Z"
 }
