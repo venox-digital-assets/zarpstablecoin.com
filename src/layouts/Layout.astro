@@ -6,8 +6,18 @@ interface Props {
 	ogTitle?: string;
 	ogDescription?: string;
 	ogImage?: string;
+	/** Describes the share image itself, not the page. */
+	ogImageAlt?: string;
+	ogImageWidth?: number;
+	ogImageHeight?: number;
+	/** Defaults to this page's own URL; only override for a deliberate alias. */
 	ogUrl?: string;
 	ogType?: 'website' | 'article';
+	/** article:* tags below are emitted only when ogType is 'article'. */
+	publishedTime?: Date;
+	modifiedTime?: Date;
+	articleAuthor?: string;
+	articleTags?: string[];
 }
 
 const {
@@ -15,9 +25,22 @@ const {
 	ogTitle = 'ZARP Stablecoin',
 	ogDescription = 'ZARP is a cryptocurrency stablecoin pegged to the price of the South African Rand (ZAR).',
 	ogImage = 'https://zarpstablecoin.com/img/og-home.jpg',
-	ogUrl = 'https://zarpstablecoin.com/',
-	ogType = 'website'
+	ogImageAlt = 'ZARP Stablecoin',
+	ogImageWidth,
+	ogImageHeight,
+	ogUrl,
+	ogType = 'website',
+	publishedTime,
+	modifiedTime,
+	articleAuthor,
+	articleTags = []
 } = Astro.props;
+
+// og:url and the canonical link must agree, and both must sit on the same
+// host as `site` in astro.config.mjs — otherwise they point at a redirect and
+// split the page's ranking signals.
+const pageUrl = ogUrl ?? new URL(Astro.url.pathname, Astro.site).href;
+const isArticle = ogType === 'article';
 ---
 
 <!doctype html>
@@ -31,16 +54,30 @@ const {
 		
 		<!-- Meta Tags -->
 		<meta name="description" content={ogDescription} />
+		<link rel="canonical" href={pageUrl} />
 		
 		<!-- RSS feed auto-discovery -->
 		<link rel="alternate" type="application/rss+xml" title="ZARP Stablecoin News" href="/rss.xml" />
 
 		<!-- Open Graph / Facebook -->
+		<meta property="og:site_name" content="ZARP Stablecoin" />
+		<meta property="og:locale" content="en_ZA" />
 		<meta property="og:title" content={ogTitle} />
 		<meta property="og:type" content={ogType} />
-		<meta property="og:url" content={ogUrl} />
+		<meta property="og:url" content={pageUrl} />
 		<meta property="og:image" content={ogImage} />
+		<meta property="og:image:alt" content={ogImageAlt} />
+		{ogImageWidth && <meta property="og:image:width" content={String(ogImageWidth)} />}
+		{ogImageHeight && <meta property="og:image:height" content={String(ogImageHeight)} />}
 		<meta property="og:description" content={ogDescription} />
+		{isArticle && publishedTime && (
+			<meta property="article:published_time" content={publishedTime.toISOString()} />
+		)}
+		{isArticle && modifiedTime && (
+			<meta property="article:modified_time" content={modifiedTime.toISOString()} />
+		)}
+		{isArticle && articleAuthor && <meta property="article:author" content={articleAuthor} />}
+		{isArticle && articleTags.map((tag) => <meta property="article:tag" content={tag} />)}
 		
 		<!-- Twitter -->
 		<meta name="twitter:card" content="summary_large_image" />
@@ -49,6 +86,7 @@ const {
 		<meta name="twitter:title" content={ogTitle} />
 		<meta name="twitter:description" content={ogDescription} />
 		<meta name="twitter:image" content={ogImage} />
+		<meta name="twitter:image:alt" content={ogImageAlt} />
 
 		<!-- Fonts -->
 		<link rel="preconnect" href="https://fonts.googleapis.com">

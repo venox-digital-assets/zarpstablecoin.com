@@ -2,6 +2,7 @@
 import { render } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
 import { getPublishedNews, formatDate, readingTime } from '../../utils/posts';
+import { publicImageSize } from '../../utils/images';
 
 export async function getStaticPaths() {
 	const posts = await getPublishedNews();
@@ -16,8 +17,14 @@ const { Content } = await render(post);
 
 const ogImage = post.data.heroImage
 	? new URL(post.data.heroImage, Astro.site).href
-	: 'https://zarpstablecoin.com/img/og-home.jpg';
-const canonical = new URL(`/news/${post.id}/`, Astro.site).href;
+	: new URL('/img/og-home.jpg', Astro.site).href;
+// Falls back to the post title so the share image is never unlabelled.
+const ogImageAlt = post.data.heroImage
+	? (post.data.heroImageAlt ?? post.data.title)
+	: 'ZARP Stablecoin';
+const ogImageSize = post.data.heroImage
+	? publicImageSize(post.data.heroImage)
+	: undefined;
 ---
 
 <Layout
@@ -25,8 +32,14 @@ const canonical = new URL(`/news/${post.id}/`, Astro.site).href;
 	ogTitle={post.data.title}
 	ogDescription={post.data.description}
 	ogImage={ogImage}
-	ogUrl={canonical}
+	ogImageAlt={ogImageAlt}
+	ogImageWidth={ogImageSize?.width}
+	ogImageHeight={ogImageSize?.height}
 	ogType="article"
+	publishedTime={post.data.pubDate}
+	modifiedTime={post.data.updatedDate}
+	articleAuthor={post.data.author}
+	articleTags={post.data.tags}
 >
 	<main class="min-h-screen bg-white">
 		<article class="pt-16 pb-20 md:pt-24 md:pb-28">
