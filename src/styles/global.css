@@ -1,2 +1,48 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
+
+/* Stat grid for News articles.
+   Used as raw HTML inside src/content/news/*.md to present a row of figures
+   as centred, green-bordered tiles. Plain CSS rather than
+   utility classes so markdown stays readable and Tailwind doesn't have to
+   scan content files. Selectors are (0,1,1) so they beat Typography's
+   :where()-wrapped prose defaults. */
+.stat-grid {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: 1rem;
+	margin: 2rem 0;
+}
+
+@media (min-width: 640px) {
+	.stat-grid {
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+	}
+}
+
+.stat-grid > div {
+	background: rgb(0 154 53 / 0.05);
+	border: 2px solid rgb(0 154 53 / 0.35);
+	border-radius: 1rem;
+	padding: 1.5rem;
+	text-align: center;
+}
+
+.stat-grid p {
+	margin: 0;
+}
+
+.stat-grid .stat-value {
+	font-size: 1.875rem;
+	line-height: 2.25rem;
+	font-weight: 800;
+	letter-spacing: -0.025em;
+	color: #0f172a;
+}
+
+.stat-grid .stat-label {
+	margin-top: 0.5rem;
+	font-size: 0.875rem;
+	line-height: 1.375rem;
+	color: #64748b;
+}
