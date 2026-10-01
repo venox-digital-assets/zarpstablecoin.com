@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="512" height="512" role="img" aria-label="Solid">
+  <title>Solid</title>
+  <desc>Two fists, one blue and one amber. Bumping, not stacked.</desc>
+  <rect x="15" y="9" width="34" height="20" rx="7" fill="#5B5FFF"/>
+  <rect x="11.5" y="18" width="6" height="9" rx="3" fill="#5B5FFF"/>
+  <rect x="15" y="35" width="34" height="20" rx="7" fill="#FF8A3D"/>
+  <rect x="46.5" y="37" width="6" height="9" rx="3" fill="#FF8A3D"/>
+</svg>
