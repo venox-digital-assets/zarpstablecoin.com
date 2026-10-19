@@ -5,6 +5,8 @@ description: >-
   and can't run on dollars alone.
 pubDate: 2026-10-19T08:00:00Z
 author: ZARP Stablecoin
+heroImage: /img/news/tokenisation-will-need-a-stablecoin-for-every-currency.jpeg
+heroImageAlt: Gold bars, banknotes and a bank vault flowing through a glowing cube into a network of blockchain blocks
 tags:
   - Insight
   - Tokenisation
@@ -157,6 +159,8 @@ The first wave of stablecoins made the Dollar available to anyone with a phone. 
 
 ## Sources
 
+<div class="sources">
+
 - IMF, Dan Katz, "Stablecoins: Promise, Risks, and Policy Choices for Emerging Markets", University of Cape Town, 7 August 2026.
 - Goldman Sachs Global Institute, "Stablecoins and Emerging Markets", 4 February 2026.
 - European Central Bank, "Stablecoins and the future of money: separating functions from instruments", speech, 8 May 2026.
@@ -166,3 +170,5 @@ The first wave of stablecoins made the Dollar available to anyone with a phone. 
 - rwa.xyz tokenised asset data; DefiLlama stablecoin data.
 - ZARP public reporting ([reporting.inv.es/zarp](https://reporting.inv.es/zarp)), daily record for 18 October 2026.
 - ZARP Stablecoin, [Transparency & Trust](/transparency) page, updated 5 October 2026 (Kempen Audit attestations).
+
+</div>
