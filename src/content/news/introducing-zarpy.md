@@ -6,7 +6,7 @@ description: >-
 pubDate: 2026-10-20T08:00:00Z
 author: ZARP Stablecoin
 heroImage: /img/news/introducing-zarpy.jpeg
-heroImageAlt: The ZARPY logo above a rising, stepped green line representing yield that accrues hour by hour
+heroImageAlt: The ZARPY logo beside a stepped green line that climbs ever more steeply to a highlighted high point, representing yield accruing hour by hour
 tags:
   - Announcement
   - ZARPY
