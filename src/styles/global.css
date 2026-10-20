@@ -97,6 +97,26 @@
 	margin: 0.375rem 0;
 }
 
+/* Regulatory disclosure at the end of an article */
+.disclosure {
+	margin-top: 3rem;
+	padding: 1.25rem 1.5rem;
+	border-radius: 0.75rem;
+	background: #f8fafc;
+	border: 1px solid #e2e8f0;
+	font-size: 0.8125rem;
+	line-height: 1.6;
+	color: #64748b;
+}
+
+.disclosure p {
+	margin: 0;
+}
+
+.disclosure strong {
+	color: #334155;
+}
+
 /* Column chart (change over time) */
 .chart .cols {
 	display: flex;
