@@ -7,6 +7,7 @@ pubDate: 2026-10-19T08:00:00Z
 author: ZARP Stablecoin
 heroImage: /img/news/tokenisation-will-need-a-stablecoin-for-every-currency.jpeg
 heroImageAlt: Gold bars, banknotes and a bank vault flowing through a glowing cube into a network of blockchain blocks
+ogImage: /img/news/tokenisation-will-need-a-stablecoin-for-every-currency-og.jpeg
 tags:
   - Insight
   - Tokenisation
