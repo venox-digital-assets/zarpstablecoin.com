@@ -1,5 +1,5 @@
 ---
-title: "Introducing ZARPY: money market yield for rand that's only parked for an hour"
+title: "Introducing ZARPY - real-time money market yield for the Rand"
 description: >-
   ZARPY lets approved institutions earn money market fund returns on ZARP, the
   rand stablecoin, for as long as it is staked, even for an hour. No lock-up.
