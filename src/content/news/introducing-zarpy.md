@@ -35,7 +35,11 @@ Now, for the first time, Rand value can be put to work in a real-time yield engi
 
 Rand-denominated yield is not new. What ZARPY adds is time. Yield accrues second by second, not at an end-of-day snapshot or on a fund's settlement cycle. Idle capital starts earning immediately, and yield can be claimed at any time.
 
+<div class="callout">
+
 Institutional treasuries have always had to choose between earning a proper money market rate and keeping their rands on hand. ZARPY removes that trade-off. Your rands earn for every minute they're not working, and it's back in your wallet the moment you need it.
+
+</div>
 
 ## Built for institutions
 
