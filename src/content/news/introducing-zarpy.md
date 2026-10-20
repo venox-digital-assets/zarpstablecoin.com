@@ -35,7 +35,7 @@ Now, for the first time, Rand value can be put to work in a real-time yield engi
 
 Rand-denominated yield is not new. What ZARPY adds is time. Yield accrues second by second, not at an end-of-day snapshot or on a fund's settlement cycle. Idle capital starts earning immediately, and yield can be claimed at any time.
 
-> Institutional treasuries have always had to choose between earning a proper money market rate and keeping their rands on hand. ZARPY removes that trade-off. Your rands earn for every minute they're not working, and it's back in your wallet the moment you need it.
+Institutional treasuries have always had to choose between earning a proper money market rate and keeping their rands on hand. ZARPY removes that trade-off. Your rands earn for every minute they're not working, and it's back in your wallet the moment you need it.
 
 ## Built for institutions
 
@@ -51,5 +51,8 @@ ZARPY is a permissioned product for institutions, not a retail or open DeFi prod
 
 ZARPY is in a live pilot with approved partners. ZARP Partners who want to take part or explore the many opportunities provided by ZARPY should contact us at [hello@zarpstablecoin.com](mailto:hello@zarpstablecoin.com?subject=ZARPY). Not yet a partner? Start with a [partner application](/get-zarp#partner-application).
 
+<div class="disclosure">
+
 **Important information.** ZARPY is issued by Inves Capital (Pty) Ltd. ZARPY is not a bank deposit, is not insured, and is not a collective investment scheme. ZARPY holders are unsecured creditors of Inves Capital. Yield is discretionary, is not guaranteed, and past rates do not indicate future rates. ZARPY is available only to approved institutional partners, subject to its terms and conditions and risk disclosures. Nothing in this article is financial, investment, tax or legal advice. See our [FAIS disclosure](/fais-disclosure) for more information.
 
+</div>
