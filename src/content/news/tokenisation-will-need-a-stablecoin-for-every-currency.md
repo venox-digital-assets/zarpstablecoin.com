@@ -1,8 +1,9 @@
 ---
 title: Tokenisation will need a stablecoin for every currency
 description: >-
-  Dollar stablecoins won the first wave. The next will put real assets on-chain,
-  and can't run on dollars alone.
+  Tokenised bonds, funds and property settle in the currency they're issued in,
+  so the next wave can't run on dollars alone. Why the rand needs on-chain cash,
+  and where ZARP stands today.
 pubDate: 2026-10-19T08:00:00Z
 author: ZARP Stablecoin
 heroImage: /img/news/tokenisation-will-need-a-stablecoin-for-every-currency.jpeg
@@ -11,6 +12,9 @@ tags:
   - Insight
   - Tokenisation
   - Stablecoins
+  - Real-World Assets
+  - Settlement
+  - South Africa
 ---
 
 **Dollar stablecoins won the first wave. The next will put real assets on-chain, and can't run on dollars alone.**
