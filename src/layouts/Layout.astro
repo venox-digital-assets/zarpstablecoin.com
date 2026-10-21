@@ -18,6 +18,8 @@ interface Props {
 	modifiedTime?: Date;
 	articleAuthor?: string;
 	articleTags?: string[];
+	/** Keep the page out of search results (e.g. forms sent directly to partners). */
+	noindex?: boolean;
 }
 
 const {
@@ -33,7 +35,8 @@ const {
 	publishedTime,
 	modifiedTime,
 	articleAuthor,
-	articleTags = []
+	articleTags = [],
+	noindex = false
 } = Astro.props;
 
 // og:url and the canonical link must agree, and both must sit on the same
@@ -55,6 +58,7 @@ const isArticle = ogType === 'article';
 		<!-- Meta Tags -->
 		<meta name="description" content={ogDescription} />
 		<link rel="canonical" href={pageUrl} />
+		{noindex && <meta name="robots" content="noindex" />}
 		
 		<!-- RSS feed auto-discovery -->
 		<link rel="alternate" type="application/rss+xml" title="ZARP Stablecoin News" href="/rss.xml" />
