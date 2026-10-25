@@ -1,10 +1,12 @@
 ---
 title: "Introducing ZARPY - real-time money market yield for the Rand"
-description: ZARPY lets approved partners earn money market yield with ZARP Stablecoin, in real time. No minimums, no lock-up, 24/7.
-pubDate: 2026-10-25T20:00:00Z
+description: Earn yield on ZARP by the second, benchmarked to the Old Mutual Money Market Fund. No minimums, no lock-up, unstake 24/7. For approved partners.
+pubDate: 2026-10-21T08:00:00Z
 author: ZARP Stablecoin
 heroImage: /img/news/introducing-zarpy.jpeg
 heroImageAlt: The ZARPY logo on pale green, above a smooth upward curve that separates a lighter field from a darker green one
+ogImage: /img/news/introducing-zarpy.jpeg
+ogImageAlt: The ZARPY logo on pale green, above a rising curve
 tags:
   - Announcement
   - ZARPY
@@ -18,7 +20,7 @@ Inves Capital, issuer of the ZARP Stablecoin, is introducing a new yield-bearing
 
 ZARPY enables approved institutional partners to earn yield on their ZARP balances for precisely the time they are staked, with continuous accrual and the ability to unstake without a minimum holding period.
 
-Powered by the Old Mutual Money Market Fund, ZARPY brings together established investment returns and the speed, flexibility and programmability of blockchain-based money.
+With yield benchmarked to the Old Mutual Money Market Fund, ZARPY brings together established money market returns and the speed, flexibility and programmability of blockchain-based money.
 
 ## Short-term Rand has always been left out
 
