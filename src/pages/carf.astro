@@ -1,0 +1,643 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+// CARF self-certification endpoint (Formspree). Submissions are emailed via Formspree.
+const FORMSPREE_ENDPOINT = "https://formspree.io/f/xgaojpva";
+
+// ISO 3166-1 alpha-2 codes; names come from Intl so the list stays consistent.
+const countryCodes = "AD AE AF AG AI AL AM AO AQ AR AS AT AU AW AX AZ BA BB BD BE BF BG BH BI BJ BL BM BN BO BQ BR BS BT BV BW BY BZ CA CC CD CF CG CH CI CK CL CM CN CO CR CU CV CW CX CY CZ DE DJ DK DM DO DZ EC EE EG EH ER ES ET FI FJ FK FM FO FR GA GB GD GE GF GG GH GI GL GM GN GP GQ GR GS GT GU GW GY HK HM HN HR HT HU ID IE IL IM IN IO IQ IR IS IT JE JM JO JP KE KG KH KI KM KN KP KR KW KY KZ LA LB LC LI LK LR LS LT LU LV LY MA MC MD ME MF MG MH MK ML MM MN MO MP MQ MR MS MT MU MV MW MX MY MZ NA NC NE NF NG NI NL NO NP NR NU NZ OM PA PE PF PG PH PK PL PM PN PR PS PT PW PY QA RE RO RS RU RW SA SB SC SD SE SG SH SI SJ SK SL SM SN SO SR SS ST SV SX SY SZ TC TD TF TG TH TJ TK TL TM TN TO TR TT TV TW TZ UA UG UM US UY UZ VA VC VE VG VI VN VU WF WS XK YE YT ZA ZM ZW".split(" ");
+const regionNames = new Intl.DisplayNames(['en'], { type: 'region' });
+const countries = countryCodes
+  .filter((code) => code !== 'ZA')
+  .map((code) => regionNames.of(code) ?? code)
+  .sort((a, b) => a.localeCompare(b));
+// South Africa first: almost every partner is a South African entity.
+const countryOptions = ['South Africa', ...countries];
+
+const noTinReasons = [
+  "The jurisdiction does not issue TINs",
+  "The entity is otherwise unable to obtain a TIN",
+  "A TIN is not required by the domestic law of the jurisdiction"
+];
+
+const excludedCriteria = [
+  { value: "Listed entity", label: "An entity whose stock is regularly traded on one or more established securities markets", needsMarket: true },
+  { value: "Related entity of a listed entity", label: "A related entity of an entity whose stock is regularly traded on an established securities market", needsMarket: true },
+  { value: "Governmental entity", label: "A governmental entity" },
+  { value: "International organisation", label: "An international organisation" },
+  { value: "Central bank", label: "A central bank" },
+  { value: "Financial institution", label: "A financial institution, other than an investment entity managed by another financial institution" }
+];
+
+const activeCriteria = [
+  "Less than 50% of the entity's gross income for the preceding year is passive income, and less than 50% of its assets during that year produced or were held to produce passive income",
+  "Substantially all of the entity's activities consist of holding shares in, or providing financing and services to, subsidiaries that carry on a trade or business other than that of a financial institution",
+  "The entity is not yet operating a business, has no prior operating history, and is investing capital into assets with the intent to operate a business other than that of a financial institution (within 24 months of its organisation)",
+  "The entity was not a financial institution in the past five years and is liquidating its assets or reorganising with the intent to continue or recommence a business other than that of a financial institution",
+  "The entity primarily engages in financing and hedging transactions with, or for, related entities that are not financial institutions, and does not provide such services to unrelated entities",
+  "The entity is a non-profit organisation that meets the requirements for an active entity under the CARF Regulations"
+];
+
+const controllingRoles = [
+  "Owner (controlling ownership interest)",
+  "Control by other means",
+  "Senior managing official",
+  "Trust: settlor",
+  "Trust: trustee",
+  "Trust: protector",
+  "Trust: beneficiary",
+  "Trust: other",
+  "Legal arrangement (non-trust): equivalent role"
+];
+
+const inputClass = "w-full px-4 py-2.5 rounded-lg border border-slate-200 bg-white text-base md:text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-[#009A35] focus:ring-2 focus:ring-[#009A35]/20 transition-colors";
+const labelClass = "block text-sm font-medium text-slate-700 mb-1.5";
+const hintClass = "text-xs text-slate-500 mt-1.5";
+const choiceClass = "flex items-start gap-3 p-3 rounded-lg border border-slate-200 bg-white hover:border-[#009A35]/40 cursor-pointer transition-colors has-[:checked]:border-[#009A35] has-[:checked]:bg-[#009A35]/5";
+const removeClass = "text-sm text-slate-500 hover:text-red-600 transition-colors";
+const addClass = "inline-flex items-center gap-2 text-sm font-medium text-[#009A35] hover:text-slate-900 transition-colors";
+---
+
+<Layout
+	title="CARF Self-Certification | ZARP Stablecoin"
+	ogTitle="CARF Self-Certification — ZARP Stablecoin"
+	ogDescription="Entity tax residence self-certification for ZARP partners under South Africa's Crypto-Asset Reporting Framework (CARF) Regulations."
+	noindex
+>
+	<main class="min-h-screen bg-white">
+
+		<!-- Hero -->
+		<section class="pt-20 pb-10 md:pt-28 md:pb-12">
+			<div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+				<div class="inline-flex items-center gap-2 bg-slate-100 text-slate-600 text-sm font-medium px-4 py-1.5 rounded-full mb-6">
+					<svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
+					Partner Compliance
+				</div>
+				<h1 class="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight mb-4">
+					Entity Self-Certification: CARF
+				</h1>
+				<div class="space-y-4 text-slate-600 leading-relaxed">
+					<p>
+						South Africa's Crypto-Asset Reporting Framework (CARF) Regulations took effect on 1 March 2026. Inves Capital (Pty) Ltd, the issuer of ZARP and ZARPY, is a Reporting Crypto-Asset Service Provider and must hold a valid tax residence self-certification from every partner it transacts with.
+					</p>
+					<p>
+						If your entity is tax resident outside South Africa, details of your account and transactions may be reported to the South African Revenue Service (SARS), which may exchange them with the tax authorities of the jurisdictions where your entity is resident.
+					</p>
+				</div>
+
+				<div class="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-4">
+					<div class="bg-slate-50 rounded-xl p-5">
+						<h2 class="text-sm font-semibold text-slate-900 mb-1">New partners</h2>
+						<p class="text-sm text-slate-600">Relationship started on or after 1 March 2026: certify <strong>before your first issuance, stake or ZARPY approval</strong>.</p>
+					</div>
+					<div class="bg-slate-50 rounded-xl p-5">
+						<h2 class="text-sm font-semibold text-slate-900 mb-1">Existing partners</h2>
+						<p class="text-sm text-slate-600">Relationship in place on 28 February 2026: certify <strong>by 28 February 2027</strong>.</p>
+					</div>
+				</div>
+
+				<h2 class="mt-8 text-sm font-semibold text-slate-900">Please note</h2>
+				<ul class="mt-3 space-y-2 text-sm text-slate-600 list-disc marker:text-[#009A35] pl-5">
+					<li>Where a self-certification is due and we don't hold a valid one, the CARF Regulations require us to suspend transactions until it is received.</li>
+					<li>If any of the information changes (for example your tax residence or controlling persons), you must submit a new self-certification.</li>
+					<li>We cannot give tax advice. If you are unsure how to answer, please consult a tax adviser.</li>
+				</ul>
+			</div>
+		</section>
+
+		<section class="pb-20 md:pb-28">
+			<div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+
+				<form id="carf-form" action={FORMSPREE_ENDPOINT} method="POST" class="space-y-8" novalidate>
+					<input type="hidden" name="_subject" id="carf-subject" value="CARF Self-Certification" />
+					<input type="hidden" name="form_version" value="2026-10" />
+					<p class="hidden"><label>Leave this field empty <input name="_gotcha" tabindex="-1" autocomplete="off" /></label></p>
+
+					<!-- 1. Entity details -->
+					<fieldset class="bg-slate-50 rounded-2xl p-6 sm:p-8">
+						<legend class="sr-only">Entity details</legend>
+						<div class="flex items-center gap-3 mb-6">
+							<span class="flex items-center justify-center w-8 h-8 rounded-full bg-[#009A35] text-white text-sm font-bold">1</span>
+							<h2 class="text-xl font-bold text-slate-900">Entity details</h2>
+						</div>
+
+						<div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+							<div class="sm:col-span-2">
+								<label for="legal_name" class={labelClass}>Legal name of entity <span class="text-red-500">*</span></label>
+								<input type="text" id="legal_name" name="legal_name" required autocomplete="organization" class={inputClass} />
+								<p class={hintClass}>As registered with the relevant authority.</p>
+							</div>
+							<div>
+								<label for="trading_name" class={labelClass}>Trading name</label>
+								<input type="text" id="trading_name" name="trading_name" class={inputClass} />
+							</div>
+							<div>
+								<label for="entity_type" class={labelClass}>Entity type <span class="text-red-500">*</span></label>
+								<input type="text" id="entity_type" name="entity_type" required placeholder="e.g. Private company, trust" class={inputClass} />
+							</div>
+							<div>
+								<label for="registration_number" class={labelClass}>Registration number <span class="text-red-500">*</span></label>
+								<input type="text" id="registration_number" name="registration_number" required class={inputClass} />
+							</div>
+							<div>
+								<label for="incorporation_country" class={labelClass}>Country of incorporation or organisation <span class="text-red-500">*</span></label>
+								<select id="incorporation_country" name="incorporation_country" required class={inputClass}>
+									<option value="">Select a country</option>
+									{countryOptions.map((c) => <option value={c}>{c}</option>)}
+								</select>
+							</div>
+							<div class="sm:col-span-2">
+								<label for="address" class={labelClass}>Registered address <span class="text-red-500">*</span></label>
+								<textarea id="address" name="address" rows="3" required autocomplete="street-address" placeholder="Street address, city, postal code" class={`${inputClass} resize-y`}></textarea>
+							</div>
+							<div>
+								<label for="address_country" class={labelClass}>Country of registered address <span class="text-red-500">*</span></label>
+								<select id="address_country" name="address_country" required class={inputClass}>
+									<option value="">Select a country</option>
+									{countryOptions.map((c) => <option value={c}>{c}</option>)}
+								</select>
+							</div>
+							<div>
+								<label for="account_email" class={labelClass}>Email address linked to your ZARP account <span class="text-red-500">*</span></label>
+								<input type="email" id="account_email" name="account_email" required autocomplete="email" class={inputClass} />
+							</div>
+						</div>
+
+						<div class="mt-6">
+							<p class={labelClass}>Products you use with Inves <span class="text-red-500">*</span></p>
+							<div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+								<label class={choiceClass}>
+									<input type="checkbox" name="product_zarp" value="Yes" data-product class="mt-0.5 accent-[#009A35]" />
+									<span class="text-sm text-slate-700">ZARP: issuance and redemption</span>
+								</label>
+								<label class={choiceClass}>
+									<input type="checkbox" name="product_zarpy" value="Yes" data-product class="mt-0.5 accent-[#009A35]" />
+									<span class="text-sm text-slate-700">ZARPY: staking</span>
+								</label>
+							</div>
+						</div>
+
+						<div class="mt-6">
+							<p class={labelClass}>Did your entity have a relationship with Inves on or before 28 February 2026? <span class="text-red-500">*</span></p>
+							<div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+								{["Yes", "No", "Not sure"].map((v) => (
+									<label class={choiceClass}>
+										<input type="radio" name="pre_existing_relationship" value={v} required class="mt-0.5 accent-[#009A35]" />
+										<span class="text-sm text-slate-700">{v}</span>
+									</label>
+								))}
+							</div>
+						</div>
+					</fieldset>
+
+					<!-- 2. Tax residence -->
+					<fieldset class="bg-slate-50 rounded-2xl p-6 sm:p-8">
+						<legend class="sr-only">Tax residence</legend>
+						<div class="flex items-center gap-3 mb-2">
+							<span class="flex items-center justify-center w-8 h-8 rounded-full bg-[#009A35] text-white text-sm font-bold">2</span>
+							<h2 class="text-xl font-bold text-slate-900">Tax residence</h2>
+						</div>
+						<p class="text-sm text-slate-500 mb-6">List <strong>every</strong> jurisdiction in which the entity is resident for tax purposes, with its tax identification number (TIN) there. For South Africa, the TIN is the income tax reference number.</p>
+
+						<div id="entity-jurisdictions" class="space-y-4"></div>
+
+						<button type="button" id="add-jurisdiction" class={`${addClass} mt-4`}>
+							<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
+							Add another jurisdiction
+						</button>
+					</fieldset>
+
+					<!-- 3. Entity classification -->
+					<fieldset class="bg-slate-50 rounded-2xl p-6 sm:p-8">
+						<legend class="sr-only">Entity classification</legend>
+						<div class="flex items-center gap-3 mb-2">
+							<span class="flex items-center justify-center w-8 h-8 rounded-full bg-[#009A35] text-white text-sm font-bold">3</span>
+							<h2 class="text-xl font-bold text-slate-900">Entity classification</h2>
+						</div>
+						<p class="text-sm text-slate-500 mb-6">Select the one classification that applies to the entity under the CARF Regulations.</p>
+
+						<div class="space-y-3">
+							<label class={choiceClass}>
+								<input type="radio" name="carf_classification" value="Excluded Person" required class="mt-0.5 accent-[#009A35]" />
+								<span>
+									<span class="block text-sm font-medium text-slate-900">Excluded Person</span>
+									<span class="block text-sm text-slate-500">A listed entity or its related entity, a governmental entity, an international organisation, a central bank, or a regulated financial institution.</span>
+								</span>
+							</label>
+							<label class={choiceClass}>
+								<input type="radio" name="carf_classification" value="Active Entity" class="mt-0.5 accent-[#009A35]" />
+								<span>
+									<span class="block text-sm font-medium text-slate-900">Active Entity</span>
+									<span class="block text-sm text-slate-500">An operating business whose income and assets are mainly not passive, or one of the other active entity categories.</span>
+								</span>
+							</label>
+							<label class={choiceClass}>
+								<input type="radio" name="carf_classification" value="Neither (passive entity)" class="mt-0.5 accent-[#009A35]" />
+								<span>
+									<span class="block text-sm font-medium text-slate-900">Neither</span>
+									<span class="block text-sm text-slate-500">The entity is not an Excluded Person or an Active Entity. You'll be asked for details of its controlling persons.</span>
+								</span>
+							</label>
+						</div>
+
+						<div id="excluded-detail" class="hidden mt-6 pt-6 border-t border-slate-200" data-show-for="Excluded Person">
+							<p class={labelClass}>On which basis is the entity an Excluded Person? <span class="text-red-500">*</span></p>
+							<div class="space-y-3">
+								{excludedCriteria.map((c) => (
+									<label class={choiceClass}>
+										<input type="radio" name="excluded_basis" value={c.value} required data-needs-market={c.needsMarket ? "true" : undefined} class="mt-0.5 accent-[#009A35]" />
+										<span class="text-sm text-slate-700">{c.label}</span>
+									</label>
+								))}
+							</div>
+							<div id="market-detail" class="hidden mt-5">
+								<div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+								<div>
+									<label for="listed_entity_name" class={labelClass}>Name of the listed entity <span class="text-red-500">*</span></label>
+									<input type="text" id="listed_entity_name" name="listed_entity_name" required class={inputClass} />
+								</div>
+								<div>
+									<label for="securities_market" class={labelClass}>Securities market <span class="text-red-500">*</span></label>
+									<input type="text" id="securities_market" name="securities_market" required placeholder="e.g. JSE" class={inputClass} />
+								</div>
+								</div>
+							</div>
+						</div>
+
+						<div id="active-detail" class="hidden mt-6 pt-6 border-t border-slate-200" data-show-for="Active Entity">
+							<p class={labelClass}>On which basis is the entity an Active Entity? <span class="text-red-500">*</span></p>
+							<div class="space-y-3">
+								{activeCriteria.map((c) => (
+									<label class={choiceClass}>
+										<input type="radio" name="active_basis" value={c} required class="mt-0.5 accent-[#009A35]" />
+										<span class="text-sm text-slate-700">{c}</span>
+									</label>
+								))}
+							</div>
+						</div>
+					</fieldset>
+
+					<!-- 4. Controlling persons (only for "Neither") -->
+					<fieldset id="controlling-section" class="hidden bg-slate-50 rounded-2xl p-6 sm:p-8" data-show-for="Neither (passive entity)">
+						<legend class="sr-only">Controlling persons</legend>
+						<div class="flex items-center gap-3 mb-2">
+							<span class="flex items-center justify-center w-8 h-8 rounded-full bg-[#009A35] text-white text-sm font-bold">4</span>
+							<h2 class="text-xl font-bold text-slate-900">Controlling persons</h2>
+						</div>
+						<p class="text-sm text-slate-500 mb-6">Give details of every natural person who exercises control over the entity. Where no natural person exercises control through ownership, give the senior managing official.</p>
+
+						<div id="controlling-persons" class="space-y-6"></div>
+
+						<button type="button" id="add-person" class={`${addClass} mt-4`}>
+							<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
+							Add another controlling person
+						</button>
+					</fieldset>
+
+					<!-- Declaration -->
+					<fieldset class="bg-slate-50 rounded-2xl p-6 sm:p-8">
+						<legend class="sr-only">Declaration</legend>
+						<div class="flex items-center gap-3 mb-6">
+							<span class="flex items-center justify-center w-8 h-8 rounded-full bg-[#009A35] text-white text-sm font-bold" data-declaration-number>4</span>
+							<h2 class="text-xl font-bold text-slate-900">Declaration</h2>
+						</div>
+
+						<div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+							<div>
+								<label for="signatory_name" class={labelClass}>Full name of authorised representative <span class="text-red-500">*</span></label>
+								<input type="text" id="signatory_name" name="signatory_name" required autocomplete="name" class={inputClass} />
+							</div>
+							<div>
+								<label for="signatory_capacity" class={labelClass}>Capacity <span class="text-red-500">*</span></label>
+								<input type="text" id="signatory_capacity" name="signatory_capacity" required autocomplete="organization-title" placeholder="e.g. Director, CFO" class={inputClass} />
+							</div>
+							<div>
+								<label for="signatory_email" class={labelClass}>Email address <span class="text-red-500">*</span></label>
+								<input type="email" id="signatory_email" name="signatory_email" required class={inputClass} />
+							</div>
+							<div>
+								<label for="declaration_date" class={labelClass}>Date <span class="text-red-500">*</span></label>
+								<input type="date" id="declaration_date" name="declaration_date" required class={inputClass} />
+							</div>
+						</div>
+
+						<div class="mt-6 space-y-3">
+							<label class={choiceClass}>
+								<input type="checkbox" name="declaration_authorised" value="Confirmed" required class="mt-0.5 accent-[#009A35]" />
+								<span class="text-sm text-slate-700">I am authorised to sign this self-certification on behalf of the entity.</span>
+							</label>
+							<label class={choiceClass}>
+								<input type="checkbox" name="declaration_true" value="Confirmed" required class="mt-0.5 accent-[#009A35]" />
+								<span class="text-sm text-slate-700">I declare that, to the best of my knowledge and belief, the information in this self-certification is true, correct and complete.</span>
+							</label>
+							<label class={choiceClass}>
+								<input type="checkbox" name="declaration_reporting" value="Confirmed" required class="mt-0.5 accent-[#009A35]" />
+								<span class="text-sm text-slate-700">I acknowledge that the information in this form, and information about the entity's transactions, may be reported to SARS and exchanged with the tax authorities of other jurisdictions under the CARF Regulations and international agreements.</span>
+							</label>
+							<label class={choiceClass}>
+								<input type="checkbox" name="declaration_changes" value="Confirmed" required class="mt-0.5 accent-[#009A35]" />
+								<span class="text-sm text-slate-700">I undertake to inform Inves within 30 days of any change in circumstances that makes this self-certification incorrect or incomplete, and to provide a new self-certification.</span>
+							</label>
+						</div>
+
+						<p class="text-xs text-slate-500 mt-6 leading-relaxed">
+							Inves Capital (Pty) Ltd processes this information under the Protection of Personal Information Act to meet its obligations under the CARF Regulations and the Tax Administration Act, and retains it for the period those laws require. Questions: <a href="mailto:compliance@zarpstablecoin.com" class="text-[#009A35] hover:underline">compliance@zarpstablecoin.com</a>.
+						</p>
+					</fieldset>
+
+					<p id="carf-status" class="hidden text-sm text-red-600" role="alert"></p>
+
+					<button type="submit" id="carf-submit"
+					        class="w-full inline-flex items-center justify-center px-6 py-3 bg-slate-900 text-white text-sm font-medium rounded-lg hover:bg-[#009A35] disabled:opacity-60 disabled:cursor-not-allowed transition-colors">
+						Submit self-certification
+					</button>
+				</form>
+
+				<div id="carf-success" class="hidden bg-slate-50 rounded-2xl p-6 sm:p-8">
+					<div class="flex items-start gap-4">
+						<div class="shrink-0 h-10 w-10 flex items-center justify-center rounded-full bg-[#009A35]/10">
+							<svg class="w-5 h-5 text-[#009A35]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+						</div>
+						<div>
+							<h2 class="text-lg font-bold text-slate-900">Self-certification received</h2>
+							<p class="text-sm text-slate-500 mt-1">Thank you. Our compliance team will check it against your onboarding records and contact you if anything is missing. If your circumstances change, please submit a new self-certification.</p>
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</section>
+	</main>
+
+	<!-- Repeatable rows. __PREFIX__ and __N__ are replaced when a row is added or renumbered. -->
+	<template id="jurisdiction-template">
+		<div class="jurisdiction-row bg-white rounded-xl border border-slate-200 p-5" data-row>
+			<div class="flex items-center justify-between mb-4">
+				<h3 class="text-sm font-semibold text-slate-900">Jurisdiction <span data-row-number></span></h3>
+				<button type="button" class={removeClass} data-remove-row>Remove</button>
+			</div>
+			<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+				<div>
+					<label class={labelClass} data-for="country">Jurisdiction of tax residence <span class="text-red-500">*</span></label>
+					<select data-field="country" required class={inputClass}>
+						<option value="">Select a jurisdiction</option>
+						{countryOptions.map((c) => <option value={c}>{c}</option>)}
+					</select>
+				</div>
+				<div>
+					<label class={labelClass} data-for="tin">Tax identification number (TIN)</label>
+					<input type="text" data-field="tin" data-tin class={inputClass} />
+				</div>
+				<div class="sm:col-span-2" data-no-tin-wrap>
+					<label class={labelClass} data-for="no_tin_reason">If no TIN, the reason <span class="text-red-500">*</span></label>
+					<select data-field="no_tin_reason" data-no-tin class={inputClass}>
+						<option value="">Select a reason</option>
+						{noTinReasons.map((r) => <option value={r}>{r}</option>)}
+					</select>
+				</div>
+			</div>
+		</div>
+	</template>
+
+	<template id="person-template">
+		<div class="bg-white rounded-xl border border-slate-200 p-5" data-row>
+			<div class="flex items-center justify-between mb-4">
+				<h3 class="text-sm font-semibold text-slate-900">Controlling person <span data-row-number></span></h3>
+				<button type="button" class={removeClass} data-remove-row>Remove</button>
+			</div>
+			<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+				<div>
+					<label class={labelClass} data-for="name">Full name <span class="text-red-500">*</span></label>
+					<input type="text" data-field="name" required class={inputClass} />
+				</div>
+				<div>
+					<label class={labelClass} data-for="date_of_birth">Date of birth <span class="text-red-500">*</span></label>
+					<input type="date" data-field="date_of_birth" required class={inputClass} />
+				</div>
+				<div class="sm:col-span-2">
+					<label class={labelClass} data-for="role">Role <span class="text-red-500">*</span></label>
+					<select data-field="role" required class={inputClass}>
+						<option value="">Select a role</option>
+						{controllingRoles.map((r) => <option value={r}>{r}</option>)}
+					</select>
+				</div>
+				<div class="sm:col-span-2">
+					<label class={labelClass} data-for="address">Residential address <span class="text-red-500">*</span></label>
+					<textarea data-field="address" rows="2" required placeholder="Street address, city, postal code" class={`${inputClass} resize-y`}></textarea>
+				</div>
+				<div>
+					<label class={labelClass} data-for="address_country">Country of residential address <span class="text-red-500">*</span></label>
+					<select data-field="address_country" required class={inputClass}>
+						<option value="">Select a country</option>
+						{countryOptions.map((c) => <option value={c}>{c}</option>)}
+					</select>
+				</div>
+			</div>
+
+			<div class="mt-5 pt-5 border-t border-slate-100">
+				<p class="text-sm font-medium text-slate-700 mb-3">Tax residence</p>
+				<div class="space-y-4" data-nested-jurisdictions></div>
+				<button type="button" class={`${addClass} mt-3`} data-add-nested>
+					<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
+					Add another jurisdiction
+				</button>
+			</div>
+		</div>
+	</template>
+
+	<script>
+		const form = document.getElementById('carf-form') as HTMLFormElement | null;
+		const submitBtn = document.getElementById('carf-submit') as HTMLButtonElement | null;
+		const status = document.getElementById('carf-status');
+		const success = document.getElementById('carf-success');
+		const subject = document.getElementById('carf-subject') as HTMLInputElement | null;
+		const entityJurisdictions = document.getElementById('entity-jurisdictions')!;
+		const persons = document.getElementById('controlling-persons')!;
+		const jurisdictionTemplate = document.getElementById('jurisdiction-template') as HTMLTemplateElement;
+		const personTemplate = document.getElementById('person-template') as HTMLTemplateElement;
+		const marketDetail = document.getElementById('market-detail');
+		const declarationDate = document.getElementById('declaration_date') as HTMLInputElement | null;
+
+		const MAX_JURISDICTIONS = 5;
+		const MAX_PERSONS = 10;
+
+		if (declarationDate) declarationDate.value = new Date().toISOString().slice(0, 10);
+
+		// Give each row's fields flat, numbered names (e.g. tax_2_tin, cp_1_tax_2_country)
+		// so Formspree emails read cleanly, and keep labels pointing at their inputs.
+		function renumber(container: HTMLElement, prefix: string) {
+			const rows = Array.from(container.children) as HTMLElement[];
+			rows.forEach((row, i) => {
+				const rowPrefix = `${prefix}_${i + 1}`;
+				const num = row.querySelector(':scope [data-row-number]');
+				if (num) num.textContent = String(i + 1);
+				// The first row of each list can't be removed: at least one is required.
+				const remove = row.querySelector(':scope [data-remove-row]') as HTMLElement | null;
+				if (remove) remove.classList.toggle('hidden', i === 0);
+
+				row.querySelectorAll<HTMLElement>('[data-field]').forEach((field) => {
+					if (field.closest('[data-row]') !== row) return;
+					const name = `${rowPrefix}_${field.dataset.field}`;
+					field.setAttribute('name', name);
+					field.id = name;
+					const label = row.querySelector(`[data-for="${field.dataset.field}"]`);
+					if (label && label.closest('[data-row]') === row) label.setAttribute('for', name);
+				});
+
+				const nested = row.querySelector(':scope [data-nested-jurisdictions]') as HTMLElement | null;
+				if (nested) renumber(nested, `${rowPrefix}_tax`);
+			});
+		}
+
+		function renumberAll() {
+			renumber(entityJurisdictions, 'tax');
+			renumber(persons, 'cp');
+			updateAddButtons();
+		}
+
+		function syncTinRow(row: HTMLElement) {
+			const tin = row.querySelector('[data-tin]') as HTMLInputElement;
+			const reason = row.querySelector('[data-no-tin]') as HTMLSelectElement;
+			const wrap = row.querySelector('[data-no-tin-wrap]') as HTMLElement;
+			const hasTin = tin.value.trim() !== '';
+			wrap.classList.toggle('hidden', hasTin);
+			reason.disabled = hasTin;
+			reason.required = !hasTin;
+		}
+
+		function addJurisdiction(container: HTMLElement) {
+			if (container.children.length >= MAX_JURISDICTIONS) return;
+			const row = (jurisdictionTemplate.content.cloneNode(true) as DocumentFragment).firstElementChild as HTMLElement;
+			const tin = row.querySelector('[data-tin]') as HTMLInputElement;
+			tin.addEventListener('input', () => syncTinRow(row));
+			row.querySelector('[data-remove-row]')?.addEventListener('click', () => {
+				row.remove();
+				renumberAll();
+			});
+			container.appendChild(row);
+			syncTinRow(row);
+			renumberAll();
+		}
+
+		function addPerson() {
+			if (persons.children.length >= MAX_PERSONS) return;
+			const row = (personTemplate.content.cloneNode(true) as DocumentFragment).firstElementChild as HTMLElement;
+			const nested = row.querySelector('[data-nested-jurisdictions]') as HTMLElement;
+			row.querySelector('[data-add-nested]')?.addEventListener('click', () => addJurisdiction(nested));
+			row.querySelector('[data-remove-row]')?.addEventListener('click', () => {
+				row.remove();
+				renumberAll();
+			});
+			persons.appendChild(row);
+			addJurisdiction(nested);
+		}
+
+		function updateAddButtons() {
+			document.getElementById('add-jurisdiction')?.classList.toggle('hidden', entityJurisdictions.children.length >= MAX_JURISDICTIONS);
+			document.getElementById('add-person')?.classList.toggle('hidden', persons.children.length >= MAX_PERSONS);
+			persons.querySelectorAll<HTMLElement>('[data-row]').forEach((row) => {
+				const nested = row.querySelector('[data-nested-jurisdictions]');
+				const btn = row.querySelector('[data-add-nested]');
+				if (nested && btn) btn.classList.toggle('hidden', nested.children.length >= MAX_JURISDICTIONS);
+			});
+		}
+
+		document.getElementById('add-jurisdiction')?.addEventListener('click', () => addJurisdiction(entityJurisdictions));
+		document.getElementById('add-person')?.addEventListener('click', addPerson);
+		addJurisdiction(entityJurisdictions);
+
+		// Show only the follow-up questions for the chosen classification. Hidden sections
+		// are disabled so their fields are neither validated nor submitted.
+		function setSectionEnabled(section: HTMLElement, enabled: boolean) {
+			section.classList.toggle('hidden', !enabled);
+			section.querySelectorAll<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>('input, select, textarea').forEach((el) => {
+				el.disabled = !enabled;
+			});
+			if (enabled) {
+				section.querySelectorAll<HTMLElement>('[data-row]').forEach((row) => {
+					if (row.querySelector('[data-tin]')) syncTinRow(row);
+				});
+			}
+		}
+
+		function syncMarket() {
+			if (!marketDetail) return;
+			const basis = form?.querySelector('input[name="excluded_basis"]:checked') as HTMLInputElement | null;
+			const excludedOpen = !document.getElementById('excluded-detail')?.classList.contains('hidden');
+			setSectionEnabled(marketDetail, excludedOpen && basis?.dataset.needsMarket === 'true');
+		}
+
+		function syncClassification() {
+			const chosen = (form?.querySelector('input[name="carf_classification"]:checked') as HTMLInputElement | null)?.value;
+			document.querySelectorAll<HTMLElement>('[data-show-for]').forEach((section) => {
+				setSectionEnabled(section, section.dataset.showFor === chosen);
+			});
+			const isPassive = chosen === 'Neither (passive entity)';
+			if (isPassive && persons.children.length === 0) addPerson();
+			const declNum = document.querySelector('[data-declaration-number]');
+			if (declNum) declNum.textContent = isPassive ? '5' : '4';
+			syncMarket();
+		}
+
+		form?.querySelectorAll('input[name="carf_classification"]').forEach((el) => el.addEventListener('change', syncClassification));
+		form?.querySelectorAll('input[name="excluded_basis"]').forEach((el) => el.addEventListener('change', syncMarket));
+		syncClassification();
+
+		const legalName = document.getElementById('legal_name') as HTMLInputElement | null;
+		legalName?.addEventListener('input', () => {
+			if (subject) subject.value = `CARF Self-Certification: ${legalName.value.trim() || 'unnamed entity'}`;
+		});
+
+		function showError(message: string) {
+			if (!status) return;
+			status.textContent = message;
+			status.classList.remove('hidden');
+		}
+
+		form?.addEventListener('submit', async (e) => {
+			e.preventDefault();
+			status?.classList.add('hidden');
+
+			const products = form.querySelectorAll('input[data-product]:checked');
+			const firstProduct = form.querySelector('input[data-product]') as HTMLInputElement | null;
+			firstProduct?.setCustomValidity(products.length ? '' : 'Select at least one product.');
+
+			if (!form.reportValidity()) return;
+
+			if (submitBtn) {
+				submitBtn.disabled = true;
+				submitBtn.textContent = 'Sending…';
+			}
+
+			try {
+				const res = await fetch(form.action, {
+					method: 'POST',
+					body: new FormData(form),
+					headers: { Accept: 'application/json' }
+				});
+
+				if (res.ok) {
+					form.reset();
+					form.classList.add('hidden');
+					success?.classList.remove('hidden');
+					success?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+				} else {
+					const data = await res.json().catch(() => null);
+					const detail = data?.errors?.map((err: { message: string }) => err.message).join(', ');
+					showError(detail || 'Something went wrong. Please try again, or email compliance@zarpstablecoin.com.');
+				}
+			} catch {
+				showError('Could not reach the server. Please check your connection, or email compliance@zarpstablecoin.com.');
+			} finally {
+				if (submitBtn) {
+					submitBtn.disabled = false;
+					submitBtn.textContent = 'Submit self-certification';
+				}
+			}
+		});
+
+		form?.querySelectorAll('input[data-product]').forEach((el) =>
+			el.addEventListener('change', () => (form.querySelector('input[data-product]') as HTMLInputElement).setCustomValidity(''))
+		);
+	</script>
+</Layout>
