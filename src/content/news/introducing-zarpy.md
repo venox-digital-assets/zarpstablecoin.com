@@ -1,7 +1,7 @@
 ---
 title: "Introducing ZARPY - real-time money market yield for the Rand"
 description: Earn yield on ZARP by the second, benchmarked to the Old Mutual Money Market Fund. No minimums, no lock-up, unstake 24/7. For approved partners.
-pubDate: 2026-10-21T08:00:00Z
+pubDate: 2026-10-25T20:00:00Z
 author: ZARP Stablecoin
 heroImage: /img/news/introducing-zarpy.jpeg
 heroImageAlt: The ZARPY logo on pale green, above a smooth upward curve that separates a lighter field from a darker green one
