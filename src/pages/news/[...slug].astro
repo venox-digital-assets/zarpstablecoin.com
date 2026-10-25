@@ -15,16 +15,39 @@ export async function getStaticPaths() {
 const { post } = Astro.props;
 const { Content } = await render(post);
 
-const ogImage = post.data.heroImage
-	? new URL(post.data.heroImage, Astro.site).href
+const shareImage = post.data.ogImage ?? post.data.heroImage;
+const ogImage = shareImage
+	? new URL(shareImage, Astro.site).href
 	: new URL('/img/og-home.jpg', Astro.site).href;
 // Falls back to the post title so the share image is never unlabelled.
-const ogImageAlt = post.data.heroImage
-	? (post.data.heroImageAlt ?? post.data.title)
-	: 'ZARP Stablecoin';
-const ogImageSize = post.data.heroImage
-	? publicImageSize(post.data.heroImage)
-	: undefined;
+const ogImageAlt = post.data.ogImage
+	? (post.data.ogImageAlt ?? post.data.heroImageAlt ?? post.data.title)
+	: post.data.heroImage
+		? (post.data.heroImageAlt ?? post.data.title)
+		: 'ZARP Stablecoin';
+const ogImageSize = shareImage ? publicImageSize(shareImage) : undefined;
+
+// schema.org NewsArticle, so search engines can show the headline, image and
+// dates in rich results. Mirrors the Open Graph values above.
+const pageUrl = new URL(Astro.url.pathname, Astro.site).href;
+const structuredData = {
+	'@context': 'https://schema.org',
+	'@type': 'NewsArticle',
+	headline: post.data.title,
+	description: post.data.description,
+	image: [ogImage],
+	datePublished: post.data.pubDate.toISOString(),
+	dateModified: (post.data.updatedDate ?? post.data.pubDate).toISOString(),
+	author: { '@type': 'Organization', name: post.data.author, url: Astro.site?.href },
+	publisher: {
+		'@type': 'Organization',
+		name: 'ZARP Stablecoin',
+		url: Astro.site?.href,
+		logo: { '@type': 'ImageObject', url: new URL('/favicon.png', Astro.site).href },
+	},
+	mainEntityOfPage: { '@type': 'WebPage', '@id': pageUrl },
+	keywords: post.data.tags.join(', '),
+};
 ---
 
 <Layout
@@ -41,6 +64,7 @@ const ogImageSize = post.data.heroImage
 	articleAuthor={post.data.author}
 	articleTags={post.data.tags}
 >
+	<script type="application/ld+json" slot="head" set:html={JSON.stringify(structuredData)} />
 	<main class="min-h-screen bg-white">
 		<article class="pt-16 pb-20 md:pt-24 md:pb-28">
 			<!-- Header -->
