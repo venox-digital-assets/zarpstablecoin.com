@@ -4,7 +4,7 @@ This policy explains what personal information Inves Capital (Pty) Ltd collects,
 
 **Inves Capital (Pty) Ltd** (registration number 2016/437415/07) is responsible for the personal information in this policy. In the Protection of Personal Information Act 4 of 2013 (POPIA) it is the *responsible party*. Inves issues and redeems ZARP, and issues ZARPY.
 
-ZARP Stablecoin (Pty) Ltd is Inves's juristic representative and runs zarpstablecoin.com for Inves. It does not decide what is done with your information. Venox IO (Pty) Ltd is a separate company, and this policy does not cover it.
+ZARP Stablecoin (Pty) Ltd is Inves's juristic representative and runs zarpstablecoin.com for Inves. It does not decide what is done with your information. Venox IO (Pty) Ltd is a separate company, also Inves's juristic representative, with [its own privacy policy](https://venox.io/privacy-policy.html). This policy covers only what Inves receives about Venox's clients.
 
 **Contact:** Inves's Information Officer, at [compliance@inv.es](mailto:compliance@inv.es), or 31 Parliament Street, Speakers Corner, Cape Town, 8000.
 
@@ -20,6 +20,7 @@ ZARP Stablecoin (Pty) Ltd is Inves's juristic representative and runs zarpstable
 | A visitor to our websites | Your IP address, browser details and the pages you ask for, in our hosting providers' logs | Your browser |
 | Staff of the fund administrator who send Inves its daily rate | Your name, email address and email signature | The email you send |
 | A person Inves invites to its internal reporting dashboard | Your email address | Inves |
+| A client of Venox IO (Pty) Ltd, or a beneficial owner or controlling person of one | The due-diligence, tax and transaction information Inves needs as the financial services provider Venox represents | **Venox, not you** |
 
 A partner company's own details are also personal information under POPIA: its names, registration number, tax number, bank accounts and wallet addresses.
 
