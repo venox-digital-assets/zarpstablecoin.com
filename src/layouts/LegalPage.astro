@@ -1,0 +1,29 @@
+---
+// A legal text published word for word from Inves's approved source.
+// The Markdown under src/legal/ is copied from totemiq-handbook
+// documentation/operators/inves/compliance/; change it there first.
+import Layout from './Layout.astro';
+
+interface Props {
+	title: string;
+	pageTitle: string;
+	version: string;
+	description: string;
+}
+
+const { title, pageTitle, version, description } = Astro.props;
+---
+
+<Layout title={pageTitle} ogTitle={title} ogDescription={description}>
+	<main class="min-h-screen bg-white pt-16 pb-24">
+		<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+			<div class="mb-12">
+				<h1 class="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight mb-4">{title}</h1>
+				<p class="text-lg text-slate-500">{version}</p>
+			</div>
+			<div class="prose prose-slate max-w-none prose-headings:font-bold prose-headings:tracking-tight prose-a:text-[#009A35] prose-a:font-medium prose-a:no-underline hover:prose-a:underline prose-strong:text-slate-900 prose-table:text-sm prose-th:align-top prose-td:align-top">
+				<slot />
+			</div>
+		</div>
+	</main>
+</Layout>
