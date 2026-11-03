@@ -33,7 +33,7 @@ The privacy policy lists every other recipient.
 
 ## Outside South Africa
 
-The platform keeps its data in South Africa. **Totemiq reaches it from the United Arab Emirates.** Inves relies on POPIA section 72(1)(a): Totemiq is bound by a written agreement to process it on principles substantially similar to POPIA's, to pass it on only with Inves's written consent to a recipient bound in the same way, and to give you your rights through Inves. The portal's access logs (your IP address, the page address and your browser details) are kept by Amazon Web Services in the United States for 30 days.
+The platform keeps its data in South Africa. **Totemiq reaches it from the United Arab Emirates.** Inves relies on POPIA section 72(1)(a): Totemiq is bound by a written agreement to process it on principles substantially similar to POPIA's, to pass it on only with Inves's written consent to a recipient bound in the same way, and to give you your rights through Inves. The portal's access logs (your IP address, the page address and your browser details) are kept by Amazon Web Services in the United States for 30 days. If you complete the tax-residence self-certification form on zarpstablecoin.com, Formspree, in the United States, delivers it to Inves.
 
 ## How long
 

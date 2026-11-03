@@ -49,7 +49,7 @@ Inves does not sell personal information, does not use it for direct marketing, 
 | **Amazon Web Services** | Hosts the platform: its database, portal sign-in and the emails it sends | Cape Town, South Africa |
 | | The partner portal's access logs and web firewall: your IP address, the page address and your browser details, kept for 30 days | United States |
 | **Google** (Google Workspace) | Email for inv.es and zarpstablecoin.com, and Inves's documents | Google's data centres, in several countries |
-| **Formspree** | The "Become a ZARP Partner" form on zarpstablecoin.com, which it forwards to us | United States |
+| **Formspree** | The "Become a ZARP Partner" form and the CARF self-certification form on zarpstablecoin.com, which it forwards to us | United States |
 | **Fly.io** and **Resend** | Inves's internal reporting dashboard, and the sign-in emails it sends | Johannesburg, South Africa (Fly.io); United States (Resend) |
 | **Discord** | Alerts to Inves's operations team about money received: the amount and the payment reference, never the payer's name. A name that a payer types into the reference appears in the alert | United States |
 | **Alchemy** and **Safe** | Blockchain data services. They see wallet addresses, never names | United States and other countries |
